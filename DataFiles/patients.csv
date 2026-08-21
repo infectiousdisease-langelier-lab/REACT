@@ -1,0 +1,54 @@
+nPID,Age,Gender,Race,Ethnicity,Diabetes,Hemodialysis,IBD,Chemo6mo,Chemoagents,Study_Group,APPS_Cycle,SNT_Cycle,Cycle1,APPS1,SNT1,Cycle2,APPS2,SNT2,Donor,nDonor_Dose,Route,Donor_Cycle,Donor_Date
+P01,51,M,American Indian or Alaska Native,Not Hispanic,Yes,No,No,No,No,APPS,1 and 2,NA,1,1,0,1,1,0,NA,NA,NA,NA,NA
+P02,76,F,Korean,Not Hispanic,No,Yes,No,No,No,APPS,1 and 2,NA,1,1,0,1,1,0,NA,NA,NA,NA,NA
+P03,59,M,White,Not Hispanic,No,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P04,57,F,Black or African American,Not Hispanic,Yes,No,No,No,No,APPS,1 and 2,NA,1,1,0,1,1,0,NA,NA,NA,NA,NA
+P05,32,M,White,"Other Hispanic, Latino/a, or Spanish origin",No,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P06,58,M,Black or African American,Not Hispanic,No,No,No,No,No,APPS,1 and 2,NA,1,1,0,1,1,0,NA,NA,NA,NA,NA
+P09,75,M,White,Not Hispanic,Yes,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P28,39,F,Black or African American,Not Hispanic,No,Yes,No,No,No,SNT,1 and 2,1,1,1,1,1,1,0,MEPSD0008,NA,PEG,1,5/14/23
+P10,61,M,Black or African American,Unknown,No,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P11,70,F,Black or African American,Not Hispanic,Yes,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P12,53,M,White,Not Hispanic,No,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P32,60,F,White,Not Hispanic,No,No,No,No,No,SNT,1 and 2,2,1,1,0,1,1,1,MEPSD0008,D01_D6,Enema,2,6/21/23
+P14,59,F,White,Not Hispanic,Yes,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P31,81,M,Black or African American,Not Hispanic,Yes,Yes,No,No,No,SNT,1,1,1,1,1,0,0,0,MEPSD0008,D01_D3,PEG,1,5/14/23
+P16,68,M,Decline to Answer,Decline to Answer,No,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P27,76,M,Black or African American,Not Hispanic,No,No,No,No,No,SNT,1,1,1,1,1,0,0,0,MEPSD0015,D02_D2,PEG,1,5/14/23
+P17,79,F,Black or African American,Not Hispanic,Yes,Yes,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P26,68,F,White,Not Hispanic,No,No,No,No,No,SNT,1 and 2,1 and 2,1,1,1,1,1,1,"MEPSD0015, MEPSD0008","D02_D1, D01_D4","PEG, Enema",1,5/14/23
+P18,62,M,Black or African American,Not Hispanic,No,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P19,53,F,Black or African American,Not Hispanic,Yes,No,No,No,No,APPS,1 and 2,NA,1,1,0,1,1,0,NA,NA,NA,NA,NA
+P20,45,M,Black or African American,Not Hispanic,No,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P30,82,F,Black or African American,Not Hispanic,Yes,No,No,No,No,SNT,1,1,1,1,1,0,0,0,MEPSD0008,D01_D2,PEG,1,5/14/23
+P21,84,M,Unknown,Unknown,No,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P23,51,M,Black or African American,Not Hispanic,Yes,No,No,No,No,APPS,1 and 2,NA,1,1,0,1,1,0,NA,NA,NA,NA,NA
+P24,64,F,Black or African American,Not Hispanic,No,No,No,No,No,APPS,1 and 2,NA,1,1,0,1,1,0,NA,NA,NA,NA,NA
+P25,68,M,Unknown,Unknown,No,No,No,No,No,APPS,1 and 2,NA,1,1,0,1,1,0,NA,NA,NA,NA,NA
+P15,63,F,Black or African American,Not Hispanic,No,Yes,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P07,69,M,White,Not Hispanic,Yes,No,No,No,No,APPS,1 and 2,NA,1,1,0,1,1,0,NA,NA,NA,NA,NA
+P08,87,M,White,Not Hispanic,No,No,No,No,No,APPS,1,NA,1,1,0,0,0,0,NA,NA,NA,NA,NA
+P13,69,F,Unknown,Unknown,Yes,No,No,No,No,APPS,1 and 2,NA,1,1,0,1,1,0,NA,NA,NA,NA,NA
+P29,70,F,Unknown,Unknown,No,No,No,No,No,SNT,1,1,1,1,1,0,0,0,MEPSD0008,D01_D2,PEG,1,5/14/23
+P33,82,M,Black or African American,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P34,33,M,Black or African American,Not Hispanic,Yes,Yes,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P35,49,F,Black or African American,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P36,76,M,Unknown,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P37,70,M,Black or African American,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P38,57,M,Black or African American,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P51,45,F,White,Not Hispanic,No,No,No,No,No,SNT,2,2,0,0,0,1,1,1,MEPSD0008,D01_D6,Enema,2,6/21/23
+P50,55,M,Unknown,Not Hispanic,Yes,No,No,No,No,SNT,2,2,0,0,0,1,1,1,MEPSD0008,D01_D4,Enema,2,6/21/23
+P40,70,F,Black or African American,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P41,70,F,Other,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P42,75,M,Black or African American,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P43,55,F,Black or African American,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P45,80,M,Black or African American,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P46,69,M,White,Not Hispanic,No,Yes,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P47,48,F,Other Pacific Islander,Not Hispanic,Yes,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P48,91,F,Black or African American,Unknown,Yes,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P49,62,F,Black or African American,Not Hispanic,Yes,No,No,No,No,SNT,2,2,0,0,0,1,1,1,MEPSD0008,D01_D8,Enema,2,6/28/23
+P44,43,M,White,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P39,54,F,White,Not Hispanic,No,No,No,No,No,APPS,2,NA,0,0,0,1,1,0,NA,NA,NA,NA,NA
+P22,59,F,Black or African American,Unknown,Yes,No,No,No,No,APPS,1 and 2,NA,1,1,0,1,1,0,NA,NA,NA,NA,NA
+D01,NA,NA,NA,NA,NA,NA,NA,NA,NA,Donor,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
+D02,NA,NA,NA,NA,NA,NA,NA,NA,NA,Donor,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA,NA
