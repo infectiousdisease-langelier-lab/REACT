@@ -1,0 +1,3812 @@
+---
+title: "REACT Analysis"
+date: August 15, 2026
+created by: Victoria Chu
+---
+
+# Setup
+```{r setup-clear-data}
+
+rm(list = ls())
+graphics.off()
+
+```
+
+## Packages and paths
+
+```{r setup-libraries, message=FALSE, warning=FALSE}
+knitr::opts_chunk$set(echo = TRUE)
+
+# Project paths
+DATA_DIR <- file.path("../DataFiles")
+
+# Statistical modeling and publication tables
+library(gtsummary)
+library(geepack)
+library(glmmTMB)
+library(car)
+
+# Core data wrangling and plotting
+library(tidyverse)
+library(lubridate)
+library(scales)
+library(forcats)
+library(ggrepel)
+library(patchwork)
+library(gridExtra)
+library(viridis)
+
+# Network and phylogenetic analysis
+library(igraph)
+library(ggtree)
+library(ggraph)
+library(tidygraph)
+library(ggtreeExtra)
+library(ggnewscale)
+library(vegan)
+library(ape)
+library(ComplexHeatmap)
+library(circlize)
+```
+
+```{r setup-theme}
+theme_mine <- function(base_size = 12, base_family = "") {
+  theme_bw(base_size = base_size, base_family = base_family) %+replace%
+    theme(
+      strip.background  = element_blank(),
+      strip.text.x      = element_text(size = 18),
+      strip.text.y      = element_text(size = 18),
+      axis.text.x       = element_text(size = 14),
+      axis.text.y       = element_text(size = 14, hjust = 1),
+      axis.ticks        = element_line(colour = "black"),
+      axis.title.x      = element_text(size = 16),
+      axis.title.y      = element_text(size = 16, angle = 90),
+      panel.background  = element_blank(),
+      panel.border      = element_blank(),
+      panel.grid.major  = element_blank(),
+      panel.grid.minor  = element_blank(),
+      panel.spacing     = unit(1.0, "lines"),
+      plot.background   = element_blank(),
+      plot.margin       = unit(c(0.5, 0.5, 0.5, 0.5), "lines"),
+      axis.line         = element_line(colour = "black")
+    )
+}
+
+theme_set(theme_mine())
+```
+
+```{r setup-risk-parameters}
+
+# Shared time scale used by the risk-factor analysis.
+STUDY_START <- as.Date("2023-05-07")
+
+week_dates <- tibble(
+  week     = paste0("W", 1:12),
+  week_num = 1:12,
+  w_start  = STUDY_START + weeks(0:11),
+  w_end    = STUDY_START + weeks(0:11) + days(6)
+)
+
+week_daily_lookup <- week_dates %>%
+  rowwise() %>%
+  mutate(date = list(seq(w_start, w_end, by = "day"))) %>%
+  unnest(date) %>%
+  select(date, week, week_num)
+
+```
+
+## Data input
+
+```{r setup-input-data}
+
+patients_all <- read.csv(file.path(DATA_DIR, "patients.csv"), na = c("NA", ""))
+patients <- patients_all %>% filter(!(nPID %in% c("P08", "P14")))
+
+samples <- read.csv(file.path(DATA_DIR, "samples.csv"), na = c("NA", ""))
+rooms <- read.csv(file.path(DATA_DIR, "rooms.csv"), na = c("NA", ""))
+providers <- read.csv(file.path(DATA_DIR, "providers.csv"), na = c("NA", ""))
+
+micro_cx <- read.csv(file.path(DATA_DIR, "micro_cultures_filt.csv"), na = c("NA", ""))
+
+mNGS_samples <- read.csv(file.path(DATA_DIR, "mNGS_samples.csv"), na = c("NA", ""))
+
+mNGS_instrain <- read.csv(file.path(DATA_DIR, "SOI_instrain_newthreshold.csv"), na = c("NA", ""))
+instrain_old <- read.csv(file.path(DATA_DIR, "SOI_instrain_oldthreshold.csv"), na = c("NA", ""))
+
+MAGs_SOI <- read.csv(file.path(DATA_DIR, "MAGs_SOI.csv"), na = c("NA", ""))
+MAGs_all <- read.csv(file.path(DATA_DIR, "MAGs_all.csv"), na = c("NA", ""))
+MAGs <- read.csv(file.path(DATA_DIR, "MAGs_all_filt.csv"), na = c("NA", ""))
+MAGs_amr <- read.csv(file.path(DATA_DIR, "MAGs_amr.csv"), na = c("NA", ""))
+
+SSS <- read.csv(file.path(DATA_DIR, "strain_sharing_samples.csv"), na = c("NA", ""))
+
+# Risk-factor preprocessing derived from the shared room and provider tables.
+
+rooms_raw <- rooms %>%
+  mutate(
+    AdmDate = as.Date(AdmDate),
+    DcDate  = as.Date(DcDate),
+    Room    = ifelse(Room == 520, paste(Room, "-", Bed, sep = ""), Room)
+  )
+
+providers_raw <- providers %>%
+  mutate(
+    event_date = as.Date(event_date),
+    room = case_when(
+      room == "SCU 2" ~ "520-2",
+      room == "SCU 3" ~ "520-3",
+      room == "SCU 4" ~ "520-4",
+      room == "SCU 5" ~ "520-5",
+      TRUE            ~ room
+    )
+  )
+
+```
+
+
+# Analysis
+
+## 1. Study enrollment
+
+```{r main_Demographics}
+
+non_donor_pt <- patients %>% filter(Study_Group!="Donor")
+
+summary(non_donor_pt$Age)
+
+table(non_donor_pt$Gender)
+table(non_donor_pt$Race)
+table(non_donor_pt$Ethnicity)
+table(non_donor_pt$Diabetes)
+table(non_donor_pt$Hemodialysis)
+
+#number participants per sampling week
+tbl_summary(samples %>% filter(Collected==1 & Study_Group!="Donor") %>% filter(!(nPID %in% c("P08","P14"))) %>% distinct(),
+  include = nTID, nPID,
+  statistic = all_categorical() ~ "{n} ({p}%)"
+)
+
+#number of weeks for SNT patients
+samples_data <- samples %>% filter(Collected==1 & Study_Group=="SNT") %>% filter(!(nPID %in% c("P08","P14"))) %>%
+  select(nPID, nTID) %>% distinct() %>%
+  group_by(nPID) %>%
+  mutate(weeks_num = n()) %>%
+  select(nPID, weeks_num) %>%
+  distinct()
+
+summary(samples_data$weeks_num)
+
+
+#number samples per source
+tbl_summary(samples %>% filter(Collected==1 & Study_Group!="Donor") %>% filter(!(nPID %in% c("P08","P14"))) %>% select(Source),
+  statistic = all_categorical() ~ "{n} ({p}%)"
+)
+
+# Summarize all collected samples
+all_samples_summ <- samples %>% filter(Collected==1)
+
+table(all_samples_summ$Source)
+
+```
+
+## 2. WGS characterization
+
+### 2.1 WGS summary
+
+```{r main_WGS summary}
+
+WGS <- micro_cx %>% filter(WGS_yn==1)
+
+strain <- as.data.frame(unique(WGS$WGS_bact_strain))%>%
+  mutate(
+    species = str_extract(`unique(WGS$WGS_bact_strain)`, "^.+(?=_)"),   # everything before last underscore
+    number  = str_extract(`unique(WGS$WGS_bact_strain)`, "[^_]+$")       # everything after last underscore
+  ) %>% distinct() %>%
+  select(species, number)
+
+```
+
+### 2.2 Supplementary Table 1
+
+```{r Supplementary Table 1}
+
+table(WGS$MDRO) # number of isolates
+table(strain$species) # number of strains
+
+```
+
+
+### 2.3 Supplementary Figure 1
+
+```{r WGS phylo tree}
+# Build radial phylogenetic tree from multiple Newick files
+# Load species trees
+tree_files <- list.files(
+  path = "../REACTTree",
+  pattern = "\\.(nwk|newick)$",
+  full.names = TRUE,
+  recursive = TRUE
+)
+
+cat("Found", length(tree_files), "Newick files:\n")
+print(basename(tree_files))
+
+# Define helper to extract species names from filenames
+get_species_label <- function(file) {
+  tools::file_path_sans_ext(basename(file))
+}
+
+# Define the desired species order
+desired_order <- c(
+  "Kpneumo_tree",
+  "Klebspp_tree",
+  "Enterobacter_spp_phylo_tree_0326",
+  "Citrobacter_tree",
+  "ecoli_phylo_tree_0326",
+  "Pmirabilis_tree",
+  "Paeruginosa_tree",
+  "Smaltophilia_tree",
+  "Acinetobacter_tree",
+  "Efaecalis_tree",
+  "Cperfingens_tree",
+  "Cdiff_tree",
+  "Efaecium_tree"
+)
+
+# Read and label species trees
+species_trees <- lapply(tree_files, function(file) {
+  tr <- read.tree(file)
+  if (inherits(tr, "multiPhylo")) tr <- tr[[1]]
+  species <- get_species_label(file)
+  tr$tip.label <- paste(species, tr$tip.label, sep = "_")
+  attr(tr, "species_name") <- species
+  tr
+})
+
+# Reorder species trees to the desired order
+species_names <- sapply(species_trees, function(tr) attr(tr, "species_name"))
+
+# Check that all requested species are present
+missing <- setdiff(desired_order, species_names)
+if (length(missing) > 0) warning("Missing species: ", paste(missing, collapse = ", "))
+
+# Reorder species trees
+species_trees <- species_trees[match(desired_order, species_names)]
+species_names <- sapply(species_trees, function(tr) attr(tr, "species_name"))  # update
+
+# Build scaffold tree with one tip per species
+scaffold <- stree(length(species_names), tip.label = species_names, type = "left")
+
+# Graft each species tree onto the scaffold
+combined_tree <- scaffold
+for (tr in species_trees) {
+  species     <- attr(tr, "species_name")
+  graft_point <- which(combined_tree$tip.label == species)
+  combined_tree <- bind.tree(combined_tree, tr, where = graft_point, position = 0)
+}
+
+# Remove the original scaffold tips, which are now internal nodes
+combined_tree <- drop.tip(combined_tree, species_names)
+
+cat("\nCombined tree summary:\n")
+cat("  Tips:         ", length(combined_tree$tip.label), "\n")
+cat("  Internal nodes:", combined_tree$Nnode, "\n")
+
+# Prepare tip metadata
+tip_data <- data.frame(
+  label   = combined_tree$tip.label,
+  species = sub("_.*", "", combined_tree$tip.label),
+  stringsAsFactors = FALSE
+)
+
+tip_data <- tip_data %>%
+  mutate(temp_label = tolower(label)) %>%
+  mutate(temp_label = str_remove(temp_label, "tree_|ecoli_phylo_tree_0326_|enterobacter_spp_phylo_tree_0326_")) %>%
+  mutate(temp_label = str_remove(temp_label, "acinetobacter|cdiff|cperfingens|citrobacter|ecoli|efaecium|efaecalis|paeruginosa|kpneumo|klebspp|pmirabilis|enterobacter|smaltophilia")) %>%
+  mutate(temp_label = str_remove(temp_label, "_cdiff_extracted|_efaecalis_extracted|_efaecium_extracted|_kpneumoniae_extracted|_pmirabilis_extracted")) %>%
+  mutate(temp_label = ifelse(species!="ecoli" & species!="Enterobacter", gsub("^[^_]*_|_combined$", "", temp_label), str_remove(temp_label,"_combined"))) %>%
+  mutate(temp_label = case_when(temp_label=="p23220-s008_apps0018-2igvre05-22-23-1of1_s8" & species =="Efaecium" ~ "p23220-s008_apps0018-2igvre05-22-23-1of2_s8",
+                                temp_label=="p23220-s008_apps0018-2igvre05-22-23-1of1_s8" & species =="Pmirabilis" ~ "p23220-s008_apps0018-2igvre05-22-23-2of2_s8",
+                                TRUE ~ temp_label)) %>%
+  left_join(micro_cx %>% select(WGS_sample_name, WGS_bact_strain, Source), by=c("temp_label" = "WGS_sample_name")) %>%
+  mutate(Source = ifelse(Source=="env", "environmental", "patient"),
+         strain_num = as.integer(str_extract(WGS_bact_strain, "(?<=_)\\d+$"))) %>%
+  mutate(Source = ifelse(is.na(Source), "reference genome", Source)) %>%
+  mutate(species = case_when(WGS_bact_strain=="C. perfringens_1" ~ "C. perfringens",
+                             WGS_bact_strain=="C. perfringens_2" ~ "C. perfringens",
+                             TRUE ~ species))
+
+# Create display names for the legend
+species_map <- c(
+  "Acinetobacter"        = "Acinetobacter pitii",
+  "Cdiff"        = "Clostridioides difficile",
+  "Cperfingens"  = "Clostridium perfringens",
+  "C. perfringens"  = "Clostridium perfringens",
+  "Citrobacter"  = "Citrobacter freundii",
+  "ecoli"        = "Escherichia coli",
+  "Efaecium"     = "Enterococcus faecium",
+  "Efaecalis"    = "Enterococcus faecalis",
+  "Paeruginosa"  = "Pseudomonas aeruginosa",
+  "Kpneumo"      = "Klebsiella pneumoniae",
+  "Klebspp"      = "Klebsiella spp.",
+  "Pmirabilis"    = "Proteus mirabilis",
+  "Enterobacter" = "Enterobacter cloacae complex",
+  "Smaltophilia" = "Stenotrophomonas maltophilia"
+)
+
+tip_data$species_pretty <- species_map[tip_data$species]
+tip_data$species_pretty[is.na(tip_data$species_pretty)] <-
+  tip_data$species[is.na(tip_data$species_pretty)]
+
+#changing the klebsiella spp. group
+tip_data <- tip_data %>%
+  mutate(species_pretty = case_when(
+    WGS_bact_strain == "K. aerogenes_1" ~ "Klebsiella aerogenes",
+    WGS_bact_strain =="K. michiganensis_1" ~ "Klebsiella michiganensis",
+    label == "Klebspp_tree_reference" ~ "Klebsiella michiganensis",
+    TRUE ~ species_pretty  # keep original for everything else
+  )) %>%
+  mutate(species_pretty = case_when(grepl("E. hormaechei",WGS_bact_strain) ~ "Enterobacter hormaechei",
+                                    grepl("E. kobei",WGS_bact_strain) ~ "Enterobacter kobei",
+                                    label=="Enterobacter_spp_phylo_tree_0326_reference" ~ "Enterobacter hormaechei",
+    TRUE ~ species_pretty  # keep original for everything else
+  ))
+
+
+### Isolates sequenced but absent from Newick files
+tip_data %>%
+  mutate(temp_label = tolower(label)) %>%
+  mutate(check=1) %>%
+  mutate(temp_label = gsub("^[^_]*_|_combined$", "", temp_label)) %>%
+  full_join(micro_cx %>% select(WGS_sample_name, MDRO), by=c("temp_label" = "WGS_sample_name")) %>%
+  filter(is.na(check) & !is.na(temp_label))
+
+# Define color palettes
+unique_pretty <- unique(tip_data$species_pretty)
+n_species     <- length(unique_pretty)
+
+WGS_colors<-c("#8B4789","#D7CE9FFF", "#B9AA97FF", "#2C5F2D","#4F6980FF","#849DB1FF",  "#A2CEAAFF",
+ "#B66353FF","#FBB04EFF","#F47942FF", "#C9A84C", "#8E7B9B","#4A7C9E", "#5B8C85", "#638B66FF")
+
+
+# Define strain colors
+
+
+# Define source colors
+source_levels <- sort(unique(na.omit(tip_data$Source)))
+source_palette <- c("#E8967A", "#7EB8B2","gray75")
+names(source_palette) <- source_levels
+
+tip_data$Source <- factor(tip_data$Source, levels = source_levels)
+
+p <- ggtree(
+    combined_tree,
+    layout = "circular",
+    color  = "gray40",
+    size   = 0.2
+  ) %<+% tip_data
+
+tip_order <- rev(p$data$label[!is.na(p$data$label)])
+
+# Set factor levels to match tree order
+# Order species by first appearance in the tree
+species_order <- tip_data$species_pretty[match(tip_order, tip_data$label)]
+species_levels <- c("Klebsiella pneumoniae", "Klebsiella michiganensis", "Klebsiella aerogenes", "Enterobacter hormaechei", "Enterobacter kobei", "Citrobacter freundii", "Escherichia coli", "Proteus mirabilis", "Pseudomonas aeruginosa", "Stenotrophomonas maltophilia", "Acinetobacter pitii",  "Enterococcus faecalis",  "Clostridium perfringens", "Clostridioides difficile","Enterococcus faecium")
+
+tip_data$species_pretty <- factor(tip_data$species_pretty, levels = species_levels)
+
+# Order sources using the same tree-based approach
+source_order <- tip_data$Source[match(tip_order, tip_data$label)]
+source_levels <- unique(na.omit(source_order))
+tip_data$Source <- factor(tip_data$Source, levels = source_levels)
+
+# Alternate source colors when strain assignments change
+current_strain <- NULL
+toggle <- TRUE
+alt_color_map <- c()
+
+for (i in seq_along(tip_order)) {
+  lbl <- tip_order[i]
+  idx <- which(tip_data$label == lbl)
+  if (length(idx) == 0) next
+
+  s <- tip_data$strain_num[idx]
+  s_char <- ifelse(is.na(s), NA_character_, as.character(s))
+  if (length(s_char) == 0 || is.na(s_char)) {
+    alt_color_map[lbl] <- NA
+    next
+  }
+
+  if (is.null(current_strain) || !identical(s_char, current_strain)) {
+    toggle <- !toggle                # flip on each new strain
+    current_strain <- s_char
+  }
+  alt_color_map[lbl] <- ifelse(toggle, "A", "B")
+}
+
+tip_data$strain_alt <- alt_color_map[tip_data$label]
+
+# Count samples represented by each category
+species_counts <- tip_data %>%
+  count(species_pretty) %>%
+  deframe()  # converts to named vector
+
+source_counts <- tip_data %>%
+  count(Source) %>%
+  deframe()
+
+# Rebuild the plot with counts in the labels
+p <- ggtree(
+    combined_tree,
+    layout = "circular",
+    color  = "gray40",
+    size   = 0.2
+  ) %<+% tip_data +
+  geom_tippoint(
+    aes(color = species_pretty),
+    size = 2
+  ) +
+  scale_color_manual(
+    name   = "Species (including reference)",
+    values = WGS_colors,
+    labels = function(x) paste0(x, " (n=", species_counts[x], ")"),
+    na.translate = FALSE
+  ) +
+
+  # Inner ring: source
+  geom_fruit(
+    geom = geom_tile,
+    mapping = aes(y = label, fill = Source),
+    width  = 0.95,
+    offset = 0.08
+  ) +
+  scale_fill_manual(
+    name   = "Source",
+    values = source_palette,
+    labels = function(x) paste0(x, " (n=", source_counts[x], ")"),
+    na.value = "transparent",
+    na.translate = FALSE
+  ) +
+
+  new_scale_fill() +
+
+  # Outer ring: alternating strain colors
+  geom_fruit(
+    geom = geom_tile,
+    mapping = aes(y = label, fill = strain_alt),
+    width  = 0.8,
+    offset = 0.05
+  ) +
+  scale_fill_manual(
+    name   = "Strain groups\n(alternating colors)",
+    values = c("A" = "#3D3D5C", "B" = "#C4A882"),
+    labels = c("A" = "",
+               "B" = ""),
+    na.value = "transparent",
+    na.translate = FALSE,
+    guide  = guide_legend(nrow = 1)
+  ) +
+  xlim(NA, max(p$data$x, na.rm = TRUE) * 1.3) +  # expand right side by 30%
+
+  theme_void() +
+  theme(
+    legend.position = c(1, 0.5),
+    legend.text = element_text(size = 6),
+    legend.title = element_text(size = 8),
+    legend.key.size = unit(0.4, "cm"),
+    legend.box.spacing = unit(0.1, "cm")
+  )
+
+print(p)
+
+
+```
+
+### 2.4 WGS strain-sharing events
+
+```{r WGS strain sharing events}
+
+# Assign patients to WGS strains
+strain_assignments <- micro_cx %>%
+  filter(!is.na(WGS_t_cluster_strain)) %>%
+  distinct(WGS_t_cluster_strain, nPID)
+
+# Estimate possible transmission events assuming one facility introduction per strain cluster
+strain_events <- strain_assignments %>%
+  count(WGS_t_cluster_strain, name = "n_patients") %>%
+  mutate(strain_sharing_events = n_patients - 1)
+
+# Summarize overall strain-sharing events
+total_events <- sum(strain_events$strain_sharing_events)
+n_clusters <- nrow(strain_events)
+unique_patients <- n_distinct(strain_assignments$nPID)
+
+
+```
+
+
+## 3. mNGS characterization
+
+```{r mNGS sample metrics}
+
+nrow(mNGS_samples)
+
+mNGS_samples %>% summarise(n_ind = n_distinct(nPID))
+num_samples_ind <- as.data.frame(table(mNGS_samples$nPID))
+summary(num_samples_ind$Freq)
+
+
+```
+
+
+## 4. MAG characterization
+
+### 4.1 MAG metrics
+
+```{r MAG summary}
+
+# MAG domain summary
+tbl_summary(MAGs_all,
+  include = c(domain)
+)
+
+# Percentage of MAGs with >=90% completeness
+(nrow(MAGs_all %>% filter(SCG_completeness >= 90)) / nrow(MAGs_all)) * 100
+
+# Percentage of MAGs with <500 contigs
+(nrow(MAGs_all %>% filter(contigs <500)) / nrow(MAGs_all)) * 100
+
+```
+
+
+### 4.2 Supplementary Figure 2
+
+```{r main_MAG richness}
+
+# Figure 2A: MAG completeness distribution
+completeness <- ggplot(MAGs_all, aes(x = SCG_completeness)) +
+  geom_density(fill = "paleturquoise4", alpha = 0.5, color=NA) +
+  labs(
+    x = "SCG Completeness (%)",
+    y = "Density"
+  ) +
+  scale_x_continuous(expand = c(0,0), limits = c(0, NA)) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, NA)) +
+  theme(plot.margin = unit(c(0.5, 2, 0.5, 0.5), "lines")) +
+  theme_classic() +
+  theme(
+    plot.margin = unit(c(0.5, 2, 0.5, 0.5), "lines"),
+    axis.title = element_text(size = 10),
+    axis.text = element_text(size = 9)
+  )
+
+
+# Figure 2B: Contig count distribution
+contigs <- ggplot(MAGs_all, aes(x = contigs)) +
+  geom_density(fill = "paleturquoise4", alpha = 0.5, color=NA) +
+  labs(
+    x = "Contigs per MAG",
+    y = "Density"
+  ) +
+  scale_x_continuous(expand = c(0,0), limits = c(0, NA)) +
+  scale_y_continuous(expand = c(0,0), limits = c(0, NA)) +
+  theme_classic() +
+  theme(
+    axis.title = element_text(size = 10),
+    axis.text = element_text(size = 9)
+  )
+
+# Figure 2C: MAG richness versus sequencing depth
+
+# Scale total reads to millions
+mNGS_samples_nbm <- mNGS_samples %>%
+  mutate(total_10mil_reads = total_reads / 1e6)
+
+
+# Fit the negative binomial model
+nb_model <- glm.nb(
+  MAG_count ~ total_10mil_reads + SDI_microbes,
+  data = mNGS_samples_nbm
+)
+
+# Extract rate ratios and 95% confidence intervals
+exp_coef <- exp(coef(nb_model))
+ci <- exp(confint(nb_model))
+results <- cbind(Rate_Ratio = exp_coef, CI_lower = ci[,1], CI_upper = ci[,2])
+results
+
+
+# Median SDI for visualization
+median_SDI <- median(mNGS_samples_nbm$SDI_microbes)
+
+# Prediction grid for plotting
+newdat <- data.frame(
+  total_10mil_reads = seq(min(mNGS_samples_nbm$total_10mil_reads),
+                        max(mNGS_samples_nbm$total_10mil_reads),
+                        length.out = 100),
+  SDI_microbes = median_SDI
+)
+
+# Predicted MAGs and 95% CI
+pred <- predict(nb_model, newdata = newdat, type = "link", se.fit = TRUE)
+newdat <- newdat %>%
+  mutate(
+    fit = exp(pred$fit),
+    lower = exp(pred$fit - 1.96 * pred$se.fit),
+    upper = exp(pred$fit + 1.96 * pred$se.fit)
+  )
+
+summary(nb_model)
+
+# Extract IRR and 95% CI
+IRR <- exp(coef(nb_model))
+CI  <- exp(confint(nb_model))  # profile likelihood CI
+
+irr_table <- data.frame(
+  Variable = names(IRR),
+  IRR = IRR,
+  CI_lower = CI[,1],
+  CI_upper = CI[,2]
+)
+
+summary(nb_model)
+
+irr_table
+
+
+eq_label <- paste0(
+  "log(E[MAGs]) = β0 + β1(reads/10M) + β2(SDI)"
+)
+
+
+reads_plot <- ggplot(mNGS_samples_nbm, aes(x = total_10mil_reads, y = MAG_count)) +
+  geom_point(aes(color = Study_Group == "Donor"), alpha = 0.6, size = 2.5) +
+
+  geom_line(data = newdat, aes(x = total_10mil_reads, y = fit),
+            color = "black", size = 1, inherit.aes = FALSE) +
+
+  geom_ribbon(data = newdat,
+              aes(x = total_10mil_reads, ymin = lower, ymax = upper),
+              alpha = 0.2, fill = "grey70", inherit.aes = FALSE) +
+
+  scale_color_manual(
+    values = c("FALSE" = "grey60", "TRUE" = "#FC8D62"),
+    labels = c("Perirectal", "Stool"),
+    name = "Sample type"
+  ) +
+
+  annotate(
+    "text",
+    x = Inf, y = Inf,
+    label = "log(E[MAGs]) == beta[0] + beta[1]*(reads/10*M) + beta[2]*SDI",
+    parse = TRUE,
+    hjust = 1.3, vjust = 5.1, size = 3.5
+  ) +
+
+  labs(
+    x = "Total reads (per 10 million)",
+    y = "MAG richness"#,
+  ) +
+
+  scale_x_continuous(expand = expansion(mult = c(0, 0))) +  # 0% left, 5% right
+  scale_y_continuous(expand = expansion(mult = c(0, 0))) +  # 0% bottom, 5% top
+  coord_cartesian(clip = "off") +  # Allow plotting outside panel
+
+  theme_classic() +
+  theme(legend.position = c(0.5, 0.99),           # centered horizontally, top
+    legend.justification = c(0.5, 1),         # anchor at top-center of legend
+    legend.direction = "horizontal",          # horizontal layout
+    plot.title = element_text(hjust = 0.5)
+  )  +
+  theme_classic() +
+  theme(
+    axis.title = element_text(size = 11),
+    axis.text = element_text(size = 10),
+    legend.text = element_text(size = 9),
+    legend.title = element_text(size = 9),
+    legend.position = c(0.5, 0.99),
+    legend.justification = c(0.5, 1),
+    legend.direction = "horizontal"
+  )
+
+# Prepare the model results table.
+# Extract model p-values.
+p_values <- coef(summary(nb_model))[, "Pr(>|z|)"]  # p-values from the z-test
+
+# Add p-values to the IRR table.
+irr_table <- irr_table %>%
+  mutate(`P-value` = p_values[Variable])
+
+# Format the IRR and 95% CI for display.
+irr_table_edited <- irr_table %>%
+  mutate(
+    IRR = round(IRR, 1),
+    CI_lower = round(CI_lower, 1),
+    CI_upper = round(CI_upper, 1),
+    IRR = sprintf("%.1f", IRR),
+    CI_lower = sprintf("%.1f", CI_lower),
+    CI_upper = sprintf("%.1f", CI_upper),
+    `95% CI` = paste0("(", CI_lower, " - ", CI_upper, ")"),
+    `P-value` = sprintf("%.1e", `P-value`)) %>%
+  filter(Variable!="(Intercept)") %>%
+  mutate(Variable = case_when(Variable=="total_10mil_reads" ~ "reads/10M",
+                              Variable=="SDI_microbes" ~ "SDI"),
+         ) %>%
+  select(Variable, IRR, `95% CI`, `P-value`)
+
+colnames(irr_table_edited) <- c("Variable", "IRR", "95% CI", "p-value")
+
+# Convert the results table to a compact table grob.
+table_grob <- tableGrob(
+  irr_table_edited,
+  rows = NULL,  # or set to rownames(irr_table_edited) if you want row names
+  theme = ttheme_minimal(
+    base_size = 8,  # smaller font size
+    core = list(fg_params = list(cex = 1.3)),  # core cells font size
+    colhead = list(fg_params = list(cex = 1.3))  # column header font size
+  )
+)
+
+right_col <- reads_plot / plot_spacer() /  wrap_elements(table_grob, ignore_tag = TRUE) +
+  plot_layout(heights = c(6,0.1, 1))
+
+layout <- (completeness / contigs) | right_col
+layout <- layout +
+  plot_layout(widths = c(1, 2))
+
+layout_annotated <- layout +
+  plot_annotation(tag_levels = 'a') &
+  theme(plot.tag = element_text(face = 'bold', size = 12))
+
+layout_annotated
+
+```
+
+### 4.3 Supplementary Table 2
+
+```{r Supplementary Table 2}
+
+# All samples
+tbl_summary(mNGS_samples,
+  include = c(total_reads, SDI_microbes, MAG_count)
+)
+
+tbl_summary(MAGs_all,
+  include = c(SCG_completeness, contigs, size)
+)
+
+#### 4.3.1 Perirectal samples
+mNGS_pr <- mNGS_samples %>% filter(Source=="PR")
+MAGs_pr <- MAGs_all %>% filter(Source=="PR")
+
+tbl_summary(mNGS_pr,
+  include = c(total_reads, SDI_microbes, MAG_count)
+)
+
+tbl_summary(MAGs_pr,
+  include = c(SCG_completeness, contigs, size)
+)
+
+#### 4.3.2 Stool samples
+mNGS_stool <- mNGS_samples %>% filter(Source=="stool")
+MAGs_stool <- MAGs_all %>% filter(Source=="stool")
+
+tbl_summary(mNGS_stool,
+  include = c(total_reads, SDI_microbes, MAG_count)
+)
+
+tbl_summary(MAGs_stool,
+  include = c(SCG_completeness, contigs, size)
+)
+
+```
+
+### 4.4 Supplementary Figure 3
+
+```{r AMR plot}
+# Define colors used in Supplementary Figure 3
+col_bar  <- "paleturquoise4"   # blue  – unique SGBs (bars)
+col_line <- "coral"   # amber – total AMR genes (line)
+
+#### 4.4.1 Figure A: SGBs and AMR genes by antibiotic class
+keep_classes <- c(
+  "Aminoglycoside", "Chloramphenicol", "Beta-lactam", "Fluoroquinolone",
+  "Glycopeptide", "MLS", "Oxazolidinone", "Rifampin", "Sulfonamide",
+  "Tetracycline", "Colistin", "Lipopeptide", "Fosfomycin", "Nitrofurantoin",
+  "Multi-drug efflux pump"
+)
+
+fig_a_data <- MAGs_amr |>
+  filter(abx_class %in% keep_classes) |>
+  group_by(abx_class) |>
+  summarise(
+    unique_SGBs = n_distinct(MAG_derep_num, na.rm = TRUE),
+    total_genes  = n(),
+    .groups = "drop"
+  ) |>
+  arrange(desc(total_genes), desc(unique_SGBs)) |>
+  mutate(abx_class = fct_inorder(abx_class))
+
+scale_factor <- max(fig_a_data$total_genes) / max(fig_a_data$unique_SGBs)
+
+# Plot Figure A.
+fig_a <- ggplot(fig_a_data, aes(x = abx_class)) +
+  geom_col(
+    aes(y = total_genes),
+    fill  = col_bar,
+    alpha = 0.85,
+    width = 0.7
+  ) +
+  scale_y_continuous(
+    name     = "Number of MAG-based ARGs",
+    breaks   = scales::breaks_pretty(n = 6),
+    limits = c(0, 1400),
+    expand = c(0,0)
+  ) +
+  scale_x_discrete(labels = function(x) str_wrap(x, width = 14)) +
+  labs(
+    x       = "\nAntibiotic class"
+  ) +
+  theme_bw(base_size = 11) +
+  theme(
+    axis.text.x        = element_text(angle = 90, hjust = 1, size = 8),
+    axis.title.y  = element_text(size = 10),
+    panel.grid.minor   = element_blank(),
+    panel.grid.major.x = element_blank(),
+    plot.caption       = element_text(size = 8, colour = "grey50", hjust = 0),
+    plot.margin        = margin(8, 12, 8, 8)
+  )
+
+print(fig_a)
+
+#### 4.4.2 Figure B: Priority AMR genes by organism
+
+# Define priority genes; category controls point color and gene_label controls the y-axis.
+priority_genes <- tribble(
+  ~gene_pattern,    ~gene_label,    ~category,
+  # Carbapenemases
+  "^KPC-3$",        "KPC-3",        "Carbapenemase",
+  # ESBLs
+  "^CTX-M-15$",       "CTX-M-15",     "ESBL",
+  "^SHV-7$",        "SHV-7",        "ESBL",
+  "^SHV-28$",       "SHV-28",       "ESBL",
+  "^SHV-32$",       "SHV-32",       "ESBL",
+  "^SHV-50$",       "SHV-50",       "ESBL",
+  # Vancomycin resistance
+  "^vanA$",           "vanA",         "Vancomycin resistance",
+  "^vanB$",           "vanB",         "Vancomycin resistance",
+  # Colistin
+  "mcr",            "mcr",          "Colistin resistance",
+  # Fluoroquinolone
+  "^QnrB1$",        "QnrB1",        "Fluoroquinolone resistance",
+  "^QnrS1$",        "QnrS1",        "Fluoroquinolone resistance"
+)
+
+detect_hits <- function(df, pattern, label, category) {
+  df |>
+    filter(str_detect(gene_name, regex(pattern, ignore_case = TRUE))) |>
+    mutate(gene_label = label,
+           category   = category)
+}
+
+fig_b_raw <- pmap_dfr(
+  priority_genes,
+   ~ detect_hits(MAGs_amr, ..1, ..2, ..3)
+)
+
+fig_b_raw <- fig_b_raw |>
+  distinct(gene_label, category, MAG_derep_num, species)
+
+cat_order <- c(
+  "Carbapenemase",
+  "ESBL",
+  "Vancomycin resistance",
+  "Colistin resistance",
+  "Fluoroquinolone resistance"
+)
+gene_order <- c(
+  "KPC-3", "CTX-M-15",
+  "SHV-7", "SHV-28", "SHV-32", "SHV-50",
+  "vanA", "vanB",
+  "mcr",
+  "QnrB1", "QnrS1"
+)
+
+fig_b_raw <- fig_b_raw |>
+  mutate(
+    y_label    = gene_label,   # just the gene name — no drug class in brackets
+    category   = factor(category, levels = cat_order),
+    gene_label = factor(gene_label, levels = gene_order)
+  ) |>
+  arrange(category, gene_label) |>
+  mutate(y_label = fct_inorder(y_label))
+
+cat_colours <- c(
+  "Carbapenemase" = "#A32D2D",
+  "ESBL"                              = "#F47942FF",
+  "Vancomycin resistance"             = "paleturquoise4",
+  "Colistin resistance"               = "black", #not actually detected
+  "Fluoroquinolone resistance"        = "#8B4789"
+)
+
+# Match y-axis text colors to gene categories
+y_label_order    <- levels(fig_b_raw$y_label)
+y_label_category <- fig_b_raw |>
+  distinct(y_label, category) |>
+  arrange(match(y_label, y_label_order))
+axis_text_colours <- rev(cat_colours[as.character(y_label_category$category)])
+
+# Denominator: total distinct MAG IDs per species across all samples.
+mags_per_species <- MAGs_amr |>
+  distinct(species, MAG_ID) |>
+  count(species, name = "total_mags")
+
+# Numerator: distinct MAG IDs carrying each priority gene per species.
+detect_hits_mag <- function(df, pattern, label, category) {
+  df |>
+    filter(str_detect(gene_name, regex(pattern, ignore_case = TRUE))) |>
+    distinct(species, MAG_ID) |>
+    mutate(gene_label = label,
+           category   = category)
+}
+
+fig_b_raw_mag <- pmap_dfr(
+  priority_genes,
+  ~ detect_hits_mag(MAGs_amr, ..1, ..2, ..3)
+)
+
+# Create a key for joining y-axis labels.
+y_label_key <- fig_b_raw |>
+  distinct(gene_label, category, y_label)
+
+fig_b_plot <- fig_b_raw_mag |>
+  group_by(gene_label, category, species) |>
+  summarise(mags_with_gene = n_distinct(MAG_ID), .groups = "drop") |>
+  left_join(mags_per_species, by = "species") |>
+  left_join(y_label_key, by = c("gene_label", "category")) |>
+  mutate(
+    prop    = mags_with_gene / total_mags,
+    # clean GTDB clade suffixes (e.g. Enterococcus_B → Enterococcus)
+    species_clean = str_replace(species, "_[A-Z](?= |$)", ""),
+    # x-axis label: "Species name (n=XX)" where XX is the denominator
+    x_label = paste0(species_clean, " (n=", total_mags, ")")
+  )
+
+# Order x-axis labels alphabetically by cleaned species name
+x_order <- fig_b_plot |>
+  distinct(x_label, species_clean) |>
+  arrange(species_clean) |>
+  pull(x_label)
+fig_b_plot <- fig_b_plot |>
+  mutate(
+    x_label      = factor(x_label, levels = x_order),
+    prop_label   = mags_with_gene
+  )
+
+# Plot Figure B.
+fig_b <- ggplot(fig_b_plot,
+                aes(x = x_label, y = y_label, colour = category, size = prop)) +
+  geom_point(shape = 19, alpha = 0.85) +
+  geom_text(
+    aes(label = prop_label),
+    colour = "white", size = 2.5, fontface = "bold"
+  ) +
+  scale_colour_manual(
+    values = cat_colours,
+    name   = "Resistance category"
+  ) +
+  scale_size_continuous(
+    name   = "Proportion of MAGs with ARG detected",
+    range  = c(2, 8),
+    limits = c(0, 1),
+    breaks = c(0.25, 0.5, 0.75, 1),
+    labels = c("25%", "50%", "75%", "100%")
+  ) +
+  scale_x_discrete(position = "bottom") +
+  scale_y_discrete(limits = rev(y_label_order)) +
+  labs(
+    x       = "\nBacterial species (n = MAG detections)",
+    y       = "ARG\n"
+  ) +
+  theme_bw(base_size = 11) +
+  theme(
+    axis.text.x      = element_text(angle = 40, hjust = 1, size = 9,
+                                    face = "italic"),
+    axis.text.y      = element_text(size = 9,
+                                    colour = axis_text_colours),
+    axis.title       = element_text(size = 10),
+    panel.grid.major = element_line(colour = "grey88", linewidth = 0.4),
+    panel.grid.minor = element_blank(),
+    legend.position  = "right",
+    legend.title     = element_text(size = 9),
+    legend.text      = element_text(size = 9),
+    plot.caption     = element_text(size = 8, colour = "grey50", hjust = 0),
+    plot.margin      = margin(8, 12, 8, 8),
+    legend.justification = "left",
+    legend.box.just = "left"
+  ) +
+  guides(
+    colour = guide_legend(override.aes = list(size = 4), order = 1, nrow = 4),
+    size   = guide_legend(order = 2, nrow = 4)
+  )
+
+print(fig_b)
+
+
+# Extract the legend, then remove it from the main plot.
+fig_b_legend <- cowplot::get_legend(fig_b)
+fig_b_no_legend <- fig_b + theme(legend.position = "none")
+
+# Assemble the final figure: Figure A on top, Figure B and legend below.
+# Keep the legend in a dedicated panel.
+AMR_plot <-
+  fig_a /
+  ((fig_b_no_legend | wrap_elements(fig_b_legend)) + plot_layout(widths = c(1.5, 1)))+
+  plot_layout(heights = c(1, 1.5)) +
+  plot_annotation(tag_levels = list(c("a", "b"))) &
+  theme(plot.tag = element_text(face = "bold", size = 14))
+
+AMR_plot
+
+```
+
+
+## 5. SGB characterization
+
+```{r}
+
+SGBs <- MAGs_all %>% filter(!is.na(MAG_derep_num)) %>%
+  left_join(patients %>% select(nPID, Donor), by="nPID") %>%
+  mutate(Donor = ifelse(Donor=="MEPSD0008", "D01",
+                        ifelse(Donor=="MEPSD0015", "D02",
+                               ifelse(Donor=="MEPSD0015, MEPSD0008", "Both",NA_character_))))
+
+# Unique MAGs
+max(SGBs$MAG_derep_num)
+
+```
+
+
+### 5.1 Supplementary Figure 4
+
+```{r SGB bacterial phylo tree}
+
+taxonomy_clean <- SGBs %>%
+  mutate(phylum = ifelse(phylum=="Desulfobacterota_I", "Desulfobacterota", phylum)) %>%
+  mutate(phylum = ifelse(is.na(phylum), "Unclassified", phylum),
+         class  = ifelse(is.na(class),  paste(phylum,"class"),  class),
+         order  = ifelse(is.na(order),  paste(class,"order"),   order),
+         family = ifelse(is.na(family), paste(order,"family"),  family),
+         genus  = ifelse(is.na(genus),  paste(family,"genus"),  genus),
+         species= ifelse(is.na(species),paste(genus,"species"), species)) %>%
+  mutate(species = ifelse(phylum=="Unclassified" | domain=="Unclassified", MAG_derep, species)) %>%
+  mutate(genus = ifelse(phylum=="Unclassified" | domain=="Unclassified", MAG_derep, genus)) %>%
+  mutate(family = ifelse(phylum=="Unclassified" | domain=="Unclassified", MAG_derep, family)) %>%
+  mutate(order = ifelse(phylum=="Unclassified" | domain=="Unclassified", MAG_derep, order)) %>%
+  mutate(class = ifelse(phylum=="Unclassified" | domain=="Unclassified", MAG_derep, class)) %>%
+  mutate(
+    phylum_id  = paste0("p__", phylum),
+    class_id   = paste0(phylum_id,  "|c__", class),
+    order_id   = paste0(class_id,   "|o__", order),
+    family_id  = paste0(order_id,   "|f__", family),
+    genus_id   = paste0(family_id,  "|g__", genus),
+    species_id = paste0(genus_id,   "|s__", species),
+    domain_id  = paste0("d__Bacteria"))
+
+length(unique(taxonomy_clean$genus))
+
+
+species_per_phylum <- taxonomy_clean %>%
+  select(species_id, phylum) %>%   # species = terminal nodes
+  distinct() %>%                   # one row per species
+  count(phylum, name = "n_species") %>%
+  arrange(desc(n_species))
+
+levels <- c("domain_id","phylum_id","class_id",
+            "order_id","family_id","genus_id","species_id")
+
+edges <- map_dfr(seq_along(levels)[-1], function(i){
+  taxonomy_clean %>%
+    dplyr::select(from = all_of(levels[i - 1]),
+           to   = all_of(levels[i])) %>%
+    distinct()
+})
+
+tax_tree <- graph_from_data_frame(edges, directed = TRUE)
+root_node <- which(V(tax_tree)$name == "domain_id")
+
+tax_tree <- tax_tree %>%
+  as_tbl_graph() %>%
+  activate(nodes) %>%
+  mutate(sort_key = name) %>%   # alphabetical
+  arrange(sort_key)
+
+tg <- tax_tree %>%
+  activate(nodes) %>%
+  mutate(
+    phylum = stringr::str_extract(name, "p__[^|]+"),
+    phylum = gsub("^p__", "", phylum),
+    is_domain = grepl("^d__", name)
+  )
+
+phylum_levels <- tg %>%
+  activate(nodes) %>%
+  as_tibble() %>%
+  filter(!is.na(phylum)) %>%
+  distinct(phylum) %>%
+  pull(phylum)
+
+phylum_levels <- c(
+  sort(phylum_levels[phylum_levels != "Unclassified"]),
+  "Unclassified"
+)
+
+tg <- tg %>%
+  activate(nodes) %>%
+  mutate(
+    phylum = factor(phylum, levels = phylum_levels)
+  )
+
+tg <- tg %>%
+  activate(nodes) %>%
+  arrange(
+    phylum,                    # order by phylum_levels
+    !node_is_leaf(),           # draw internal nodes first
+    name                       # stable tie-breaker
+  )
+
+my_colors<-c("#4F6980FF","#849DB1FF", "#A2CEAAFF", "#638B66FF", "#BFBB60FF", "#F47942FF",
+"#FBB04EFF", "#B66353FF","#D7CE9FFF", "#B9AA97FF", "black")
+
+
+# Ensure all factor levels are represented in the intended order.
+phylum_counts_df <- tibble(phylum = phylum_levels) %>%
+  left_join(species_per_phylum, by = "phylum") %>%
+  replace_na(list(n_species = 0))
+
+# Create legend labels in the same order as phylum_levels.
+phylum_labels <- paste0(phylum_counts_df$phylum, " (n=", phylum_counts_df$n_species, ")")
+
+total_n <- sum(species_per_phylum$n_species)
+
+
+tree <- ggraph(tg, layout = "dendrogram", circular = TRUE) +
+  geom_edge_diagonal(color = "gray80", width = 0.2) +
+  geom_node_point(
+    aes(color = phylum),
+    size = 1.5,
+    na.rm = TRUE
+  ) +
+  scale_color_manual(
+    name = paste0("Bacterial phylum (N=", total_n, ")"),
+    values = my_colors,
+    labels = phylum_labels,
+    na.translate = FALSE
+  ) +
+  theme_void() +
+  theme(
+    legend.position = "right",
+    legend.text = element_text(size = 8)
+  )
+
+tree
+
+```
+
+### 5.2 Figure 2
+
+```{r Figure 2 Data}
+
+mag_to_sgb <- MAGs %>%
+  group_by(mNGS_sample_name) %>%
+  summarise(
+    total_MAGs = n(),
+    high_quality_MAGs = sum(!is.na(MAG_derep_num)),
+    recovery_rate = high_quality_MAGs / total_MAGs * 100
+  ) %>%
+  left_join(mNGS_samples %>% select(mNGS_sample_name, nPID, Study_Group, Source),
+            by = "mNGS_sample_name")
+
+
+```
+
+#### 5.2.1 Figure 2B
+
+```{r Figure 2B}
+
+p1 <- ggplot(mag_to_sgb, aes(x = total_MAGs, y = high_quality_MAGs)) +
+  geom_point(alpha = 0.5, size = 1, color="grey60") +
+  geom_smooth(method = "lm", se = FALSE, color="black", size=0.5) +
+  theme_classic() +
+  labs(x = "MAG richness", y = "SGB richness") +
+  theme(legend.position = "bottom", legend.title = element_blank()) +
+  coord_cartesian(clip = "off") +
+  scale_x_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.02))) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.02))) +
+        stat_regline_equation(label.x=29, label.y=7, size=3)
+
+```
+
+
+#### 5.2.2 Figure 2C
+
+```{r Figure 2C}
+p2 <- ggplot(mag_to_sgb, aes(x = recovery_rate)) +
+  geom_histogram(bins = 20, fill = "grey60", alpha = 0.7) +
+  theme_classic() +
+  labs(x = "MAG to SGB recovery rate (%)", y = "Number of samples") +
+  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.02)))
+
+```
+
+
+#### 5.2.3 Figure 2D
+
+```{r Figure 2D}
+p3 <- ggplot(mag_to_sgb %>%
+               mutate (Source = ifelse(Source=="PR","Perirectal", "Stool")),
+             aes(x = Source, y = recovery_rate, color = Source)) +
+  geom_jitter(width = 0.15, size = 1, alpha = 0.5) +
+  geom_boxplot(outlier.shape = NA, width = 0.35, fill=NA, color="black", size = 0.5) +
+  scale_color_manual(values = c("Stool" = "coral",
+                                 "Perirectal" = "grey60")) +
+  theme_classic() +
+  labs(x = "", y = "MAG to SGB\nrecovery rate (%)") +
+  theme(legend.position = "none") +
+  scale_y_continuous(expand = expansion(mult = c(0, 0.02)), breaks = c(0, 25, 50, 75, 100)) +
+  coord_cartesian(
+    ylim = c(0, NA),
+    clip = "off"
+  )
+
+# Wilcoxon rank-sum test for recovery rate
+wilcox.test(recovery_rate ~ Source,
+            data = mag_to_sgb %>%
+              mutate(Source = ifelse(Source == "PR", "Perirectal", "Stool")))
+
+```
+
+#### 5.2.4 Figure 2E
+
+```{r Figure 2E}
+
+detection_freq <- SGBs %>%
+  group_by(MAG_derep) %>%
+  summarise(
+    n_samples = n_distinct(mNGS_sample_name),
+    n_participants = n_distinct(nPID),
+    pct_samples = n_samples / n_distinct(mNGS_samples$mNGS_sample_name) * 100
+  )
+
+
+sgb_sharing <- detection_freq %>%
+  mutate(sharing = case_when(
+    n_participants == 1 ~ "1 person",
+    n_participants <= 5 ~ "2-5 people",
+    n_participants <= 15 ~ "6-15 people",
+    TRUE ~ ">15 people"
+  ))
+
+sgb_sharing_summary <- sgb_sharing %>%
+  count(sharing) %>%
+  mutate(sharing = factor(sharing, levels = c(">15 people",
+                                               "6-15 people",
+                                               "2-5 people",
+                                               "1 person")))
+
+p4 <- ggplot(sgb_sharing_summary, aes(x = sharing, y = n, fill = sharing)) +
+  geom_col(width = 0.85) +
+  geom_text(aes(label = n), hjust = -0.2, size = 3) +
+  scale_fill_manual(values = c("1 person" = "grey60",
+                                "2-5 people" = "#A2CEAAFF",
+                                "6-15 people" = "paleturquoise4",
+                                ">15 people" = "#2F6B6D")) +
+  coord_flip() +
+  theme_classic() +
+  theme(legend.position = "none") +
+  labs(x = "", y = "Number of SGBs") +
+  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.2)))
+
+```
+
+
+#### 5.2.5 Figure 2F
+
+```{r Figure 2F}
+samples_with_MAGs <- SGBs %>%
+  distinct(mNGS_sample_name)
+
+zero_samples <- setdiff(mNGS_samples$mNGS_sample_name, samples_with_MAGs$mNGS_sample_name)
+
+species_mat <- SGBs %>%
+  distinct(mNGS_sample_name, MAG_derep) %>%
+  mutate(present = 1) %>%
+  pivot_wider(
+    names_from = MAG_derep,
+    values_from = present,
+    values_fill = 0
+  ) %>%
+  column_to_rownames("mNGS_sample_name") %>%
+  as.matrix()
+
+jaccard_dist <- vegdist(species_mat, method = "jaccard", binary = TRUE)
+
+pcoa_res <- pcoa(jaccard_dist)
+
+pcoa_df <- data.frame(
+  sample = rownames(species_mat),
+  PC1 = pcoa_res$vectors[,1],
+  PC2 = pcoa_res$vectors[,2]
+)
+
+n_excluded <- length(zero_samples)
+
+pcoa_df2 <- pcoa_df %>%
+  left_join(mNGS_samples, by = c("sample" = "mNGS_sample_name")) %>%
+  left_join(samples %>% select(nSID, Room) %>% distinct(),
+            by="nSID") %>%
+  mutate(Population = ifelse(nPID=="D01", "Donor 1",
+                             ifelse(nPID=="D02","Donor 2" ,"LTAC residents"))) %>%
+  mutate(TID_v2 = ifelse(Study_Group=="Donor","Donor",
+                         nTID)) %>%
+  mutate(TID_v2 = factor(TID_v2, levels = c("Donor", paste0("W", 1:12))))  %>%
+  group_by(nPID) %>%
+  arrange(nPID, TID_v2) %>%  # Sort by individual AND time
+  mutate(relative_timepoint = row_number(),
+         max_timepoints = n(),
+         alpha_scaled = relative_timepoint / max_timepoints, # scale 0 to 1 within individual
+         color_group = ifelse(n() == 1, "Single sample", as.character(nPID))) %>%
+  ungroup() %>%
+  arrange(nPID, TID_v2)
+
+Jac_dis1 <- ggplot(pcoa_df2, aes(PC1, PC2, color=Population)) +
+  geom_point(size = 2, alpha = 0.8) +
+  theme_classic() +
+  labs(
+    x = paste0("Axis 1 (", round(pcoa_res$values$Relative_eig[1] * 100, 1), "%)"),
+    y = paste0("Axis 2 (", round(pcoa_res$values$Relative_eig[2] * 100, 1), "%)")
+  ) +
+  scale_x_continuous(limits = c(-0.8, 0.25)) +
+  scale_color_manual(values = c("Donor 1" = "paleturquoise4",
+                                "Donor 2" = "#A2CEAAFF",
+                                "LTAC residents" = "coral")) + 
+  theme(axis.text = element_blank(), 
+        axis.ticks = element_blank(),
+        legend.position = c(0.02, 0.98),
+        legend.background = element_rect(fill = NA, color = NA),
+        legend.justification = c(0, 1))
+
+```
+
+#### 5.2.6 Figure 2G
+
+```{r Figure 2G}
+dist_df <- as.matrix(jaccard_dist) %>%
+  as.data.frame() %>%
+  rownames_to_column("sample1") %>%
+  pivot_longer(-sample1, names_to = "sample2", values_to = "distance") %>%
+  left_join(pcoa_df2 %>% select(sample, nPID), by = c("sample1" = "sample")) %>%
+  rename(nPID1 = nPID) %>%
+  left_join(pcoa_df2 %>% select(sample, nPID), by = c("sample2" = "sample")) %>%
+  rename(nPID2 = nPID) %>%
+  filter(sample1 < sample2) %>%  # avoid duplicates
+  filter(!sample1 %in% zero_samples & !sample2 %in% zero_samples) %>%  # exclude zero-SGB samples
+  mutate(comparison = ifelse(nPID1 == nPID2, "Within individual", "Between individuals"))
+
+# Add SGB counts to the pairwise distance table.
+dist_df <- dist_df %>%
+  left_join(
+    SGBs %>%
+      group_by(mNGS_sample_name) %>%
+      summarise(n_SGBs = n_distinct(MAG_derep)),
+    by = c("sample1" = "mNGS_sample_name")
+  ) %>%
+  rename(n_SGBs1 = n_SGBs) %>%
+  left_join(
+    SGBs %>%
+      group_by(mNGS_sample_name) %>%
+      summarise(n_SGBs = n_distinct(MAG_derep)),
+    by = c("sample2" = "mNGS_sample_name")
+  ) %>%
+  rename(n_SGBs2 = n_SGBs) %>%
+  mutate(min_SGBs = pmin(n_SGBs1, n_SGBs2, na.rm = TRUE))
+
+Jac_distance_horizontal <- ggplot(dist_df %>%
+                                    mutate(comparison = ifelse(comparison == "Within individual", "Within\nindividual", "Between\nindividuals")),
+                                  aes(x = distance, y = comparison, color = comparison)) +
+  geom_jitter(data = dist_df %>% filter(distance != 0) %>%
+                mutate(comparison = ifelse(comparison == "Within individual", "Within\nindividual", "Between\nindividuals")),
+              height = 0.1, size = 1, alpha = 0.3) +
+  geom_point(data = dist_df %>% filter(distance == 0) %>%
+               mutate(comparison = ifelse(comparison == "Within individual", "Within\nindividual", "Between\nindividuals")),
+             size = 1, alpha = 0.3) +
+  geom_boxplot(outlier.shape = NA, width = 0.35, color = "black", fill = NA, size = 0.5) +
+  scale_color_manual(values = c("Within\nindividual" = "coral",
+                                 "Between\nindividuals" = "paleturquoise4")) +
+  scale_y_discrete(limits = rev) +  
+  theme_classic() +
+  theme(legend.position = "none") +
+  coord_cartesian(clip = "off") +
+  labs(
+    x = "Jaccard dissimilarity",
+    y = ""
+  ) +
+  scale_x_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.02)))
+
+```
+
+#### 5.2.7 Figure 2H
+
+```{r Figure 2H}
+Jac_scatter <- ggplot(dist_df, aes(x = min_SGBs, y = distance, color = comparison, fill=comparison)) +
+  geom_point(alpha = 0.3, size = 1) +
+  geom_smooth(method = "loess", se = TRUE, alpha = 0.2, size=0.5) +
+  scale_color_manual(values = c("Within individual" = "coral",
+                                 "Between individuals" = "paleturquoise4")) +
+  scale_fill_manual(values = c("Within individual" = "coral",
+                                "Between individuals" = "paleturquoise4")) +
+  scale_y_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.02))) +
+  scale_x_continuous(limits = c(0, NA), expand = expansion(mult = c(0, 0.02))) +
+  coord_cartesian(clip = "off") +
+  theme_classic() +
+  labs(
+    x = "SGB richness of the SGB-poorer sample",
+    y = "Jaccard dissimilarity",
+    color = ""
+  ) +
+  guides(fill="none", color = guide_legend(override.aes = list(fill = NA))) + 
+  theme(legend.position = c(0.6, 0.2),
+        legend.background = element_blank())
+
+```
+
+#### 5.2.8 Figure 2 layout
+
+```{r Figure 2 Layout}
+
+bottom_row1 <- (p4 | Jac_dis1) + plot_layout(widths = c(1, 1.5))
+bottom_row2 <- (Jac_distance_horizontal | Jac_scatter) + plot_layout(widths = c(1, 1.5))
+
+bottom_layout <- bottom_row1 / bottom_row2
+
+top_layout <- (p1 | p2 | p3) + plot_layout(widths = c(1, 1, 1))
+
+layout_annotated <- top_layout / bottom_layout +
+  plot_layout(heights = c(1, 4)) +
+  plot_annotation(tag_levels = list(letters[2:26])) &
+  theme(plot.tag = element_text(face = 'bold', size = 12))
+
+layout_annotated
+
+```
+
+
+### 5.3 Supplementary Figure 5
+
+```{r top SGBs heatmap}
+
+
+# Step 1: Select the most prevalent SGBs.
+top_sgbs <- SGBs %>%
+  group_by(MAG_derep) %>%
+  summarise(n_persons = n_distinct(nPID), .groups = "drop") %>%
+  arrange(desc(n_persons)) %>%
+  filter(n_persons >= 6) %>%
+  pull(MAG_derep)
+
+# Step 2: Count samples per participant.
+total_samples_per_pid <- mNGS_samples %>%
+  group_by(nPID) %>%
+  summarise(total_samples = n_distinct(mNGS_sample_name))
+
+all_pids <- total_samples_per_pid %>% pull(nPID)
+
+# Step 3: Create the SGB percentage matrix.
+heatmap_data <- SGBs %>%
+  filter(MAG_derep %in% top_sgbs) %>%
+  group_by(nPID, MAG_derep) %>%
+  summarise(n_samples_detected = n_distinct(mNGS_sample_name), .groups = "drop") %>%
+  left_join(total_samples_per_pid, by = "nPID") %>%
+  mutate(pct_detected = (n_samples_detected / total_samples) * 100) %>%
+  select(nPID, MAG_derep, pct_detected) %>%
+  complete(nPID = all_pids, MAG_derep = top_sgbs, fill = list(pct_detected = 0)) %>%
+  pivot_wider(names_from = nPID, values_from = pct_detected, values_fill = 0) %>%
+  column_to_rownames("MAG_derep") %>%
+  as.matrix()
+
+mag_label_map <- data.frame(MAG_derep = rownames(heatmap_data)) %>%
+  left_join(
+    SGBs %>% distinct(MAG_derep, MAG_short = str_remove(MAG_derep, "_[^_]*$")),
+    by = "MAG_derep"
+  ) %>%
+  mutate(MAG_short = ifelse(is.na(MAG_short) | MAG_short == "NA",
+                            "Unclassified", MAG_short)) %>%
+  mutate(MAG_short = gsub("_", " ", MAG_short))
+
+row_labels <- mag_label_map$MAG_short
+
+# Verify annotation lengths match the heatmap dimensions.
+print(paste("Number of rows in heatmap_data:", nrow(heatmap_data)))
+print(paste("Length of row_labels:", length(row_labels)))
+
+# Step 5: Create the annotation data frame.
+annotation_col <- total_samples_per_pid %>%
+  left_join(
+    SGBs %>% distinct(nPID, Donor),
+    by = "nPID"
+  ) %>%
+  mutate(
+    `Number of samples` = total_samples,
+    Donor = case_when(Donor == "Both" ~ "D02, then D01",
+                   is.na(Donor) ~ "None",
+                   TRUE ~ Donor)
+  ) %>%
+  arrange(match(nPID, colnames(heatmap_data))) %>%
+  column_to_rownames("nPID") %>%
+  select(`Number of samples`, Donor)
+
+# Step 6: Define ComplexHeatmap colors.
+col_fun_samples <- colorRamp2(
+  c(1, 7),
+  c("white", "#7A3F33")
+)
+
+col_donor <- c(
+  "D01" = "#D86621",
+  "D02" = "#1A9C78",
+  "D02, then D01" = "#5C4478",
+  "None" = "white"  # or use "#FFFFFF"
+)
+
+ha_bottom <- HeatmapAnnotation(
+  `Number of samples` = annotation_col$`Number of samples`,
+  Donor = annotation_col$Donor,
+  col = list(
+    `Number of samples` = col_fun_samples,
+    Donor = col_donor
+  ),
+  which = "column",
+  annotation_name_side = "left",
+  annotation_name_gp = gpar(fontsize = 6),
+  simple_anno_size = unit(2, "mm"),
+annotation_legend_param = list(
+  `Number of samples` = list(
+    at = c(1, 4, 7),
+    labels = c("1", "4", "7"),
+    title_gp = gpar(fontsize = 10, fontface = "bold"),
+    labels_gp = gpar(fontsize = 8)
+  ),
+  Donor = list(
+    title_gp = gpar(fontsize = 10, fontface = "bold"),
+    labels_gp = gpar(fontsize = 8)
+  )
+)
+)
+
+# Step 8: Create the ComplexHeatmap.
+ht <- Heatmap(
+  heatmap_data,
+  name = "% Detection",
+  col = colorRampPalette(c("white", "#3A4F61"))(100),
+
+  # Clustering
+  cluster_rows = TRUE,
+  cluster_columns = TRUE,
+  clustering_distance_rows = "euclidean",
+  clustering_distance_columns = "euclidean",
+  clustering_method_rows = "ward.D2",
+  clustering_method_columns = "ward.D2",
+
+  # Row settings
+  row_labels = row_labels,
+  show_row_names = TRUE,
+  row_names_gp = gpar(fontsize = 6),
+  row_dend_width = unit(10, "mm"),
+
+  # Column settings
+  show_column_names = TRUE,
+  column_names_gp = gpar(fontsize = 6),
+  column_dend_height = unit(7, "mm"),
+
+  # Splitting heatmap
+
+  # Annotations BELOW heatmap
+  bottom_annotation = ha_bottom,
+
+  # Add grid lines
+  rect_gp = gpar(col = "gray90", lwd = 0.5),
+
+  # Legend
+  heatmap_legend_param = list(
+    title = "% Detection",
+    title_gp = gpar(fontsize = 10, fontface = "bold"),
+    labels_gp = gpar(fontsize = 8)
+  )
+)
+
+ht
+
+```
+
+
+### 5.4 Supplementary Figure 6
+
+```{r Temporal Jaccard PCoA}
+
+multi_pids <- unique(pcoa_df2$nPID[pcoa_df2$color_group != "Single sample"])
+
+my_colors <- c("#4F6980FF","#849DB1FF", "#A2CEAAFF", "#638B66FF", "#BFBB60FF", "#F47942FF",
+               "#FBB04EFF", "#B66353FF","#D7CE9FFF", "#B9AA97FF")
+
+my_palette_21 <- colorRampPalette(my_colors)(21)
+
+pid_colors <- setNames(my_palette_21, multi_pids)
+color_values <- c("Single sample" = "grey60", pid_colors)
+
+
+first_points <- pcoa_df2 %>%
+  arrange(nPID, alpha_scaled) %>%   # replace with real time var if you have one
+  group_by(nPID) %>%
+  slice(1) %>%                      # keep first (earliest) sample
+  ungroup() %>%
+  filter(color_group != "Single sample")  # add this line
+
+Jac_dis2 <- ggplot(pcoa_df2 %>% filter(color_group!="Single sample"), aes(PC1, PC2, color = color_group)) +
+  geom_path(aes(group = nPID), alpha = 0.7, size=0.5,
+            arrow = arrow(type = "closed", length = unit(0.3, "cm")),
+            show.legend = FALSE) +  # Changed to geom_path
+  geom_point(aes(alpha = alpha_scaled), size = 3) +
+  geom_text(
+    data = first_points,
+    aes(PC1, PC2, label = nPID),
+    size = 4,
+    vjust = -0.8,
+    fontface = "bold",
+    show.legend = FALSE) +
+  scale_color_manual(name=NULL,
+    values = color_values) +
+  scale_alpha_continuous(name = "Relative time point",
+                         range = c(0.2, 1),
+                         guide="none") +
+  theme_classic() +
+  theme(legend.position = "none") +
+  labs(
+          x = paste0("Axis 1 (", round(pcoa_res$values$Relative_eig[1] * 100, 1), "%)"),
+    y = paste0("Axis 2 (", round(pcoa_res$values$Relative_eig[2] * 100, 1), "%)")
+  ) +
+  theme(legend.position = "right",
+        axis.text = element_blank(),      # Remove axis labels
+        axis.ticks = element_blank())   # Remove axis ticks
+
+Jac_dis2
+
+
+```
+
+
+## 6. inStrain threshold and network analysis
+
+### 6.1 inStrain setup
+
+```{r network_instrain function}
+
+plot_strain_network <- function(dataframe, mag_id_to_plot) {
+
+  # Filter to specific MAG
+  edges_mag <- dataframe %>%
+    filter(MAG_ID == mag_id_to_plot) %>%
+    select(ID_1, WGS_strain_num_1, ID_2, WGS_strain_num_2, Seq_1, Seq_2)
+
+  # Step 1: Find all mNGS-WGS pairs that should be merged
+  # (same ID, one is mNGS, one is WGS, and they're connected by an edge)
+  mngs_wgs_pairs <- edges_mag %>%
+    filter(ID_1 == ID_2,  # Same patient/timepoint/source
+           Seq_1 != Seq_2,  # One is mNGS, one is WGS
+           (Seq_1 == "WGS" | Seq_2 == "WGS"),  # At least one is WGS
+           (Seq_1 == "mNGS" | Seq_2 == "mNGS"))  # At least one is mNGS
+
+  # Create mapping: mNGS ID -> WGS ID (with strain number)
+  mngs_to_wgs_map <- bind_rows(
+    mngs_wgs_pairs %>%
+      filter(Seq_1 == "mNGS", Seq_2 == "WGS") %>%
+      transmute(mngs_id = ID_1, wgs_id = paste(ID_2, WGS_strain_num_2, sep = "_")),
+    mngs_wgs_pairs %>%
+      filter(Seq_1 == "WGS", Seq_2 == "mNGS") %>%
+      transmute(mngs_id = ID_2, wgs_id = paste(ID_1, WGS_strain_num_1, sep = "_"))
+  ) %>%
+    distinct()
+
+  # Step 2: Create unified IDs
+  ## 1.7 WGS analysis always gets strain appended
+  ## 1.2 mNGS and MAG characterization gets mapped to WGS ID if it shares strain, otherwise keeps original
+  edges_mag <- edges_mag %>%
+      left_join(mngs_to_wgs_map %>% rename(ID_1 = mngs_id, unified_ID_1_mapped = wgs_id),
+            by = "ID_1") %>%
+  left_join(mngs_to_wgs_map %>% rename(ID_2 = mngs_id, unified_ID_2_mapped = wgs_id),
+            by = "ID_2") %>%
+  mutate(
+    unified_ID_1 = case_when(
+      Seq_1 == "WGS" & !is.na(WGS_strain_num_1) ~ paste(ID_1, WGS_strain_num_1, sep = "_"),
+      Seq_1 == "mNGS" & !is.na(unified_ID_1_mapped) ~ unified_ID_1_mapped,
+      TRUE ~ ID_1
+    ),
+    unified_ID_2 = case_when(
+      Seq_2 == "WGS" & !is.na(WGS_strain_num_2) ~ paste(ID_2, WGS_strain_num_2, sep = "_"),
+      Seq_2 == "mNGS" & !is.na(unified_ID_2_mapped) ~ unified_ID_2_mapped,
+      TRUE ~ ID_2
+    )
+  )
+
+  # Remove self-loops (edges where unified_ID_1 == unified_ID_2)
+  edges_mag <- edges_mag %>%
+    filter(unified_ID_1 != unified_ID_2)
+
+  # Check if we have any edges left
+  if (nrow(edges_mag) == 0) {
+    return(NULL)  # No network to plot
+  }
+
+  # Create graph with unified IDs
+  g <- graph_from_data_frame(edges_mag[, c("unified_ID_1", "unified_ID_2")],
+                             directed = FALSE)
+
+  # Find connected components (strain clusters)
+  clusters <- components(g)
+
+  # Add cluster membership as vertex attribute
+  V(g)$strain_cluster <- clusters$membership
+
+  # Add patient ID
+  V(g)$patient <- sub("_T.*$", "", V(g)$name)
+
+  # Add sequencing type information
+  seq_info <- bind_rows(
+    edges_mag %>% select(unified_ID = unified_ID_1, seq_type = Seq_1),
+    edges_mag %>% select(unified_ID = unified_ID_2, seq_type = Seq_2)
+  ) %>%
+    group_by(unified_ID) %>%
+    summarise(
+      has_mNGS = any(seq_type == "mNGS"),
+      has_WGS = any(seq_type == "WGS"),
+      seq_label = case_when(
+        has_mNGS & has_WGS ~ "Both",
+        has_mNGS ~ "mNGS",
+        has_WGS ~ "WGS"
+      ),
+      .groups = "drop"
+    )
+
+  V(g)$seq_type <- seq_info$seq_label[match(V(g)$name, seq_info$unified_ID)]
+
+  # Convert to tidygraph for ggraph
+  tg <- as_tbl_graph(g)
+
+  # Get species name for this MAG
+  species_name <- unique(dataframe$species[dataframe$MAG_ID == mag_id_to_plot])
+
+  # Plot
+  p <- ggraph(tg, layout = 'fr') +
+    geom_edge_link(aes(), alpha = 0.5, color = "gray50") +
+    geom_node_point(aes(color = factor(strain_cluster),
+                       shape = seq_type),
+                   size = 3) +
+    geom_node_text(aes(label = name),
+                   repel = TRUE,
+                   size = 2,
+                   max.overlaps = Inf) +
+    scale_color_manual(
+      name = "Strain Cluster",
+      values = rev(hcl.colors(14, "Earth"))  # Set to max you might need
+      ) +
+    scale_shape_manual(values = c("mNGS" = 16, "WGS" = 17, "Both" = 15),
+                       name = "Sequencing Type") +
+    labs(title = paste0("SGB: ", mag_id_to_plot),
+         subtitle = paste0("Species: ", species_name)) +
+    theme_graph() +
+    theme(legend.position = "right",
+          plot.subtitle = element_text(size = 11),
+          plot.title.position = "plot")
+
+  return(p)
+}
+
+
+```
+
+
+### 6.2 Summary statistics
+
+```{r summary stats}
+# Summarize pairwise inStrain comparison statistics
+summary_stats <- instrain_old %>%
+  filter(shared_strain == TRUE & meets_min_scaffolds==TRUE) %>%
+  summarise(
+    #popANI
+    popANI_Q1 = quantile(median_popANI, 0.25, na.rm = TRUE),
+    popANI_median = median(median_popANI, na.rm = TRUE),
+    popANI_Q3 = quantile(median_popANI, 0.75, na.rm = TRUE),
+
+    #shared scaffold proportion
+    prop_high_Q1 = quantile(prop_scaffolds_high, 0.25, na.rm = TRUE),
+    prop_high_median = median(prop_scaffolds_high, na.rm = TRUE),
+    prop_high_Q3 = quantile(prop_scaffolds_high, 0.75, na.rm = TRUE),
+
+    #breadth
+    prop_MAG_Q1 = quantile(prop_MAG_scaffolds, 0.25, na.rm = TRUE),
+    prop_MAG_median = median(prop_MAG_scaffolds, na.rm = TRUE),
+    prop_MAG_Q3 = quantile(prop_MAG_scaffolds, 0.75, na.rm = TRUE),
+  )
+
+print("Summary Statistics:")
+print(summary_stats)
+
+```
+
+
+### 6.3 Original threshold analysis
+
+```{r network_create_weighted_edges}
+
+# Create weighted edges from strain comparison data
+# Filter shared strains using minimum scaffold requirements
+# Calculate similarity metrics and match to WGS strains
+
+edges_weighted_old <- instrain_old %>%
+  filter(shared_strain == TRUE & meets_min_scaffolds == TRUE) %>%
+  mutate(
+  nSID_1 = if_else(Seq_1 == "WGS" & !is.na(WGS_strain_num_1),
+                   paste(ID_1, WGS_strain_num_1, sep = "_"),
+                   paste(ID_1, sep = "_")),
+  nSID_2 = if_else(Seq_2 == "WGS" & !is.na(WGS_strain_num_2),
+                   paste(ID_2, WGS_strain_num_2, sep = "_"),
+                   paste(ID_2, sep = "_"))) %>%
+  select(MAG_ID, species, nSID_1, nSID_2, Seq_1, Seq_2,
+         n_scaffolds_pair, median_popANI, prop_MAG_scaffolds, prop_scaffolds_high,
+         WGS_bact_strain_1, WGS_bact_strain_2, WGS_strain_num_1, WGS_strain_num_2) %>%
+  mutate(
+    similarity = median_popANI * prop_scaffolds_high,
+    distance = 1 - median_popANI,
+    same_WGS_strain = !is.na(WGS_bact_strain_1) &
+                      !is.na(WGS_bact_strain_2) &
+                      WGS_bact_strain_1 == WGS_bact_strain_2
+  )
+
+```
+
+
+### 6.4 Threshold grid search
+
+```{r network_threshold_optimization}
+
+
+# Define threshold combinations to test
+threshold_grid <- expand.grid(
+  min_popANI = c(0.99995, 0.99999, 0.999995, 0.999999),
+  prop_high_thresh = c(0.8, 0.85, 0.9, 0.95, 1.0),
+  prop_MAG_thresh = c(0.5, 0.6, 0.7)
+)
+
+# Helper function for threshold evaluation
+mean_or_na <- function(x) {
+  if (length(x) == 0) NA_real_ else mean(x)
+}
+
+
+# Function to test threshold combinations and calculate validation metrics
+test_thresholds <- function(min_popANI, prop_high_t, prop_MAG_t) {
+  max_dist <- 1 - min_popANI
+
+  # Filter edges based on thresholds
+  edges_filtered <- edges_weighted_old %>%
+    filter(
+      n_scaffolds_pair>=10,
+      median_popANI >= min_popANI,
+      prop_scaffolds_high >= prop_high_t,
+      prop_MAG_scaffolds >= prop_MAG_t
+    ) %>%
+  select(MAG_ID, species, nSID_1, WGS_strain_num_1, nSID_2, WGS_strain_num_2,
+         Seq_1, Seq_2, median_popANI, prop_MAG_scaffolds, prop_scaffolds_high) %>%
+  mutate(
+    similarity = median_popANI * prop_scaffolds_high,
+    distance = 1 - median_popANI)
+
+
+  n_edges_retained <- nrow(edges_filtered)
+
+  # Return empty result if no edges pass threshold
+  if (n_edges_retained == 0) {
+    return(tibble(
+      max_distance_from_1 = max_dist,
+      min_popANI = min_popANI,
+      prop_high_thresh = prop_high_t,
+      prop_MAG_thresh = prop_MAG_t,
+      n_edges = 0,
+      pct_edges_retained = 0,
+      n_total_clusters = 0,
+      n_singletons = NA_integer_,
+      longitudinal_consistency = NA_real_,
+      WGS_strain_consistency = NA_real_,
+      WGS_strain_purity = NA_real_,
+      avg_modularity = NA_real_
+    ))
+  }
+
+  # Build strain clusters for each MAG/species combination
+clusters <- edges_filtered %>%
+  group_by(MAG_ID, species) %>%
+  group_modify(~ {
+    edge_df <- .x %>% select(nSID_1, nSID_2)
+    vertices <- unique(c(edge_df$nSID_1, edge_df$nSID_2))
+
+    g <- graph_from_data_frame(edge_df, directed = FALSE, vertices = vertices)
+    comp <- components(g)
+
+    tibble(
+      nSID = names(comp$membership),
+      strain_cluster = paste0("C", comp$membership)
+    )
+  }) %>%
+  ungroup() %>%
+  mutate(WGS_strain_num = as.integer(str_extract(nSID, "[0-9]+$")),
+           nSID = sub("^(([^_]*_){2}[^_]*)_.*", "\\1", nSID))
+
+  # Calculate singleton count
+  all_samples_filtered <- unique(c(edges_filtered$nSID_1, edges_filtered$nSID_2))
+  samples_in_clusters <- unique(clusters$nSID)
+  n_singletons <- length(setdiff(all_samples_filtered, samples_in_clusters))
+
+  # Validate longitudinal consistency (same participant over time)
+  validation_longitudinal <- clusters %>%
+    mutate(nPID = sub("_W.*$", "", nSID)) %>%
+    group_by(MAG_ID, species, nPID) %>%
+    summarise(
+      n_timepoints = n_distinct(nSID),
+      n_clusters = n_distinct(strain_cluster),
+      same_cluster = n_clusters == 1,
+      .groups = "drop"
+    ) %>%
+    filter(n_timepoints > 1)
+
+  # Build WGS strain mapping for each MAG/species
+  wgs_mapping <- bind_rows(
+    edges_filtered %>% select(MAG_ID, species, nSID = nSID_1, WGS_strain_num = WGS_strain_num_1),
+    edges_filtered %>% select(MAG_ID, species, nSID = nSID_2, WGS_strain_num = WGS_strain_num_2)
+  ) %>%
+    distinct(MAG_ID, species, nSID, WGS_strain_num) %>%
+    filter(!is.na(WGS_strain_num))
+
+  # Join WGS labels to clusters
+  clusters_with_WGS <- clusters %>%
+    left_join(wgs_mapping, by = c("MAG_ID", "species", "nSID", "WGS_strain_num"))
+
+  # Calculate WGS strain consistency (sensitivity: same WGS strain stays together)
+  validation_WGS_sensitivity <- clusters_with_WGS %>%
+    filter(!is.na(WGS_strain_num)) %>%
+    group_by(MAG_ID, species, WGS_strain_num) %>%
+    summarise(
+      n_samples = n(),
+      n_clusters = n_distinct(strain_cluster),
+      same_cluster = n_clusters == 1,
+      .groups = "drop"
+    ) %>%
+    filter(n_samples > 1)
+
+  # Calculate WGS strain purity (specificity: each cluster contains only one WGS strain)
+  validation_WGS_purity <- clusters_with_WGS %>%
+    filter(!is.na(WGS_strain_num)) %>%
+    group_by(MAG_ID, species, strain_cluster) %>%
+    summarise(
+      n_samples = n(),
+      n_WGS_strains = n_distinct(WGS_strain_num),
+      is_pure = n_WGS_strains == 1,
+      .groups = "drop"
+    ) %>%
+    filter(n_samples > 1)
+
+  # Calculate modularity for each MAG/species
+  modularity_vals <- edges_filtered %>%
+    group_by(MAG_ID, species) %>%
+    group_modify(~ {
+      edge_df <- .x %>% select(nSID_1, nSID_2, median_popANI, prop_scaffolds_high)
+
+      if (nrow(edge_df) == 0) {
+        return(tibble(modularity = NA_real_))
+      }
+
+      vertices <- unique(c(edge_df$nSID_1, edge_df$nSID_2))
+      g <- graph_from_data_frame(
+        edge_df[, c("nSID_1", "nSID_2")],
+        directed = FALSE,
+        vertices = vertices
+      )
+
+      # Weight edges by product of ANI and scaffold proportion
+      E(g)$weight <- edge_df$median_popANI * edge_df$prop_scaffolds_high
+
+      if (ecount(g) == 0 || vcount(g) <= 1) {
+        return(tibble(modularity = NA_real_))
+      }
+
+      clust <- tryCatch(
+        cluster_louvain(g, weights = E(g)$weight),
+        error = function(e) NULL
+      )
+
+      if (is.null(clust)) {
+        return(tibble(modularity = NA_real_))
+      }
+
+      tibble(modularity = modularity(clust))
+    }) %>%
+    ungroup()
+
+  # Aggregate validation metrics
+  long_consistency <- if (nrow(validation_longitudinal) > 0) {
+    mean(validation_longitudinal$same_cluster)
+  } else {
+    NA_real_
+  }
+
+  WGS_sensitivity <- if (nrow(validation_WGS_sensitivity) > 0) {
+    mean(validation_WGS_sensitivity$same_cluster)
+  } else {
+    NA_real_
+  }
+
+  WGS_purity <- if (nrow(validation_WGS_purity) > 0) {
+    mean(validation_WGS_purity$is_pure)
+  } else {
+    NA_real_
+  }
+
+  # Count total clusters
+  n_total_clusters <- clusters %>%
+    distinct(MAG_ID, species, strain_cluster) %>%
+    nrow()
+
+  # Return results
+  tibble(
+    max_distance_from_1 = max_dist,
+    min_popANI = min_popANI,
+    prop_high_thresh = prop_high_t,
+    prop_MAG_thresh = prop_MAG_t,
+    n_edges = n_edges_retained,
+    pct_edges_retained = (n_edges_retained / nrow(edges_weighted_old)) * 100,
+    n_total_clusters = n_total_clusters,
+    n_singletons = n_singletons,
+    longitudinal_consistency = long_consistency,
+    WGS_strain_consistency = WGS_sensitivity,
+    WGS_strain_purity = WGS_purity,
+    avg_modularity = mean(modularity_vals$modularity, na.rm = TRUE)
+  )
+}
+
+
+```
+
+#### 6.4.1 Supplementary Table 3
+
+```{r Supplementary Table 3}
+
+# Summarize threshold optimization results
+threshold_results <- threshold_grid %>%
+  pmap_dfr(~ test_thresholds(..1, ..2, ..3))
+  
+threshold_results
+
+```
+
+### 6.5 Figure 3
+
+#### 6.5.1 Figure 3A
+
+```{r network_threshold_visualization}
+
+# Prepare data for visualization
+candidates_plot <- threshold_results %>%
+  filter(
+    !is.na(WGS_strain_purity),
+    !is.na(longitudinal_consistency),
+    longitudinal_consistency >= 0.0,
+    avg_modularity >= 0.3
+  ) %>%
+  mutate(
+    prop_MAG_thresh = factor(prop_MAG_thresh),
+    prop_high_lab = paste0("high=", prop_high_thresh)
+  )  %>% 
+  mutate(prop_high_thresh = factor(prop_high_thresh))
+
+# Select recommended threshold
+chosen <- candidates_plot %>%
+  filter(prop_high_thresh == 0.95, prop_MAG_thresh == "0.5") %>%
+  arrange(desc(pct_edges_retained)) %>%
+  slice(1) %>%
+  mutate(prop_high_thresh = factor(prop_high_thresh))
+
+# Use fallback selection if filtering returns no rows
+if (nrow(chosen) == 0) {
+  chosen <- candidates_plot %>%
+    arrange(desc(WGS_strain_purity), desc(pct_edges_retained)) %>%
+    slice(1)
+}
+
+# Create threshold optimization plot
+p_optimization <- ggplot(
+  candidates_plot %>% filter(min_popANI==0.99995),
+  aes(y = longitudinal_consistency, x = WGS_strain_purity)
+) +
+  # Main scatter plot
+  geom_point(
+    aes(color = prop_high_thresh, size = pct_edges_retained, shape = prop_MAG_thresh),
+    alpha = 0.8,
+    stroke = 0.3
+  ) +
+  scale_size_continuous(
+    name = "% edges retained",
+    range = c(1.5, 5),
+    labels = function(x) paste0(round(x, 0), "%")
+  ) +
+  scale_shape_manual(
+    name = "Breadth",
+    values = c("0.5" = 16, "0.6" = 17, "0.7" = 15)
+  ) +
+  #scale threshold
+  scale_color_manual(
+  name = "Shared scaffold proportion",
+    values = c("0.8" = "#B66353FF", "0.85" = "#F47942FF", "0.9" = "#A2CEAAFF", "0.95" = "#638B66FF", "1" = "#4F6980FF")
+) +
+  # Add labels for chosen thresholds
+  geom_text_repel(
+    data = bind_rows(
+      chosen %>% mutate(opt = "A")
+    ),
+    aes(label = paste0(
+      "inStrain metrics:\n   shared scaffold proportion=", prop_high_thresh,
+      ",\n   breadth=", prop_MAG_thresh,
+      ",\n   median popANI=", min_popANI,
+      "\nResults:\n   WGS strain purity=", round(WGS_strain_purity, 2),
+      "\n   WGS strain consistency=", round(WGS_strain_consistency, 2),
+      "\n   longitudinal consistency=", round(longitudinal_consistency, 2)
+    )),
+    nudge_x = 0,
+    nudge_y = 0.07,
+    min.segment.length = 0.1,
+    box.padding = 0.35,
+    point.padding = 0.3,
+    size = 2,
+    hjust=0
+  ) +
+  labs(
+    y = "longitudinal consistency\n(sensitivity)",
+    x = "WGS strain purity (specificity)"
+  ) +
+  theme_minimal(base_size = 10) +
+  theme(legend.position = "none")
+
+p_optimization
+
+```
+
+#### 6.5.2 Figure 3B
+
+```{r new thresholds}
+
+#new thresholds obtained from evaluating network plots and longitudinal similarities
+
+instrain_new <- instrain_old %>%
+  mutate(meets_prop_MAG = ifelse(prop_MAG_scaffolds >=0.5, TRUE, FALSE),
+         meets_prop_high = ifelse(prop_scaffolds_high >=0.95, TRUE, FALSE)) %>%
+  mutate(shared_strain = ifelse(meets_min_scaffolds == TRUE & meets_prop_MAG==TRUE & meets_prop_high==TRUE & median_popANI>=0.99995 & n_scaffolds_pair>=10, TRUE, FALSE)) %>%
+  filter(shared_strain==TRUE)
+
+instrain_new_df <- instrain_new %>%
+  filter(species == "Pseudomonas aeruginosa") %>%
+  select(MAG_ID, species, ID_1, WGS_strain_num_1, ID_2, WGS_strain_num_2, Seq_1, Seq_2)
+
+mag_id <- "APPS0055PR_S_2_S113_concoct_bin45"
+
+p <- plot_strain_network(
+  instrain_new_df,
+  mag_id
+)
+
+p
+
+```
+
+### 6.6 Louvain clustering
+
+```{r network_prepare_data}
+
+# Create weighted edges from strain comparison data
+edges_weighted_new <- instrain_new %>%
+  filter(shared_strain == TRUE) %>%
+  select(MAG_ID, species, ID_1, WGS_strain_num_1, ID_2, WGS_strain_num_2,
+         Seq_1, Seq_2, median_popANI, prop_MAG_scaffolds, prop_scaffolds_high) %>%
+  mutate(
+    similarity = median_popANI * prop_scaffolds_high,
+    distance = 1 - median_popANI,
+    nSID_1 = ifelse(!is.na(WGS_strain_num_1), paste(ID_1, WGS_strain_num_1, sep = "_"),ID_1),
+    nSID_2 = ifelse(!is.na(WGS_strain_num_2), paste(ID_2, WGS_strain_num_2, sep = "_"),ID_2))
+
+# Create sequencing-type lookup for unified IDs
+seq_type_lookup <- bind_rows(
+  edges_weighted_new %>% select(nSID = nSID_1, seq_type = Seq_1),
+  edges_weighted_new %>% select(nSID = nSID_2, seq_type = Seq_2)
+) %>%
+  group_by(nSID) %>%
+  summarise(
+    has_mNGS = any(seq_type == "mNGS"),
+    has_WGS = any(seq_type == "WGS"),
+    seq_label = case_when(
+      has_mNGS & has_WGS ~ "Both",
+      has_mNGS ~ "mNGS",
+      has_WGS ~ "WGS"
+    ),
+    .groups = "drop"
+  )
+
+strain_clusters_simple <- edges_weighted_new %>%
+  group_by(MAG_ID, species) %>%
+  group_modify(~ {
+    edge_df <- .x %>% select(nSID_1, nSID_2)
+    vertices <- unique(c(edge_df$nSID_1, edge_df$nSID_2))
+
+    g <- graph_from_data_frame(edge_df, directed = FALSE, vertices = vertices)
+    comp <- components(g)
+
+    tibble(
+      nSID = names(comp$membership),
+      strain_cluster = paste0("C", comp$membership)
+    )
+  }) %>%
+  ungroup()
+
+strain_clusters_louvain <- edges_weighted_new %>%
+  group_by(MAG_ID, species) %>%
+  group_modify(~ {
+    edge_df <- .x %>% select(nSID_1, nSID_2)
+    vertices <- unique(c(edge_df$nSID_1, edge_df$nSID_2))
+
+    g <- graph_from_data_frame(edge_df, directed = FALSE, vertices = vertices)
+    E(g)$weight <- .x$median_popANI * .x$prop_scaffolds_high
+
+    clust <- cluster_louvain(g, weights = E(g)$weight, resolution = 0.3)
+
+    tibble(
+      nSID = names(membership(clust)),
+      strain_cluster = paste0("C", clust$membership),
+      modularity = modularity(clust)
+    )
+  }) %>%
+  ungroup()
+
+```
+
+#### 6.6.1 Comparison statistics
+
+```{r network_Validation measures}
+
+# Build strain clusters for each MAG/species combination
+
+strain_clusters_simple_val <- strain_clusters_simple %>%
+  mutate(WGS_strain_num = str_extract(nSID, "[0-9]+$"),
+           nSID = sub("^(([^_]*_){2}[^_]*)_.*", "\\1", nSID))
+
+strain_clusters_louvain_val <- strain_clusters_louvain %>%
+  mutate(WGS_strain_num = str_extract(nSID, "[0-9]+$"),
+           nSID = sub("^(([^_]*_){2}[^_]*)_.*", "\\1", nSID))
+
+#function to evaluate the clusters +/- louvain
+evaluate_clusters <- function(clusters_df, method_name){
+
+  # Validate longitudinal consistency (same participant over time)
+  validation_longitudinal <- clusters_df %>%
+    mutate(nPID = sub("_W.*$", "", nSID)) %>%
+    group_by(MAG_ID, species, nPID) %>%
+    summarise(
+      n_timepoints = n_distinct(nSID),
+      n_clusters = n_distinct(strain_cluster),
+      same_cluster = n_clusters == 1,
+      .groups = "drop"
+    ) %>%
+    filter(n_timepoints > 1)
+
+  # Build WGS strain mapping for each MAG/species
+  wgs_mapping <- bind_rows(
+    edges_weighted_new %>% select(MAG_ID, species, nSID = nSID_1, WGS_strain_num = WGS_strain_num_1),
+    edges_weighted_new %>% select(MAG_ID, species, nSID = nSID_2, WGS_strain_num = WGS_strain_num_2)
+  ) %>%
+    distinct(MAG_ID, species, nSID, WGS_strain_num) %>%
+    filter(!is.na(WGS_strain_num)) %>%
+    mutate(WGS_strain_num = as.character(WGS_strain_num))
+
+  # Join WGS labels to clusters
+  clusters_with_WGS <- clusters_df %>%
+    left_join(wgs_mapping, by = c("MAG_ID", "species", "nSID", "WGS_strain_num"))
+
+  # Calculate WGS strain consistency (sensitivity: same WGS strain stays together)
+  validation_WGS_sensitivity <- clusters_with_WGS %>%
+    filter(!is.na(WGS_strain_num)) %>%
+    group_by(MAG_ID, species, WGS_strain_num) %>%
+    summarise(
+      n_samples = n(),
+      n_clusters = n_distinct(strain_cluster),
+      same_cluster = n_clusters == 1,
+      .groups = "drop"
+    ) %>%
+    filter(n_samples > 1)
+
+  # Calculate WGS strain purity (specificity: each cluster contains only one WGS strain)
+  validation_WGS_purity <- clusters_with_WGS %>%
+    filter(!is.na(WGS_strain_num)) %>%
+    group_by(MAG_ID, species, strain_cluster) %>%
+    summarise(
+      n_samples = n(),
+      n_WGS_strains = n_distinct(WGS_strain_num),
+      is_pure = n_WGS_strains == 1,
+      .groups = "drop"
+    ) %>%
+    filter(n_samples > 1)
+
+  # Aggregate validation metrics
+  long_consistency <- if (nrow(validation_longitudinal) > 0) {
+    mean(validation_longitudinal$same_cluster)
+  } else {
+    NA_real_
+  }
+
+  WGS_sensitivity <- if (nrow(validation_WGS_sensitivity) > 0) {
+    mean(validation_WGS_sensitivity$same_cluster)
+  } else {
+    NA_real_
+  }
+
+  WGS_purity <- if (nrow(validation_WGS_purity) > 0) {
+    mean(validation_WGS_purity$is_pure)
+  } else {
+    NA_real_
+  }
+
+  # Count total clusters
+  n_total_clusters <- clusters_df %>%
+    distinct(MAG_ID, species, strain_cluster) %>%
+    nrow()
+
+  # Return results
+  tibble(
+    method = method_name,
+    n_total_clusters = n_total_clusters,
+    longitudinal_consistency = long_consistency,
+    WGS_strain_consistency = WGS_sensitivity,
+    WGS_strain_purity = WGS_purity
+  )
+
+}
+
+
+# Summarize clustering comparison metrics
+comparison <- bind_rows(
+  evaluate_clusters(strain_clusters_simple_val, "Connected Components"),
+  evaluate_clusters(strain_clusters_louvain_val, "Louvain")
+)
+
+
+```
+
+### 6.7 Supplementary Figure 7
+
+```{r Supplementary Figure 7}
+
+# Panel A: scaffold proportions
+p_scaffolds <- ggplot(edges_weighted_old, aes(x = prop_scaffolds_high)) +
+  geom_histogram(bins = 50, fill = "paleturquoise4", alpha = 0.7) +
+  geom_vline(
+    xintercept = c(0.8, 0.85, 0.9, 0.95, 1.0),
+    color = "coral",
+    linetype = "dashed"
+  ) +
+  labs(x = "Shared scaffold proportion (%)") +
+  theme_minimal(base_size = 10)
+
+# Panel B: MAG proportions
+p_SGB <- ggplot(edges_weighted_old, aes(x = prop_MAG_scaffolds)) +
+  geom_histogram(bins = 50, fill = "paleturquoise4", alpha = 0.7) +
+  geom_vline(
+    xintercept = c(0.5, 0.6, 0.7),
+    color = "coral",
+    linetype = "dashed"
+  ) +
+  labs(x = "Breadth (%)") +
+  theme_minimal(base_size = 10)
+
+# Select MAG to plot
+mag_id <- "APPS0055PR_S_2_S113_concoct_bin45"
+
+# Panel C: initial thresholds
+pa <- plot_strain_network(
+  instrain_old %>%
+    filter(shared_strain == TRUE) %>%
+    select(
+      MAG_ID, species,
+      ID_1, WGS_strain_num_1,
+      ID_2, WGS_strain_num_2,
+      Seq_1, Seq_2
+    ),
+  mag_id
+) +
+  labs(title = "Initial thresholds")
+
+# Panel D: optimal thresholds and Louvain clustering
+plot_strain_network_louvain <- function(dataframe, mag_id_to_plot, resolution = 0.3) {
+
+  edges_mag <- dataframe %>%
+    filter(MAG_ID == mag_id_to_plot) %>%
+    select(
+      ID_1, WGS_strain_num_1,
+      ID_2, WGS_strain_num_2,
+      Seq_1, Seq_2,
+      median_popANI, prop_scaffolds_high
+    )
+
+  # Map mNGS IDs to WGS strain IDs
+  mngs_to_wgs_map <- edges_mag %>%
+    filter(
+      ID_1 == ID_2,
+      Seq_1 != Seq_2,
+      (Seq_1 == "WGS" | Seq_2 == "WGS"),
+      (Seq_1 == "mNGS" | Seq_2 == "mNGS")
+    ) %>%
+    {
+      bind_rows(
+        filter(., Seq_1 == "mNGS", Seq_2 == "WGS") %>%
+          transmute(
+            mngs_id = ID_1,
+            wgs_id = paste(ID_2, WGS_strain_num_2, sep = "_")
+          ),
+        filter(., Seq_1 == "WGS", Seq_2 == "mNGS") %>%
+          transmute(
+            mngs_id = ID_2,
+            wgs_id = paste(ID_1, WGS_strain_num_1, sep = "_")
+          )
+      )
+    } %>%
+    distinct()
+
+  edges_mag <- edges_mag %>%
+    left_join(
+      mngs_to_wgs_map %>%
+        rename(
+          ID_1 = mngs_id,
+          unified_ID_1_mapped = wgs_id
+        ),
+      by = "ID_1"
+    ) %>%
+    left_join(
+      mngs_to_wgs_map %>%
+        rename(
+          ID_2 = mngs_id,
+          unified_ID_2_mapped = wgs_id
+        ),
+      by = "ID_2"
+    ) %>%
+    mutate(
+      unified_ID_1 = case_when(
+        Seq_1 == "WGS" & !is.na(WGS_strain_num_1) ~
+          paste(ID_1, WGS_strain_num_1, sep = "_"),
+        Seq_1 == "mNGS" & !is.na(unified_ID_1_mapped) ~
+          unified_ID_1_mapped,
+        TRUE ~ ID_1
+      ),
+      unified_ID_2 = case_when(
+        Seq_2 == "WGS" & !is.na(WGS_strain_num_2) ~
+          paste(ID_2, WGS_strain_num_2, sep = "_"),
+        Seq_2 == "mNGS" & !is.na(unified_ID_2_mapped) ~
+          unified_ID_2_mapped,
+        TRUE ~ ID_2
+      )
+    ) %>%
+    filter(unified_ID_1 != unified_ID_2)
+
+  if (nrow(edges_mag) == 0) return(NULL)
+
+  g <- graph_from_data_frame(
+    edges_mag[, c("unified_ID_1", "unified_ID_2")],
+    directed = FALSE
+  )
+
+  E(g)$weight <- edges_mag$median_popANI *
+    edges_mag$prop_scaffolds_high
+
+  clust <- cluster_louvain(
+    g,
+    weights = E(g)$weight,
+    resolution = resolution
+  )
+
+  V(g)$strain_cluster <- membership(clust)
+
+  seq_info <- bind_rows(
+    edges_mag %>%
+      select(unified_ID = unified_ID_1, seq_type = Seq_1),
+    edges_mag %>%
+      select(unified_ID = unified_ID_2, seq_type = Seq_2)
+  ) %>%
+    group_by(unified_ID) %>%
+    summarise(
+      has_mNGS = any(seq_type == "mNGS"),
+      has_WGS = any(seq_type == "WGS"),
+      seq_label = case_when(
+        has_mNGS & has_WGS ~ "Both",
+        has_mNGS ~ "mNGS",
+        has_WGS ~ "WGS"
+      ),
+      .groups = "drop"
+    )
+
+  V(g)$seq_type <- seq_info$seq_label[
+    match(V(g)$name, seq_info$unified_ID)
+  ]
+
+  ggraph(as_tbl_graph(g), layout = "fr") +
+    geom_edge_link(alpha = 0.5, color = "gray50") +
+    geom_node_point(
+      aes(color = factor(strain_cluster), shape = seq_type),
+      size = 3
+    ) +
+    geom_node_text(
+      aes(label = name),
+      repel = TRUE,
+      size = 2,
+      max.overlaps = Inf
+    ) +
+    scale_color_manual(values = rev(hcl.colors(14, "Earth"))) +
+    scale_shape_manual(
+      values = c("mNGS" = 16, "WGS" = 17, "Both" = 15),
+      name = "Sequencing Type"
+    ) +
+    guides(color = "none") +
+    labs(title = "Optimal thresholds + Louvain") +
+    theme_graph() +
+    theme(
+      legend.position = "right",
+      plot.title.position = "plot"
+    )
+}
+
+pc <- plot_strain_network_louvain(
+  instrain_new %>%
+    filter(shared_strain == TRUE),
+  mag_id
+)
+
+# Assemble final supplementary figure
+finalplot_supp <- (
+  (p_scaffolds | p_SGB) /
+  (
+    (pa + theme(legend.position = "none")) |
+    (pc + theme(legend.position = "none"))
+  )
+) +
+  plot_layout(heights = c(0.4, 1)) +
+  plot_annotation(
+    tag_levels = list(c("a", "b", "c", "d"))
+  ) &
+  theme(
+    plot.margin = margin(0, 0, 0, 4, "pt"),
+    plot.tag = element_text(face = "bold", size = 12)
+  )
+
+finalplot_supp
+
+```
+
+### 6.8 Supplementary Figure 8
+
+```{r main_instrain networks}
+
+
+plot_strain_network <- function(dataframe, mag_id_to_plot) {
+
+  # Filter to specific MAG
+  edges_mag <- dataframe %>%
+    filter(MAG_ID == mag_id_to_plot) %>%
+    select(ID_1, WGS_strain_num_1, ID_2, WGS_strain_num_2, Seq_1, Seq_2)
+
+  # Step 1: Find all mNGS-WGS pairs that should be merged
+  # (same ID, one is mNGS, one is WGS, and they're connected by an edge)
+  mngs_wgs_pairs <- edges_mag %>%
+    filter(ID_1 == ID_2,  # Same patient/timepoint/source
+           Seq_1 != Seq_2,  # One is mNGS, one is WGS
+           (Seq_1 == "WGS" | Seq_2 == "WGS"),  # At least one is WGS
+           (Seq_1 == "mNGS" | Seq_2 == "mNGS"))  # At least one is mNGS
+
+  # Create mapping: mNGS ID -> WGS ID (with strain number)
+  mngs_to_wgs_map <- bind_rows(
+    mngs_wgs_pairs %>%
+      filter(Seq_1 == "mNGS", Seq_2 == "WGS") %>%
+      transmute(mngs_id = ID_1, wgs_id = paste(ID_2, WGS_strain_num_2, sep = "_")),
+    mngs_wgs_pairs %>%
+      filter(Seq_1 == "WGS", Seq_2 == "mNGS") %>%
+      transmute(mngs_id = ID_2, wgs_id = paste(ID_1, WGS_strain_num_1, sep = "_"))
+  ) %>%
+    distinct()
+
+  # Step 2: Create unified IDs
+  ## 1.7 WGS analysis always gets strain appended
+  ## 1.2 mNGS and MAG characterization gets mapped to WGS ID if it shares strain, otherwise keeps original
+  edges_mag <- edges_mag %>%
+      left_join(mngs_to_wgs_map %>% rename(ID_1 = mngs_id, unified_ID_1_mapped = wgs_id),
+            by = "ID_1") %>%
+  left_join(mngs_to_wgs_map %>% rename(ID_2 = mngs_id, unified_ID_2_mapped = wgs_id),
+            by = "ID_2") %>%
+  mutate(
+    unified_ID_1 = case_when(
+      Seq_1 == "WGS" & !is.na(WGS_strain_num_1) ~ paste(ID_1, WGS_strain_num_1, sep = "_"),
+      Seq_1 == "mNGS" & !is.na(unified_ID_1_mapped) ~ unified_ID_1_mapped,
+      TRUE ~ ID_1
+    ),
+    unified_ID_2 = case_when(
+      Seq_2 == "WGS" & !is.na(WGS_strain_num_2) ~ paste(ID_2, WGS_strain_num_2, sep = "_"),
+      Seq_2 == "mNGS" & !is.na(unified_ID_2_mapped) ~ unified_ID_2_mapped,
+      TRUE ~ ID_2
+    )
+  )
+
+  # Remove self-loops (edges where unified_ID_1 == unified_ID_2)
+  edges_mag <- edges_mag %>%
+    filter(unified_ID_1 != unified_ID_2)
+
+  # Check if we have any edges left
+  if (nrow(edges_mag) == 0) {
+    return(NULL)  # No network to plot
+  }
+
+  # Create graph with unified IDs
+  g <- graph_from_data_frame(edges_mag[, c("unified_ID_1", "unified_ID_2")],
+                             directed = FALSE)
+
+  # Find connected components (strain clusters)
+  clusters <- components(g)
+
+  # Add cluster membership as vertex attribute
+  V(g)$strain_cluster <- clusters$membership
+
+  # Add patient ID
+  V(g)$patient <- sub("_T.*$", "", V(g)$name)
+
+  # Add sequencing type information
+  seq_info <- bind_rows(
+    edges_mag %>% select(unified_ID = unified_ID_1, seq_type = Seq_1),
+    edges_mag %>% select(unified_ID = unified_ID_2, seq_type = Seq_2)
+  ) %>%
+    group_by(unified_ID) %>%
+    summarise(
+      has_mNGS = any(seq_type == "mNGS"),
+      has_WGS = any(seq_type == "WGS"),
+      seq_label = case_when(
+        has_mNGS & has_WGS ~ "Both",
+        has_mNGS ~ "mNGS",
+        has_WGS ~ "WGS"
+      ),
+      .groups = "drop"
+    )
+
+  V(g)$seq_type <- seq_info$seq_label[match(V(g)$name, seq_info$unified_ID)]
+
+  # Convert to tidygraph for ggraph
+  tg <- as_tbl_graph(g)
+
+  # Get species name for this MAG
+  species_name <- unique(dataframe$species[dataframe$MAG_ID == mag_id_to_plot])
+
+  species_name <- ifelse(species_name == "Enterobacter hormaechei_C",
+                       "Enterobacter hormaechei",
+                       ifelse(species_name == "Enterococcus_B faecium",
+                              "Enterococcus faecium",
+                              species_name))
+
+  # Plot
+  p <- ggraph(tg, layout = 'fr') +
+    geom_edge_link(aes(), alpha = 0.5, color = "gray50") +
+    geom_node_point(aes(color = factor(strain_cluster),
+                       shape = seq_type),
+                   size = 3) +
+    scale_color_manual(
+      name = "Strain Cluster",
+      values = rev(hcl.colors(11, "Earth"))  # Set to max you might need
+      ) +
+    scale_shape_manual(values = c("mNGS" = 16, "WGS" = 17, "Both" = 15),
+                       name = "Sequencing Type") +
+    labs(title = bquote(italic(.(species_name)))) +
+    theme_graph() +
+    theme(legend.position = "none",
+          plot.title.position = "plot",
+          plot.title = element_text(size=30))
+
+  return(p)
+}
+
+instrain_new_df <- mNGS_instrain %>%
+  select(MAG_ID, species, ID_1, WGS_strain_num_1, ID_2, WGS_strain_num_2, Seq_1, Seq_2)
+
+# Get unique MAG IDs
+ordered_MAG_ID <- instrain_new_df %>% select(MAG_ID, species) %>% distinct() %>%
+  filter(species!="Pseudomonas aeruginosa") %>%
+  arrange(species)
+
+unique_mags_new <- ordered_MAG_ID$MAG_ID # ordered alphabetically, and excludes Pseudomonas since that's already in the paper
+
+# Generate plots for all MAGs
+plot_list <- list()
+
+for (mag in unique_mags_new) {
+  tryCatch({
+    p <- plot_strain_network(instrain_new_df, mag)
+
+    if (!is.null(p)) {
+      plot_list[[mag]] <- p
+    }
+
+  }, error = function(e) {
+    cat("Error with MAG", mag, ":", conditionMessage(e), "\n")
+  })
+}
+
+# Arrange plots into a 3x3 panel
+panel <- wrap_plots(plot_list, ncol = 3) +
+  plot_layout(guides = "collect") &
+  theme(legend.position = "bottom")
+
+# Temporarily restore one legend for collection
+plot_list[[3]] <- plot_list[[3]] +
+  theme(
+    legend.position = "right",
+    legend.text = element_text(size = 20),
+    legend.title = element_text(size = 20)
+  ) +
+  guides(
+    color = guide_legend(nrow = 2, direction = "horizontal", title.position = "top",
+                         override.aes = list(size = 8)),
+    shape = guide_legend(nrow = 1, direction = "horizontal", title.position = "top",
+                         override.aes = list(size = 8))
+  )
+
+panel <- wrap_plots(plot_list, ncol = 3) +
+  guide_area() +
+  plot_layout(ncol = 3, guides = "collect") &
+  theme(
+    plot.background  = element_blank(),
+    legend.text      = element_text(size = 20),
+    legend.title     = element_text(size = 20, face = "bold"),
+    legend.key.size  = unit(1.5, "cm")
+  )
+
+panel
+
+```
+
+
+## 7. WGS/MAG comparison
+
+### 7.1 Supplementary Figure 9
+
+```{r WGS vs MAG instrain comparison}
+# Build the inStrain dataset
+
+instrain1 <- mNGS_instrain %>%
+  filter((Seq_1 == "WGS" | Seq_2 == "WGS") & shared_strain == TRUE) %>%
+  select(species, sample_name_1, ID_1, Seq_1) %>%
+  rename(
+    sample_name = sample_name_1,
+    ID = ID_1,
+    Seq = Seq_1
+  )
+
+instrain2 <- mNGS_instrain %>%
+  filter((Seq_1 == "WGS" | Seq_2 == "WGS") & shared_strain == TRUE) %>%
+  select(species, sample_name_2, ID_2, Seq_2) %>%
+  rename(
+    sample_name = sample_name_2,
+    ID = ID_2,
+    Seq = Seq_2
+  )
+
+instrain_dx_final <- bind_rows(instrain1, instrain2) %>%
+  filter(Seq == "mNGS") %>%
+  mutate(
+    nSID = str_extract(ID, "^[^_]+_[^_]+"),
+    Source = ifelse(grepl("3279", sample_name), "stool", "PR"),
+    value = 1
+  ) %>%
+  select(species, nSID, Source, value) %>%
+  distinct() %>%
+  pivot_wider(
+    names_from = species,
+    values_from = value,
+    values_fill = 0
+  ) %>%
+  rename(
+    SGBC.difficile = `Clostridioides difficile`,
+    SGBK.pneumoniae = `Klebsiella pneumoniae`,
+    SGBE.faecium = `Enterococcus_B faecium`,
+    SGBP.aeruginosa = `Pseudomonas aeruginosa`,
+    SGBE.faecalis = `Enterococcus faecalis`,
+    SGBE.coli = `Escherichia coli`,
+    SGBE.hormaechei = `Enterobacter hormaechei_C`
+  ) %>%
+  full_join(
+    MAGs_SOI %>% select(mNGS_sample_name, nSID, Source),
+    by = c("nSID", "Source")
+  ) %>%
+  mutate(across(starts_with("SGB"), ~replace_na(., 0)))
+
+
+# Run inStrain analysis
+
+run_instrain_analysis <- function(df, org_micro_name, org_col_name) {
+
+  org_MAGs <- df %>%
+    select(mNGS_sample_name, all_of(org_col_name)) %>%
+    rename(MAG_detect = all_of(org_col_name)) %>%
+    mutate(MAG_detect = as.integer(MAG_detect != 0))
+
+  org_micro <- micro_cx %>%
+    filter(MDRO == org_micro_name, Source == "PR") %>%
+    distinct(nSID) %>%
+    mutate(cx_detect = 1)
+
+  org <- samples %>%
+    filter(Collected == 1, Source == "PR") %>%
+    full_join(
+      mNGS_samples %>%
+        select(mNGS_sample_name) %>%
+        filter(grepl("3279", mNGS_sample_name)),
+      by = c("MAG_sample" = "mNGS_sample_name")
+    ) %>%
+    left_join(org_MAGs, by = c("MAG_sample" = "mNGS_sample_name")) %>%
+    left_join(org_micro, by = "nSID") %>%
+    mutate(cx_detect = replace_na(cx_detect, 0)) %>%
+    filter(!is.na(MAG_detect))
+
+  twobytwo <- org %>%
+    count(cx_detect, MAG_detect) %>%
+    mutate(
+      classification = case_when(
+        cx_detect == 1 & MAG_detect == 1 ~ "Both +",
+        cx_detect == 0 & MAG_detect == 0 ~ "Both -",
+        cx_detect == 1 & MAG_detect == 0 ~ "WGS only +",
+        cx_detect == 0 & MAG_detect == 1 ~ "SGB only +"
+      )
+    )
+
+  get_n <- function(cx, mag) {
+    x <- twobytwo %>%
+      filter(cx_detect == cx, MAG_detect == mag) %>%
+      pull(n)
+    if (length(x) == 0) 0 else x
+  }
+
+  tp <- get_n(1, 1)
+  fp <- get_n(0, 1)
+  fn <- get_n(1, 0)
+  tn <- get_n(0, 0)
+
+  safe_binom <- function(x, n) {
+    if (n == 0) return(list(estimate = NA, conf.int = c(NA, NA)))
+    binom.test(x, n)
+  }
+
+  tests <- list(
+    Sensitivity = safe_binom(tp, tp + fn),
+    Specificity = safe_binom(tn, tn + fp),
+    PPV         = safe_binom(tp, tp + fp),
+    NPV         = safe_binom(tn, tn + fn)
+  )
+
+  perf <- tibble(
+    Metric = names(tests),
+    Estimate = sapply(tests, \(x) x$estimate),
+    CI_lower = sapply(tests, \(x) x$conf.int[1]),
+    CI_upper = sapply(tests, \(x) x$conf.int[2])
+  )
+
+  org_long <- org %>%
+    pivot_longer(
+      c(cx_detect, MAG_detect),
+      names_to = "method",
+      values_to = "detected"
+    ) %>%
+    mutate(
+      method = factor(method, levels = c("cx_detect", "MAG_detect")),
+      nPID_num = as.numeric(as.factor(nPID))
+    )
+
+  gee_p <- tryCatch({
+    fit <- geeglm(
+      detected ~ method,
+      data = org_long,
+      family = binomial,
+      id = nPID_num,
+      corstr = "independence"
+    )
+    summary(fit)$coefficients["methodMAG_detect", "Pr(>|W|)"]
+  }, error = function(e) NA)
+
+  list(
+    perf = perf,
+    twobytwo = twobytwo,
+    gee_p = gee_p
+  )
+}
+
+
+# Build inStrain plot
+
+plot_instrain_combined <- function(results_list, title = "") {
+
+  perf_all <- purrr::imap_dfr(
+    results_list,
+    ~.x$perf %>% mutate(Organism = .y)
+  )
+
+  concordance_all <- purrr::imap_dfr(
+    results_list,
+    ~.x$twobytwo %>% mutate(Organism = .y)
+  )
+
+  p_labels <- purrr::imap_dfr(
+    results_list,
+    ~tibble(Organism = .y, gee_p = .x$gee_p)
+  )
+
+  # Performance panel
+  perf_combined <- perf_all %>%
+    mutate(
+      Organism = factor(Organism, levels = names(results_list)),
+      Estimate_pct = Estimate * 100,
+      CI_lower_pct = CI_lower * 100,
+      CI_upper_pct = CI_upper * 100
+    )
+
+  metric_colors <- c(
+    "Sensitivity" = "#4F6980FF",
+    "Specificity" = "#F47942FF",
+    "PPV"         = "#A2CEAAFF",
+    "NPV"         = "#B66353FF"
+  )
+
+  pA <- ggplot(
+    perf_combined,
+    aes(x = Organism, y = Estimate_pct, fill = Metric)
+  ) +
+    geom_col(
+      position = position_dodge(width = 0.75),
+      width = 0.65
+    ) +
+    geom_errorbar(
+      aes(ymin = CI_lower_pct, ymax = CI_upper_pct),
+      position = position_dodge(width = 0.75),
+      width = 0.25
+    ) +
+    scale_y_continuous(
+      limits = c(0, 100),
+      labels = scales::label_percent(scale = 1),
+      breaks = seq(0, 100, 25)
+    ) +
+    scale_fill_manual(values = metric_colors) +
+    labs(x = NULL, y = "Estimate (%)", fill = "Performance metrics") +
+    theme_classic(base_size = 13) +
+    ggtitle(title)
+
+  # Concordance panel
+  concordance_combined <- concordance_all %>%
+    left_join(
+      concordance_all %>%
+        group_by(Organism) %>%
+        summarise(total = sum(n), .groups = "drop"),
+      by = "Organism"
+    ) %>%
+    left_join(p_labels, by = "Organism") %>%
+    mutate(
+      Organism = factor(Organism, levels = names(results_list)),
+      prop = n / total * 100
+    )
+
+  annot_df <- concordance_combined %>%
+    distinct(Organism, gee_p) %>%
+    mutate(
+      label = ifelse(
+        is.na(gee_p), "N/A",
+        ifelse(gee_p < 0.01, "p <0.01", sprintf("p = %.2f", gee_p))
+      )
+    )
+
+  pB <- ggplot(
+    concordance_combined,
+    aes(x = Organism, y = prop, fill = classification)
+  ) +
+    geom_col(width = 0.5) +
+    geom_text(
+      data = annot_df,
+      aes(x = Organism, y = 102, label = label),
+      inherit.aes = FALSE,
+      size = 4
+    ) +
+    scale_fill_manual(
+      values = c(
+        "WGS only +" = "#F47942FF",
+        "Both +"     = "#638B66FF",
+        "SGB only +" = "#4F6980FF",
+        "Both -"     = "grey60"
+      ),
+      labels = c(
+        "WGS only +" = "culture only +",
+        "Both +"     = "Both +",
+        "SGB only +" = "mNGS only +",
+        "Both -"     = "Both −"
+      )
+    ) +
+    scale_y_continuous(
+      limits = c(0, 115),
+      labels = scales::label_percent(scale = 1),
+      breaks = seq(0, 100, 25)
+    ) +
+    labs(x = NULL, y = "Proportion of samples (%)", fill = "Detection method") +
+    theme_classic(base_size = 13) +
+    ggtitle(title)
+
+  list(pA = pA, pB = pB)
+}
+
+
+# Assemble final figure
+
+all_results_edges <- list(
+  "C. difficile"  = run_instrain_analysis(instrain_dx_final, "C. difficile",  "SGBC.difficile"),
+  "E. faecium"    = run_instrain_analysis(instrain_dx_final, "E. faecium",    "SGBE.faecium"),
+  "E. faecalis"   = run_instrain_analysis(instrain_dx_final, "E. faecalis",   "SGBE.faecalis"),
+  "K. pneumoniae" = run_instrain_analysis(instrain_dx_final, "K. pneumoniae", "SGBK.pneumoniae"),
+  "P. aeruginosa" = run_instrain_analysis(instrain_dx_final, "P. aeruginosa", "SGBP.aeruginosa"),
+  "E. coli"       = run_instrain_analysis(instrain_dx_final, "E. coli",       "SGBE.coli"),
+  "E. hormaechei" = run_instrain_analysis(instrain_dx_final, "E. hormaechei", "SGBE.hormaechei")
+)
+
+instrain_fig_edges <- plot_instrain_combined(
+  all_results_edges,
+  title = ""
+)
+
+instrain_plot_top <-
+  instrain_fig_edges$pA /
+  instrain_fig_edges$pB +
+  plot_layout(heights = c(1, 1)) +
+  plot_annotation(tag_levels = "a") &
+  theme(plot.tag = element_text(face = "bold", size = 24))
+
+instrain_plot_top
+
+```
+
+
+## 8. Risk factor analysis
+
+### 8.1 Data preparation
+
+```{r data preparation}
+
+# Build same-timepoint P×P dyads
+pp_temp <- SSS %>%
+  filter(
+    str_starts(nPID_1, "P"),
+    str_starts(nPID_2, "P"),
+    !same_patient,
+    nTID_1 == nTID_2
+  ) %>%
+  rename(week = nTID_1) %>%
+  select(-nTID_2) %>%
+  mutate(
+    pid_a = if_else(nPID_1 < nPID_2, nPID_1, nPID_2),
+    pid_b = if_else(nPID_1 < nPID_2, nPID_2, nPID_1)
+  ) %>%
+  select(pid_a, pid_b, week, n_MAGs_compared, sharing_rate) %>%
+  left_join(week_dates, by = "week")
+
+# Count intervals contributed by each patient
+dyad_intervals_temp <- pp_temp %>%
+  group_by(pid_a, pid_b) %>%
+  arrange(week_num, .by_group = TRUE) %>%
+  mutate(week_t2 = lead(week)) %>%
+  filter(!is.na(week_t2)) %>%
+  ungroup()
+
+patient_interval_counts <- bind_rows(
+  dyad_intervals_temp %>% count(pid = pid_a),
+  dyad_intervals_temp %>% count(pid = pid_b)
+) %>%
+  group_by(pid) %>%
+  summarise(
+    n_intervals = sum(n),
+    .groups = "drop"
+  )
+
+# Order dyads so pid_a has more intervals
+pp_same <- SSS %>%
+  filter(
+    str_starts(nPID_1, "P"),
+    str_starts(nPID_2, "P"),
+    !same_patient,
+    nTID_1 == nTID_2
+  ) %>%
+  rename(week = nTID_1) %>%
+  select(-nTID_2) %>%
+  left_join(
+    patient_interval_counts %>%
+      rename(nPID_1 = pid, n1 = n_intervals),
+    by = "nPID_1"
+  ) %>%
+  left_join(
+    patient_interval_counts %>%
+      rename(nPID_2 = pid, n2 = n_intervals),
+    by = "nPID_2"
+  ) %>%
+  mutate(
+    pid_a = case_when(
+      n1 > n2         ~ nPID_1,
+      n2 > n1         ~ nPID_2,
+      nPID_1 < nPID_2 ~ nPID_1,
+      TRUE            ~ nPID_2
+    ),
+    pid_b = case_when(
+      n1 > n2         ~ nPID_2,
+      n2 > n1         ~ nPID_1,
+      nPID_1 < nPID_2 ~ nPID_2,
+      TRUE            ~ nPID_1
+    )
+  ) %>%
+  select(
+    pid_a, pid_b, week,
+    n_MAGs_compared,
+    sharing_rate
+  ) %>%
+  left_join(week_dates, by = "week") %>%
+  mutate(
+    log_n_MAGs = log(n_MAGs_compared)
+  )
+
+
+# Create consecutive T1 → T2 dyad intervals
+dyad_intervals <- pp_same %>%
+  group_by(pid_a, pid_b) %>%
+  arrange(week_num, .by_group = TRUE) %>%
+  mutate(
+    week_t2         = lead(week),
+    sharing_rate_t2 = lead(sharing_rate),
+    log_n_MAGs_t2   = lead(log_n_MAGs),
+    interval_start  = w_start,
+    interval_end    = lead(w_end)
+  ) %>%
+  filter(!is.na(week_t2)) %>%
+  ungroup() %>%
+  rename(
+    week_t1         = week,
+    sharing_rate_t1 = sharing_rate
+  )
+
+
+# Create shared model dataset
+model_data <- dyad_intervals %>%
+  select(
+    pid_a,
+    pid_b,
+    week_t1,
+    interval_start,
+    interval_end,
+    sharing_rate_t1,
+    sharing_rate_t2,
+    log_n_MAGs_t2
+  ) %>%
+  mutate(
+    sharing_rate_adj = case_when(
+      sharing_rate_t2 == 0 ~ 0.0001,
+      sharing_rate_t2 == 1 ~ 0.9999,
+      TRUE                 ~ sharing_rate_t2
+    )
+  )
+
+
+# Create daily room-occupancy data
+rooms_daily <- rooms_raw %>%
+  rowwise() %>%
+  mutate(
+    date = list(seq(AdmDate, DcDate, by = "day"))
+  ) %>%
+  unnest(date) %>%
+  ungroup() %>%
+  select(nPID, date, Room, Floor)
+```
+
+
+### 8.2 Figure 5
+
+```{r provider crossings analysis}
+
+# Link provider visits to patients
+provider_visits <- providers_raw %>%
+  left_join(
+    rooms_daily %>% rename(room = Room),
+    by = c("room", "event_date" = "date")
+  ) %>%
+  filter(
+    !is.na(nPID),
+    str_starts(nPID, "P")
+  ) %>%
+  select(
+    clinician_id,
+    group_classification,
+    event_date,
+    timestamp,
+    nPID
+  ) %>%
+  mutate(
+    datetime = ymd_hms(paste(event_date, timestamp))
+  ) %>%
+  distinct(
+    nPID,
+    clinician_id,
+    group_classification,
+    datetime
+  )
+
+
+# Create patient-specific visit records
+all_visits_a <- dyad_intervals %>%
+  select(
+    pid_a, pid_b, week_t1,
+    interval_start, interval_end
+  ) %>%
+  left_join(
+    provider_visits %>% rename(pid_a = nPID),
+    by = "pid_a",
+    relationship = "many-to-many"
+  ) %>%
+  filter(
+    datetime >= ymd(interval_start),
+    datetime <= ymd(interval_end) + hours(23) + minutes(59)
+  ) %>%
+  mutate(patient = "a")
+
+all_visits_b <- dyad_intervals %>%
+  select(
+    pid_a, pid_b, week_t1,
+    interval_start, interval_end
+  ) %>%
+  left_join(
+    provider_visits %>% rename(pid_b = nPID),
+    by = "pid_b",
+    relationship = "many-to-many"
+  ) %>%
+  filter(
+    datetime >= ymd(interval_start),
+    datetime <= ymd(interval_end) + hours(23) + minutes(59)
+  ) %>%
+  mutate(patient = "b")
+
+
+# Identify clinician crossings between patients
+crossing_features <- bind_rows(
+  all_visits_a,
+  all_visits_b
+) %>%
+  group_by(
+    pid_a,
+    pid_b,
+    week_t1,
+    clinician_id
+  ) %>%
+  filter(n_distinct(patient) == 2) %>%
+  arrange(datetime, .by_group = TRUE) %>%
+  mutate(
+    crossed = patient != lag(patient, default = first(patient))
+  ) %>%
+  summarise(
+    n_crossings = sum(crossed),
+    group_classification = first(group_classification),
+    .groups = "drop"
+  )
+
+
+# Aggregate crossings and normalize by interval length
+crossing_summary <- crossing_features %>%
+  group_by(pid_a, pid_b, week_t1) %>%
+  summarise(
+    total_crossings =
+      sum(n_crossings),
+
+    n_nurses_crossings =
+      sum(
+        n_crossings[
+          group_classification == "Nurses (RN)"
+        ],
+        na.rm = TRUE
+      ),
+
+    n_rt_crossings =
+      sum(
+        n_crossings[
+          group_classification ==
+            "Respiratory Therapists (RT)"
+        ],
+        na.rm = TRUE
+      ),
+
+    n_techs_crossings =
+      sum(
+        n_crossings[
+          group_classification == "Techs"
+        ],
+        na.rm = TRUE
+      ),
+
+    n_evs_crossings =
+      sum(
+        n_crossings[
+          group_classification %in% c(
+            "Environmental Services (EVS)",
+            "Facility Services",
+            "Food Services"
+          )
+        ],
+        na.rm = TRUE
+      ),
+
+    n_therapist_crossings =
+      sum(
+        n_crossings[
+          group_classification == "Therapists"
+        ],
+        na.rm = TRUE
+      ),
+
+    n_physician_crossings =
+      sum(
+        n_crossings[
+          group_classification == "Physicians"
+        ],
+        na.rm = TRUE
+      ),
+
+    .groups = "drop"
+  ) %>%
+  left_join(
+    dyad_intervals %>%
+      select(
+        pid_a,
+        pid_b,
+        week_t1,
+        interval_start,
+        interval_end
+      ) %>%
+      mutate(
+        interval_days =
+          as.numeric(interval_end - interval_start)
+      ),
+    by = c("pid_a", "pid_b", "week_t1")
+  ) %>%
+  mutate(
+    crossings_per_day =
+      total_crossings / interval_days,
+
+    nurse_crossings_per_day =
+      n_nurses_crossings / interval_days,
+
+    rt_crossings_per_day =
+      n_rt_crossings / interval_days,
+
+    techs_crossings_per_day =
+      n_techs_crossings / interval_days,
+
+    evs_crossings_per_day =
+      n_evs_crossings / interval_days,
+
+    therapist_crossings_per_day =
+      n_therapist_crossings / interval_days,
+
+    physician_crossings_per_day =
+      n_physician_crossings / interval_days
+  )
+
+
+# Add crossing predictors to the model dataset
+model_data_crossings <- model_data %>%
+  left_join(
+    crossing_summary %>%
+      select(
+        pid_a,
+        pid_b,
+        week_t1,
+        crossings_per_day,
+        nurse_crossings_per_day,
+        rt_crossings_per_day,
+        techs_crossings_per_day,
+        evs_crossings_per_day,
+        therapist_crossings_per_day,
+        physician_crossings_per_day
+      ),
+    by = c("pid_a", "pid_b", "week_t1")
+  ) %>%
+  mutate(
+    across(
+      ends_with("_per_day"),
+      ~ replace_na(., 0)
+    )
+  )
+
+
+# Fit crossing models
+run_model <- function(formula, data) {
+  glmmTMB(
+    formula,
+    ziformula = ~1,
+    family = beta_family(link = "logit"),
+    data = data
+  )
+}
+
+extract_results <- function(fit, label) {
+
+  coefs <- fixef(fit)$cond
+  cis   <- confint(fit, parm = "beta_", method = "Wald")
+  wald  <- car::Anova(fit)
+
+  coef_name <- names(coefs)[3]
+  ci_name   <- paste0("cond.", coef_name)
+
+  tibble(
+    label   = label,
+    OR      = exp(coefs[coef_name]),
+    CI_low  = exp(cis[ci_name, "2.5 %"]),
+    CI_high = exp(cis[ci_name, "97.5 %"]),
+    p       = wald[2, "Pr(>Chisq)"]
+  )
+}
+
+
+fitc1 <- run_model(
+  sharing_rate_adj ~
+    sharing_rate_t1 +
+    crossings_per_day +
+    offset(log_n_MAGs_t2) +
+    (1 | pid_a),
+  model_data_crossings
+)
+
+fitc2 <- run_model(
+  sharing_rate_adj ~
+    sharing_rate_t1 +
+    nurse_crossings_per_day +
+    offset(log_n_MAGs_t2) +
+    (1 | pid_a) + (1 | pid_b),
+  model_data_crossings
+)
+
+fitc3 <- run_model(
+  sharing_rate_adj ~
+    sharing_rate_t1 +
+    rt_crossings_per_day +
+    offset(log_n_MAGs_t2) +
+    (1 | pid_a) + (1 | pid_b),
+  model_data_crossings
+)
+
+fitc4 <- run_model(
+  sharing_rate_adj ~
+    sharing_rate_t1 +
+    techs_crossings_per_day +
+    offset(log_n_MAGs_t2) +
+    (1 | pid_a) + (1 | pid_b),
+  model_data_crossings
+)
+
+fitc5 <- run_model(
+  sharing_rate_adj ~
+    sharing_rate_t1 +
+    evs_crossings_per_day +
+    offset(log_n_MAGs_t2) +
+    (1 | pid_a) + (1 | pid_b),
+  model_data_crossings
+)
+
+fitc6 <- run_model(
+  sharing_rate_adj ~
+    sharing_rate_t1 +
+    therapist_crossings_per_day +
+    offset(log_n_MAGs_t2) +
+    (1 | pid_a) + (1 | pid_b),
+  model_data_crossings
+)
+
+fitc7 <- run_model(
+  sharing_rate_adj ~
+    sharing_rate_t1 +
+    physician_crossings_per_day +
+    offset(log_n_MAGs_t2) +
+    (1 | pid_a) + (1 | pid_b),
+  model_data_crossings
+)
+
+
+forest_crossings <- bind_rows(
+  extract_results(fitc1, "All staff"),
+  extract_results(fitc2, "Nurses"),
+  extract_results(fitc3, "Respiratory therapists"),
+  extract_results(fitc4, "Techs"),
+  extract_results(fitc5, "Support services"),
+  extract_results(fitc6, "Therapists"),
+  extract_results(fitc7, "Physicians")
+) %>%
+  mutate(
+    sig = p < 0.05,
+    label = factor(label, levels = rev(label))
+  )
+
+
+# Create forest plot
+forest_plot <- ggplot(
+  forest_crossings,
+  aes(y = label)
+) +
+  geom_vline(
+    xintercept = 1,
+    linetype = "dashed",
+    color = "grey60",
+    linewidth = 0.4
+  ) +
+  geom_errorbarh(
+    aes(xmin = CI_low, xmax = CI_high, color = sig),
+    height = 0.2,
+    linewidth = 0.6,
+    show.legend = FALSE
+  ) +
+  geom_point(
+    aes(x = OR, color = sig, shape = sig),
+    size = 2.8
+  ) +
+  geom_text(
+    aes(
+      x = max(CI_high, na.rm = TRUE) * 1.05,
+      label = paste0(
+        sprintf(
+          "OR: %.2f (95%% CI: %.2f–%.2f)",
+          OR, CI_low, CI_high
+        ),
+        ifelse(
+          p < 0.001,
+          ", p<0.01",
+          paste0(", p=", sprintf("%.2f", p))
+        )
+      ),
+      color = sig
+    ),
+    hjust = 0,
+    size = 3,
+    show.legend = FALSE
+  ) +
+  scale_x_log10(
+    breaks = c(0.5, 1, 2),
+    labels = c("0.5", "1.0", "2.0"),
+    limits = c(0.1, 40)
+  ) +
+  scale_color_manual(
+    values = c(
+      "TRUE" = "#185FA5",
+      "FALSE" = "#888780"
+    ),
+    labels = c(
+      "TRUE" = "p < 0.05",
+      "FALSE" = "p ≥ 0.05"
+    ),
+    name = NULL
+  ) +
+  scale_shape_manual(
+    values = c(
+      "TRUE" = 18,
+      "FALSE" = 16
+    ),
+    labels = c(
+      "TRUE" = "p < 0.05",
+      "FALSE" = "p ≥ 0.05"
+    ),
+    name = NULL
+  ) +
+  labs(
+    x = "\nOdds ratio (log scale)",
+    y = "Number of interpatient crossings\n"
+  ) +
+  theme_mine() +
+  theme(
+    legend.position = "bottom",
+    axis.text.y = element_text(size = 10),
+    panel.grid.major.x = element_line(
+      color = "grey90",
+      linewidth = 0.3
+    ),
+    panel.grid.major.y = element_blank()
+  )
+
+forest_plot
+```
+
+
+### 8.3 Additional risk factor analysis
+
+```{r HAND HYGIENE + SAME-FLOOR ANALYSIS}
+
+# Link provider events to patients with hand-hygiene data
+provider_patient <- providers_raw %>%
+  left_join(
+    rooms_daily %>% rename(room = Room),
+    by = c("room", "event_date" = "date")
+  ) %>%
+  filter(
+    !is.na(nPID),
+    str_starts(nPID, "P")
+  ) %>%
+  select(
+    clinician_id,
+    group_classification,
+    event_date,
+    is_performant,
+    nPID
+  )
+
+
+# Calculate hand-hygiene non-performance among bridging staff
+visits_a_hh <- dyad_intervals %>%
+  select(
+    pid_a, pid_b, week_t1,
+    interval_start, interval_end
+  ) %>%
+  left_join(
+    provider_patient %>% rename(pid_a = nPID),
+    by = "pid_a",
+    relationship = "many-to-many"
+  ) %>%
+  filter(
+    event_date >= interval_start,
+    event_date <= interval_end
+  )
+
+visits_b_hh <- dyad_intervals %>%
+  select(
+    pid_a, pid_b, week_t1,
+    interval_start, interval_end
+  ) %>%
+  left_join(
+    provider_patient %>% rename(pid_b = nPID),
+    by = "pid_b",
+    relationship = "many-to-many"
+  ) %>%
+  filter(
+    event_date >= interval_start,
+    event_date <= interval_end
+  ) %>%
+  select(
+    pid_a, pid_b, week_t1, clinician_id
+  )
+
+bridging_hh <- visits_a_hh %>%
+  inner_join(
+    visits_b_hh,
+    by = c(
+      "pid_a",
+      "pid_b",
+      "week_t1",
+      "clinician_id"
+    ),
+    relationship = "many-to-many"
+  ) %>%
+  group_by(pid_a, pid_b, week_t1) %>%
+  summarise(
+    bridge_nonperf_rate =
+      mean(is_performant == "N", na.rm = TRUE),
+    .groups = "drop"
+  )
+
+
+# Calculate same-floor exposure
+floor_interval <- dyad_intervals %>%
+  select(
+    pid_a, pid_b, week_t1,
+    interval_start, interval_end
+  ) %>%
+  left_join(
+    rooms_daily %>%
+      select(nPID, date, Floor) %>%
+      rename(
+        pid_a = nPID,
+        floor_a = Floor
+      ),
+    by = "pid_a",
+    relationship = "many-to-many"
+  ) %>%
+  filter(
+    date >= interval_start,
+    date <= interval_end
+  ) %>%
+  left_join(
+    rooms_daily %>%
+      select(nPID, date, Floor) %>%
+      rename(
+        pid_b = nPID,
+        floor_b = Floor
+      ),
+    by = c("pid_b", "date")
+  ) %>%
+  group_by(pid_a, pid_b, week_t1) %>%
+  summarise(
+    days_both_present = sum(!is.na(floor_b)),
+    days_same_floor   = sum(floor_a == floor_b, na.rm = TRUE),
+    same_floor =
+      days_both_present > 0 &
+      days_same_floor / days_both_present > 0.5,
+    .groups = "drop"
+  )
+
+
+# Add hand-hygiene and floor predictors to the model dataset
+model_data_hh_floor <- model_data %>%
+  left_join(
+    bridging_hh,
+    by = c("pid_a", "pid_b", "week_t1")
+  ) %>%
+  left_join(
+    floor_interval %>%
+      select(pid_a, pid_b, week_t1, same_floor),
+    by = c("pid_a", "pid_b", "week_t1")
+  ) %>%
+  mutate(
+    same_floor = factor(
+      same_floor,
+      levels = c(FALSE, TRUE),
+      labels = c("Different floor", "Same floor")
+    )
+  )
+
+
+# Fit crossing models
+fit1 <- run_model(
+  sharing_rate_adj ~
+    sharing_rate_t1 +
+    bridge_nonperf_rate +
+    offset(log_n_MAGs_t2) +
+    (1 | pid_a) + (1 | pid_b),
+  model_data_hh_floor %>%
+    filter(!is.na(bridge_nonperf_rate))
+)
+
+fit2 <- run_model(
+  sharing_rate_adj ~
+    sharing_rate_t1 +
+    same_floor +
+    offset(log_n_MAGs_t2) +
+    (1 | pid_a) + (1 | pid_b),
+  model_data_hh_floor %>%
+    filter(!is.na(same_floor))
+)
+
+
+# Extract hand-hygiene and same-floor results
+hh_result <- extract_results(
+  fit1,
+  "Hand hygiene non-compliance"
+)
+
+floor_result <- extract_results(
+  fit2,
+  "Same floor"
+)
+
+hh_result
+floor_result
+```
