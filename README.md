@@ -7,66 +7,66 @@ This repository contains the code for the paper **Strain-resolved metagenomics r
 REACT_analysis.Rmd is used to analyze the data and produce manuscript figures 1-3 and 5, supplementary tables 1-3, and supplementary figures 1-9. This code uses the following input files: 
 
 Data Files:
-* [patients.csv](Input/DataFiles/patients.csv)
-* [samples.csv](Input/DataFiles/samples.csv)
-* [rooms.csv](Input/DataFiles/rooms.csv)
-* [providers.csv](Input/DataFiles/providers.csv)
-* [micro_cultures_filt.csv](Input/DataFiles/micro_cultures_filt.csv)
-* [mNGS_samples.csv](Input/DataFiles/mNGS_samples.csv)
-* [SOI_instrain_newthreshold.csv](Input/DataFiles/SOI_instrain_newthreshold.csv)
-* [SOI_instrain_oldthreshold.csv](Input/DataFiles/SOI_instrain_oldthreshold.csv)
-* [MAGs_SOI.csv](Input/DataFiles/MAGs_SOI.csv)
-* [MAGs_all.csv](Input/DataFiles/MAGs_all.csv)
-* [MAGs_all_filt.csv](Input/DataFiles/MAGs_all_filt.csv)
-* [MAGs_amr.csv](Input/DataFiles/MAGs_amr.csv)
-* [strain_sharing_samples.csv](Input/DataFiles/strain_sharing_samples.csv)
+* [patients.csv](../DataFiles/patients.csv)
+* [samples.csv](../DataFiles/samples.csv)
+* [rooms.csv](../DataFiles/rooms.csv)
+* [providers.csv](../DataFiles/providers.csv)
+* [micro_cultures_filt.csv](../DataFiles/micro_cultures_filt.csv)
+* [mNGS_samples.csv](../DataFiles/mNGS_samples.csv)
+* [SOI_instrain_newthreshold.csv](../DataFiles/SOI_instrain_newthreshold.csv)
+* [SOI_instrain_oldthreshold.csv](../DataFiles/SOI_instrain_oldthreshold.csv)
+* [MAGs_SOI.csv](../DataFiles/MAGs_SOI.csv)
+* [MAGs_all.csv](../DataFiles/MAGs_all.csv)
+* [MAGs_all_filt.csv](../DataFiles/MAGs_all_filt.csv)
+* [MAGs_amr.csv](../DataFiles/MAGs_amr.csv)
+* [strain_sharing_samples.csv](../DataFiles/strain_sharing_samples.csv)
 
 Phylogenetic Tree Files:
-* [Acinetobacter_tree.newick](Input/REACTTree/Acinetobacter_tree.newick)
-* [Cdiff_tree.nwk](Input/REACTTree/Cdiff_tree.nwk)
-* [Citrobacter_tree.nwk](Input/REACTTree/Citrobacter_tree.nwk)
-* [Cperfingens_tree.nwk](Input/REACTTree/Cperfingens_tree.nwk)
-* [ecoli_phylo_tree_0326.nwk](Input/REACTTree/ecoli_phylo_tree_0326.nwk)
-* [Efaecalis_tree.nwk](Input/REACTTree/Efaecalis_tree.nwk)
-* [Efaecium_tree.nwk](Input/REACTTree/Efaecium_tree.nwk)
-* [Enterobacter_spp_phylo_tree_0326.nwk](Input/REACTTree/Enterobacter_spp_phylo_tree_0326.nwk)
-* [Klebspp_tree.nwk](Input/REACTTree/Klebspp_tree.nwk)
-* [Kpneumo_tree.nwk](Input/REACTTree/Kpneumo_tree.nwk)
-* [Paeruginosa_tree.nwk](Input/REACTTree/Paeruginosa_tree.nwk)
-* [Pmirabilis_tree.nwk](Input/REACTTree/Pmirabilis_tree.nwk)
-* [Smaltophilia_tree.nwk](Input/REACTTree/Smaltophilia_tree.nwk)
+* [Acinetobacter_tree.newick](../REACTTree/Acinetobacter_tree.newick)
+* [Cdiff_tree.nwk](../REACTTree/Cdiff_tree.nwk)
+* [Citrobacter_tree.nwk](../REACTTree/Citrobacter_tree.nwk)
+* [Cperfingens_tree.nwk](../REACTTree/Cperfingens_tree.nwk)
+* [ecoli_phylo_tree_0326.nwk](../REACTTree/ecoli_phylo_tree_0326.nwk)
+* [Efaecalis_tree.nwk](../REACTTree/Efaecalis_tree.nwk)
+* [Efaecium_tree.nwk](../REACTTree/Efaecium_tree.nwk)
+* [Enterobacter_spp_phylo_tree_0326.nwk](../REACTTree/Enterobacter_spp_phylo_tree_0326.nwk)
+* [Klebspp_tree.nwk](../REACTTree/Klebspp_tree.nwk)
+* [Kpneumo_tree.nwk](../REACTTree/Kpneumo_tree.nwk)
+* [Paeruginosa_tree.nwk](../REACTTree/Paeruginosa_tree.nwk)
+* [Pmirabilis_tree.nwk](../REACTTree/Pmirabilis_tree.nwk)
+* [Smaltophilia_tree.nwk](../REACTTree/Smaltophilia_tree.nwk)
 
 ## Input
 
 Data Files:
-* [patients.csv](Input/DataFiles/patients.csv): Metadata on each patient
-* [samples.csv](Input/DataFiles/samples.csv): Metadata on each sample
-* [rooms.csv](Input/DataFiles/rooms.csv): Room location of each patient at different timepoints
-* [providers.csv](Input/DataFiles/providers.csv): Hand hygiene data of providers
-* [micro_cultures_filt.csv](Input/DataFiles/micro_cultures_filt.csv): MDRO culture results
-* [mNGS_samples.csv](Input/DataFiles/mNGS_samples.csv): mNGS sequencing results
-* [SOI_instrain_newthreshold.csv](Input/DataFiles/SOI_instrain_newthreshold.csv): inStrain compare dataset of the all mNGS and WGS samples using the derep MAGs and the original thresholds for "shared strain"
-* [SOI_instrain_oldthreshold.csv](Input/DataFiles/SOI_instrain_oldthreshold.csv): inStrain compare dataset of the all mNGS and WGS samples using the derep MAGs and the new thresholds for "shared strain"
-* [MAGs_SOI.csv](Input/DataFiles/MAGs_SOI.csv): Presence/absence MAGs dataset of species of interest detected in the mNGS samples
-* [MAGs_all.csv](Input/DataFiles/MAGs_all.csv): All MAGs detected in the mNGS samples (including unused donor stool doses)
-* [MAGs_all_filt.csv](Input/DataFiles/MAGs_all_filt.csv): Filtered MAGs detected in the mNGS samples (excluding unused donor stool doses)
-* [MAGs_amr.csv](Input/DataFiles/MAGs_amr.csv): AMR genes detected on MAGs
-* [strain_sharing_samples.csv](Input/DataFiles/strain_sharing_samples.csv): Strain-sharing rates between paired samples
+* [patients.csv](../DataFiles/patients.csv): Metadata on each patient
+* [samples.csv](../DataFiles/samples.csv): Metadata on each sample
+* [rooms.csv](../DataFiles/rooms.csv): Room location of each patient at different timepoints
+* [providers.csv](../DataFiles/providers.csv): Hand hygiene data of providers
+* [micro_cultures_filt.csv](../DataFiles/micro_cultures_filt.csv): MDRO culture results
+* [mNGS_samples.csv](../DataFiles/mNGS_samples.csv): mNGS sequencing results
+* [SOI_instrain_newthreshold.csv](../DataFiles/SOI_instrain_newthreshold.csv): inStrain compare dataset of the all mNGS and WGS samples using the derep MAGs and the original thresholds for "shared strain"
+* [SOI_instrain_oldthreshold.csv](../DataFiles/SOI_instrain_oldthreshold.csv): inStrain compare dataset of the all mNGS and WGS samples using the derep MAGs and the new thresholds for "shared strain"
+* [MAGs_SOI.csv](../DataFiles/MAGs_SOI.csv): Presence/absence MAGs dataset of species of interest detected in the mNGS samples
+* [MAGs_all.csv](../DataFiles/MAGs_all.csv): All MAGs detected in the mNGS samples (including unused donor stool doses)
+* [MAGs_all_filt.csv](../DataFiles/MAGs_all_filt.csv): Filtered MAGs detected in the mNGS samples (excluding unused donor stool doses)
+* [MAGs_amr.csv](../DataFiles/MAGs_amr.csv): AMR genes detected on MAGs
+* [strain_sharing_samples.csv](../DataFiles/strain_sharing_samples.csv): Strain-sharing rates between paired samples
 
 Phylogenetic Tree Files: WGS of MDRO culture isolates by bacterial species
-* [Acinetobacter_tree.newick](Input/REACTTree/Acinetobacter_tree.newick): Acinetobacter baumannii WGSs
-* [Cdiff_tree.nwk](Input/REACTTree/Cdiff_tree.nwk): Clostridioides difficile WGSs
-* [Citrobacter_tree.nwk](Input/REACTTree/Citrobacter_tree.nwk): Citrobacter freunii WGSs
-* [Cperfingens_tree.nwk](Input/REACTTree/Cperfingens_tree.nwk): Clostridium perfringens WGSs
-* [ecoli_phylo_tree_0326.nwk](Input/REACTTree/ecoli_phylo_tree_0326.nwk): Escherichia coli WGSs
-* [Efaecalis_tree.nwk](Input/REACTTree/Efaecalis_tree.nwk): Enterococcus faecalis WGSs
-* [Efaecium_tree.nwk](Input/REACTTree/Efaecium_tree.nwk): Enterococcus faecium WGSs
-* [Enterobacter_spp_phylo_tree_0326.nwk](Input/REACTTree/Enterobacter_spp_phylo_tree_0326.nwk): Enterobacter species WGSs
-* [Klebspp_tree.nwk](Input/REACTTree/Klebspp_tree.nwk): non-Klebsiella pnuemoniae Klebsiella species WGSs
-* [Kpneumo_tree.nwk](Input/REACTTree/Kpneumo_tree.nwk): Klebsiella pneumoniae WGSs
-* [Paeruginosa_tree.nwk](Input/REACTTree/Paeruginosa_tree.nwk): Pseudomonas aeruginosa WGSs
-* [Pmirabilis_tree.nwk](Input/REACTTree/Pmirabilis_tree.nwk): Proteus mirabilis WGSs
-* [Smaltophilia_tree.nwk](Input/REACTTree/Smaltophilia_tree.nwk): Stenotrophomonas maltophilia WGSs
+* [Acinetobacter_tree.newick](../REACTTree/Acinetobacter_tree.newick): Acinetobacter baumannii WGSs
+* [Cdiff_tree.nwk](../REACTTree/Cdiff_tree.nwk): Clostridioides difficile WGSs
+* [Citrobacter_tree.nwk](../REACTTree/Citrobacter_tree.nwk): Citrobacter freunii WGSs
+* [Cperfingens_tree.nwk](../REACTTree/Cperfingens_tree.nwk): Clostridium perfringens WGSs
+* [ecoli_phylo_tree_0326.nwk](../REACTTree/ecoli_phylo_tree_0326.nwk): Escherichia coli WGSs
+* [Efaecalis_tree.nwk](../REACTTree/Efaecalis_tree.nwk): Enterococcus faecalis WGSs
+* [Efaecium_tree.nwk](../REACTTree/Efaecium_tree.nwk): Enterococcus faecium WGSs
+* [Enterobacter_spp_phylo_tree_0326.nwk](../REACTTree/Enterobacter_spp_phylo_tree_0326.nwk): Enterobacter species WGSs
+* [Klebspp_tree.nwk](../REACTTree/Klebspp_tree.nwk): non-Klebsiella pnuemoniae Klebsiella species WGSs
+* [Kpneumo_tree.nwk](../REACTTree/Kpneumo_tree.nwk): Klebsiella pneumoniae WGSs
+* [Paeruginosa_tree.nwk](../REACTTree/Paeruginosa_tree.nwk): Pseudomonas aeruginosa WGSs
+* [Pmirabilis_tree.nwk](../REACTTree/Pmirabilis_tree.nwk): Proteus mirabilis WGSs
+* [Smaltophilia_tree.nwk](../REACTTree/Smaltophilia_tree.nwk): Stenotrophomonas maltophilia WGSs
 
 ## Required hardware and software dependencies
 
