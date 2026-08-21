@@ -1,0 +1,480 @@
+nPID,nTID,nSID,Study_Group,Cycle,Visit,CollectDate,Source,MDRO,cx_sample,cx_sample_name,micro_org,WGS_yn,WGS_sample_name,WGS_org,WGS_bact_strain,WGS_t_cluster_strain
+P01,W6,P01_W6,APPS,2,APPS,6/11/23,PR,E. coli,apps0017-2presbl1of1,apps0017_2presbl1of1,Escherichia coli,1,p23220-s002_apps0017-2presbl1of1_s2,Escherichia coli,E. coli_4,
+P11,W1,P11_W1,APPS,1,APPS,5/7/23,IG,E. coli,apps0031igesbl-2of2,apps0031igesbl-2of2,Escherichia coli,1,p23220-s043_apps0031igesbl04-17-23-2of2_s43,Escherichia coli,E. coli_9,
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,env,E. faecalis,apps0053-2envvre-1of2,apps0053_2envvre-1of2,Enterococcus faecium,1,p23220-s086_apps0053-2envvre05-22-23-1of2_s410,Enterococcus faecalis,E. faecalis_10,
+P27,W1,P27_W1,SNT,1,APPS,5/7/23,PR,E. faecium,apps0042prvre-1of1,apps0042prvre-1of1,Enterococcus faecium,1,p23220-s065_apps0042prvre04-17-23-1of1_s65,Enterococcus faecium,E. faecium_5,E. faecium_5
+P18,W1,P18_W1,APPS,1,APPS,5/7/23,IG,E. hormaechei,apps0045igesbl-1of2,apps0045igesbl-1of2,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s075_apps0045igesbl04-17-23-1of2_s75,Enterobacter hormaechei,E. hormaechei_6,
+P11,W1,P11_W1,APPS,1,APPS,5/7/23,IG,E. hormaechei,apps0031igcre-1of2,apps0031igcre-1of2,Escherichia coli,1,p23220-s041_apps0031igcre04-17-23-1of2_s41,Enterobacter hormaechei,E. hormaechei_10,
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,IG,K. pneumoniae,apps0053-2igesbl-1of2,apps0053_2igesbl-1of2,Klebsiella pneumoniae,1,p23220-s089_apps0053-2igesbl05-22-23-1of2_s88,Klebsiella pneumoniae,K. pneumoniae_9,
+P07,W1,P07_W1,APPS,1,APPS,5/7/23,PR,A. baumannii,apps0023prcre-1of1,apps0023prcre-1of1,Acinetobacter baumannii,0,,,,
+P07,W1,P07_W1,APPS,1,APPS,5/7/23,PR,A. baumannii,apps0023presbl-1of1,apps0023presbl-1of1,Acinetobacter baumannii,0,,,,
+P15,W1,P15_W1,APPS,1,APPS,5/7/23,PR,A. baumannii,apps0038presbl-1of1,apps0038presbl-1of1,Acinetobacter baumannii,0,,,,
+P07,W6,P07_W6,APPS,2,APPS,6/11/23,IG,A. baumannii,apps0023-2igcre-1of1,apps0023_2igcre-1of1,Acinetobacter baumannii,0,,,,
+P34,W6,P34_W6,APPS,2,APPS,6/11/23,PR,A. baumannii,apps0057presbl-2of2,apps0057presbl-2of2,Acinetobacter baumannii,0,,,,
+P07,W6,P07_W6,APPS,2,APPS,6/11/23,IG,A. baumannii,apps0023-2igesbl-1of1,apps0023_2igesbl-1of1,Acinetobacter baumannii,0,,,,
+P26,W11,P26_W11,SNT,2,D28,7/18/23,stool,A. pittii,snt0013-d28stoolesbl-1of1,snt0013-stoolesbl-1of1,Acinetobacter bittii,1,p23220-s351_snt0013-d28stoolesbl06-28-23-1of1_s350,Acinetobacter pittii,A. pittii_1,
+P26,W2,P26_W2,SNT,1,D00,5/14/23,PR,B. intermedia,snt0001-d0presbl-1of1,snt0001-d0presbl-1of1,Brucella (Ochrobactrum) intermedia,0,,,,
+P02,W6,P02_W6,APPS,2,APPS,6/11/23,PR,C. braakii,apps0018-2prcre-1of2,apps0018_2prcre-1of2,Citrobacter braakii,0,,,,
+P26,W2,P26_W2,SNT,1,D00,5/14/23,PR,C. difficile,snt0001-d0prccfa-1of1,snt0001-d0prccfa-1of1,Clostridioides difficile,1,p23220-s315_snt0001-d0prccfa04-24-23-1of1_s314,Clostridioides difficile,C. difficile_1,C. difficile_1
+P30,W2,P30_W2,SNT,1,D00,5/14/23,PR,C. difficile,snt0007-d0prccfa-1of1,snt0007-d0prccfa-1of1,Clostridioides difficile,1,p23220-s327_snt0007-d0prccfa04-24-23-1of1_s326,Clostridioides difficile,C. difficile_1,C. difficile_1
+P30,W2,P30_W2,SNT,1,D00,5/14/23,env,C. difficile,snt0007-d0envccfa-1of1,snt0007-d0envccfa-1of1,Clostridioides difficile,1,p23220-s328_snt0007-d0envccfa04-24-23-1of1_s327,Clostridioides difficile,C. difficile_1,C. difficile_1
+P26,W3,P26_W3,SNT,1,D07,5/21/23,PR,C. difficile,snt0001-d7prccfa-1of1,snt0001-d7prccfa-1of1,Clostridioides difficile,1,p23220-s316_snt0001-d7prccfa05-01-23-1of1_s315,Clostridioides difficile,C. difficile_1,C. difficile_1
+P26,W3,P26_W3,SNT,1,D07,5/21/23,env,C. difficile,snt0001-d7envccfa-1of1,snt0001-d7envccfa-1of1,Clostridioides difficile,1,p23220-s317_snt0001-d7envccfa05-01-23-1of1_s316,Clostridioides difficile,C. difficile_1,C. difficile_1
+P30,W3,P30_W3,SNT,1,D07,5/21/23,PR,C. difficile,snt0007-d7prccfa-1of1,snt0007-d7prccfa-1of1,Clostridioides difficile,1,p23220-s329_snt0007-d7prccfa05-01-23-1of1_s328,Clostridioides difficile,C. difficile_1,C. difficile_1
+P26,W5,P26_W5,SNT,1,D21,6/4/23,PR,C. difficile,snt0001-d21prccfa-1of1,snt0001-d21prccfa-1of1,Clostridioides difficile,1,p23220-s318_snt0001-d21prccfa05-15-23-1of1_s317,Clostridioides difficile,C. difficile_1,C. difficile_1
+P26,W5,P26_W5,SNT,1,D21,6/4/23,env,C. difficile,snt0001-d21envccfa-1of1,snt0001-d21envccfa-1of1,Clostridioides difficile,1,p23220-s319_snt0001-d21envccfa05-15-23-1of1_s318,Clostridioides difficile,C. difficile_1,C. difficile_1
+P30,W5,P30_W5,SNT,1,D21,6/4/23,PR,C. difficile,snt0007-d21prccfa-1of1,snt0007-d21prccfa-1of1,Clostridioides difficile,1,p23220-s330_snt0007-d21prccfa05-15-23-1of1_s329,Clostridioides difficile,C. difficile_1,C. difficile_1
+P26,W6,P26_W6,SNT,1,D28,6/11/23,env,C. difficile,snt0001-d28envccfa-1of1,snt0001-d28envccfa-1of1,Clostridioides difficile,1,p23220-s314_apps0044-2-envccfa05-22-23-1of1_s313,Clostridioides difficile,C. difficile_1,C. difficile_1
+P37,W6,P37_W6,APPS,2,APPS,6/11/23,env,C. difficile,apps0060-envccfa-1of1,apps0060envccfa-1of1,Clostridioides difficile,1,p23220-s345_apps0060-envccfa05-22-23-1of1_s344,Clostridioides difficile,C. difficile_1,C. difficile_1
+P30,W6,P30_W6,SNT,1,D28,6/12/23,PR,C. difficile,snt0007-d28prccfa-1of1,snt0007-d28prccfa-1of1,Clostridioides difficile,1,p23220-s331_snt0007-d28prccfa05-15-23-1of1_s330,Clostridioides difficile,C. difficile_1,C. difficile_1
+P51,W8,P51_W8,SNT,2,D07,6/28/23,PR,C. difficile,snt0012-d7prccfa-1of1,snt0012-d7prccfa-1of1,Clostridioides difficile,1,p23220-s341_snt0012-d7prccfa06-08-23-1of1_s340,Clostridioides difficile,C. difficile_1,C. difficile_1
+P26,W8,P26_W8,SNT,2,D07,6/28/23,PR,C. difficile,snt0013-d7prccfa-1of1,snt0013-d7prccfa-1of1,Clostridioides difficile,1,p23220-s342_snt0013-d7prccfa06-08-23-1of1_s341,Clostridioides difficile,C. difficile_1,C. difficile_1
+P26,W8,P26_W8,SNT,2,D07,6/28/23,env,C. difficile,snt0013-d7envccfa-1of1,snt0013-d7envccfa-1of1,Clostridioides difficile,1,p23220-s343_snt0013-d7envccfa06-08-23-1of1_s342,Clostridioides difficile,C. difficile_1,C. difficile_1
+P49,W12,P49_W12,SNT,2,D28,7/26/23,env,C. difficile,snt0009-d28envccfa-1of1,snt0009-d28envccfa-1of1,Clostridioides difficile,1,p23220-s335_snt0009-d28envccfa07-06-23-1of1_s334,Clostridioides difficile,C. difficile_1,C. difficile_1
+P45,W6,P45_W6,APPS,2,APPS,6/11/23,env,C. difficile,apps0071-envccfa-1of1,apps0071envccfa-1of1,Clostridioides difficile,1,p23220-s313_apps0071-envccfa05-22-23-1of-1_s312,Clostridioides difficile,C. difficile_2,C. difficile_2
+P49,W8,P49_W8,SNT,2,D00,6/28/23,PR,C. difficile,snt0009-d0prccfa-1of1,snt0009-d0prccfa-1of1,Clostridioides difficile,1,p23220-s332_snt0009-d0prccfa06-08-23-1of1_s331,Clostridioides difficile,C. difficile_2,C. difficile_2
+P49,W9,P49_W9,SNT,2,D07,7/5/23,PR,C. difficile,snt0009-d7prccfa-1of1,snt0009-d7prccfa-1of1,Clostridioides difficile,1,p23220-s333_snt0009-d7prccfa06-15-23-1of1_s332,Clostridioides difficile,C. difficile_2,C. difficile_2
+P49,W11,P49_W11,SNT,2,D21,7/19/23,PR,C. difficile,snt0009-d21prccfa-1of1,snt0009-d21prccfa-1of1,Clostridioides difficile,1,p23220-s344_snt0009-d21prccfa06-29-23-1of1_s343,Clostridioides difficile,C. difficile_2,C. difficile_2
+P32,W7,P32_W7,SNT,2,D00,6/21/23,PR,C. difficile,snt0010-d0prccfa-1of1,snt0010-d0prccfa-1of1,Clostridioides difficile,1,p23220-s336_snt0010-d0prccfa06-01-23-1of1_s335,Clostridioides difficile,C. difficile_3,
+P32,W8,P32_W8,SNT,2,D07,6/28/23,PR,C. difficile,snt0010-d7prccfa-1of1,snt0010-d7prccfa-1of1,Clostridioides difficile,1,p23220-s337_snt0010-d7pr06-08-23-1of1_s336,Clostridioides difficile,C. difficile_3,
+P32,W9,P32_W9,SNT,2,D14,7/5/23,PR,C. difficile,snt0010-d14prccfa-1of1,snt0010-d14prccfa-1of1,Clostridioides difficile,1,p23220-s338_snt0010-d14pr06-15-23-1of1_s337,Clostridioides difficile,C. difficile_3,
+P32,W10,P32_W10,SNT,2,D21,7/12/23,PR,C. difficile,snt0010-d21prccfa-1of1,snt0010-d21prccfa-1of1,Clostridioides difficile,1,p23220-s339_snt0010-d21prccfa06-22-23-1of1_s338,Clostridioides difficile,C. difficile_3,
+P32,W11,P32_W11,SNT,2,D28,7/19/23,PR,C. difficile,snt0010-d28prccfa-1of1,snt0010-d28prccfa-1of1,Clostridioides difficile,1,p23220-s340_snt10-d28prccfa06-29-23-1of1_s339,Clostridioides difficile,C. difficile_3,
+P28,W2,P28_W2,SNT,1,D00,5/14/23,PR,C. difficile,snt0003-d0prccfa-1of1,snt0003-d0prccfa-1of1,Clostridioides difficile,1,p23220-s320_snt0003-d0prccfa04-24-23-1of1_s319,Clostridioides difficile,C. difficile_4,
+P28,W3,P28_W3,SNT,1,D07,5/21/23,PR,C. difficile,snt0003-d7prccfa-1of1,,,1,p23220-s321_snt0003-d7prccfa05-01-23-1of1_s320,Clostridioides difficile,C. difficile_4,
+P49,W6,P49_W6,SNT,2,APPS,6/11/23,PR/IG,C. difficile,apps0073pr/igccfa-1of1,apps0073pr/igccfa-1of1,Clostridioides difficile,1,p23220-s346_apps0073-prccfa05-22-23-1of1_s345,Clostridioides difficile,C. difficile_5,
+P29,W2,P29_W2,SNT,1,D00,5/14/23,PR,C. difficile,snt0006-d0prccfa-1of1,snt0006-d0prccfa-1of1,Clostridioides difficile,1,p23220-s322_snt0006-d0prccfa05-01-23-1of1_s321,Clostridioides difficile,C. difficile_6,
+P11,W1,P11_W1,APPS,1,APPS,5/7/23,env,C. difficile,apps0031envccmb-tal-1of1,apps0031envccmb-tal-1of1,Clostridioides difficile,0,,,,
+P21,W1,P21_W1,APPS,1,APPS,5/7/23,env,C. difficile,apps0051envccmb-tal-1of1,apps0051envccmb-tal-1of1,Clostridioides difficile,0,,,,
+P11,W1,P11_W1,APPS,1,APPS,5/7/23,PR/IG,C. difficile,apps0031pr/igccmb-tal-1of1,apps0031pr/igccmb-tal-1of1,Clostridioides difficile,0,,,,
+P15,W1,P15_W1,APPS,1,APPS,5/7/23,PR/IG,C. difficile,apps0038pr/igccmb-tal-1of1,apps0038pr/igccmb-tal-1of1,Clostridioides difficile,0,,,,
+P16,W1,P16_W1,APPS,1,APPS,5/7/23,PR/IG,C. difficile,apps0040pr/igccmb-tal-1of1,apps0040pr/igccmb-tal-1of1,Clostridioides difficile,0,,,,
+P21,W1,P21_W1,APPS,1,APPS,5/7/23,PR/IG,C. difficile,apps0051pr/igccmb-tal-1of1,apps0051pr/igccmb-tal-1of1,Clostridioides difficile,0,,,,
+P26,W4,P26_W4,SNT,1,D14,5/28/23,env,C. difficile,snt0001-d14envccfa-1of1,snt0001-d14envccfa-1of1,Clostridioides difficile,0,,,,
+P31,W4,P31_W4,SNT,1,D14,5/28/23,PR,C. difficile,snt0008-d14prccfa-1of1,snt0008-d14prccfa-1of1,Clostridioides difficile,0,,,,
+P26,W4,P26_W4,SNT,1,D14,5/28/23,PR,C. difficile,snt0001-d14prccfa-1of1,snt0001-d14prccfa-1of1,Clostridioides difficile,0,,,,
+P49,W6,P49_W6,SNT,2,APPS,6/11/23,env,C. difficile,apps0073envccfa-1of1,apps0073envccfa-1of1,Clostridioides difficile,0,,,,
+P37,W6,P37_W6,APPS,2,APPS,6/11/23,PR/IG,C. difficile,apps0060pr/igccfa-1of1,apps0060pr/igccfa-1of1,Clostridioides difficile,0,,,,
+P38,W6,P38_W6,APPS,2,APPS,6/11/23,PR/IG,C. difficile,apps0061pr/igccfa.22.23-1of1,apps0061pr/igccfa.22.23-1of1,Clostridioides difficile,0,,,,
+P48,W6,P48_W6,APPS,2,APPS,6/11/23,PR/IG,C. difficile,apps0076pr/igccfa-1of1,apps0076pr/igccfa-1of1,Clostridioides difficile,0,,,,
+P50,W7,P50_W7,SNT,2,D00,6/21/23,PR,C. difficile,snt0011-d0prccfa-1of1,snt0011-d0prccfa-1of1,Clostridioides difficile,0,,,,
+P49,W10,P49_W10,SNT,2,D14,7/12/23,env,C. difficile,snt0009-d14envccfa-1of1,snt0009-d14envccfa-1of1,Clostridioides difficile,0,,,,
+P49,W10,P49_W10,SNT,2,D14,7/12/23,PR,C. difficile,snt0009-d14prccfa-1of1,snt0009-d14prccfa-1of1,Clostridioides difficile,0,,,,
+P02,W6,P02_W6,APPS,2,APPS,6/11/23,IG,C. freundii,apps0018-2igesbl-1of1,apps0018_2igesbl-1of1,Citrobacter braakii,1,p23220-s007_apps0018-2igesbl05-22-23-1of1_s7,Citrobacter freundii,C. freundii_1,
+P02,W6,P02_W6,APPS,2,APPS,6/11/23,PR,C. freundii,apps0018-2presbl-1of1,apps0018_2presbl-1of1,Citrobacter braakii,1,p23220-s009_apps0018-2presbl05-22-23-1of1_s9,Citrobacter freundii,C. freundii_1,
+P29,W3,P29_W3,SNT,1,D07,5/21/23,PR,C. perfringens,snt0006-d7prccfa-1of1,snt0006-d7prccfa-1of1,Clostridioides difficile,1,p23220-s323_snt0006-d7prccfa05-01-23-1of1_s322,Clostridium perfringens,C. perfringens_1,C. perfringens_1
+P29,W3,P29_W3,SNT,1,D07,5/21/23,env,C. perfringens,snt0006-d7envccfa-1of1,snt0006-d7envccfa-1of1,Clostridioides difficile,1,p23220-s324_snt0006-d7envccfa05-01-23-1of1_s323,Clostridium perfringens,C. perfringens_2,
+P29,W4,P29_W4,SNT,1,D14,5/29/23,stool,C. perfringens,snt0006-d14stoolccfa-1of1,snt0006-d14stoolccfa-1of1,Clostridioides difficile,1,p23220-s325_snt0006-d14stoolccfa05-08-23-1of1_s324,Clostridium perfringens,C. perfringens_1,C. perfringens_1
+P30,W6,P30_W6,SNT,1,D28,6/12/23,PR,C. perfringens,snt0007-d28prccfa-1of1,snt0007-d28prccfa-1of1,Clostridioides difficile,1,p23220-s326_s0006-d28prccfa05-25-23-1of1_s325,Clostridium perfringens,C. perfringens_1,C. perfringens_1
+P32,W1,P32_W1,SNT,1,APPS,5/7/23,PR,E. coli,apps0035presbl-1of1,apps0035presbl-1of1,Escherichia coli,1,p23220-s050_apps0035presbl04-17-23-1of1_s50,Escherichia coli,E. coli_1,E. coli_1
+P32,W6,P32_W6,SNT,2,APPS,6/11/23,PR,E. coli,apps0035-2presbl-1of1,apps0035_2presbl-1of1,Escherichia coli,1,p23220-s049_apps0035-2presbl05-22-23-1of1_s49,Escherichia coli,E. coli_1,E. coli_1
+P32,W7,P32_W7,SNT,2,D00,6/21/23,PR,E. coli,snt0010-d0presbl-1of1,snt0010-d0presbl-1of1,Escherichia coli,1,p23220-s267_snt0010-d0presbl06-01-23-1of1_s266,Escherichia coli,E. coli_1,E. coli_1
+P51,W7,P51_W7,SNT,2,D00,6/21/23,PR,E. coli,snt0012-d0presbl-1of1,snt0012-d0presbl-1of1,Escherichia coli,1,p23220-s300_snt0012-d0presbl06-01-23-1of1_s299,Escherichia coli,E. coli_1,E. coli_1
+P32,W8,P32_W8,SNT,2,D07,6/28/23,PR,E. coli,snt0010-d7presbl-1of1,snt0010-d7presbl-1of1,Escherichia coli,1,p23220-s273_snt0010-d7presbl06-08-23-1of1_s272,Escherichia coli,E. coli_1,E. coli_1
+P32,W9,P32_W9,SNT,2,D14,7/5/23,PR,E. coli,snt0010-d14presbl-1of1,snt0010-d14presbl-1of1,Escherichia coli,1,p23220-s269_snt0010-d14presbl06-15-23-1of1_s268,Escherichia coli,E. coli_1,E. coli_1
+P32,W10,P32_W10,SNT,2,D21,7/12/23,PR,E. coli,snt0010-d21presbl-1of1,snt0010-d21presbl-1of1,Escherichia coli,1,p23220-s270_snt0010-d21presbl06-22-23-1of1_s269,Escherichia coli,E. coli_1,E. coli_1
+P32,W11,P32_W11,SNT,2,D28,7/19/23,PR,E. coli,snt0010-d28presbl-1of1,snt0010-d28presbl-1of1,Escherichia coli,1,p23220-s271_snt0010-d28presbl06-29-23-1of1_s270,Escherichia coli,E. coli_1,E. coli_1
+P27,W3,P27_W3,SNT,1,D07,5/21/23,PR,E. coli,snt0002-d7presbl-1of2,snt0002-d7presbl-1of2,Escherichia coli,1,p23220-s191_snt0002-d7presbl05-01-23-1of2_s190,Escherichia coli,E. coli_2,
+P27,W4,P27_W4,SNT,1,D14,5/28/23,PR,E. coli,snt0002-d14presbl-1of4,snt0002-d14presbl-1of4,Escherichia coli,1,p23220-s182_snt0002-d14presbl05-08-23-1of4_s181,Escherichia coli,E. coli_2,
+P12,W1,P12_W1,APPS,1,APPS,5/7/23,PR,E. coli,apps0033presbl-1of2,apps0033presbl-1of2,Escherichia coli,0,,,,
+P27,W1,P27_W1,SNT,1,APPS,5/7/23,PR,E. coli,apps0042presbl-1of2,apps0042presbl-1of2,Escherichia coli,0,,,,
+P27,W1,P27_W1,SNT,1,APPS,5/7/23,PR,E. coli,apps0042presbl-2of2,apps0042presbl-2of2,Escherichia coli,0,,,,
+P26,W1,P26_W1,SNT,1,APPS,5/7/23,PR,E. coli,apps0044presbl-1of3,apps0044presbl-1of3,Escherichia coli,0,,,,
+P11,W1,P11_W1,APPS,1,APPS,5/7/23,IG,E. coli,apps0031igesbl-1of2,apps0031igesbl-1of2,Escherichia coli,0,,,,
+P27,W4,P27_W4,SNT,1,D14,5/28/23,PR,E. coli,snt0002-d14presbl-2of4,snt0002-d14presbl-2of4,Escherichia coli,1,p23220-s183_snt0002-d14presbl05-08-23-2of4_s182,Escherichia coli,E. coli_2,
+P27,W4,P27_W4,SNT,1,D14,5/28/23,PR,E. coli,snt0002d14presbl-4of4,snt0002d14presbl-4of4,Escherichia coli,1,p23220-s199_snt0002d14presbl05-08-23-4of4_s198,Escherichia coli,E. coli_2,
+P27,W5,P27_W5,SNT,1,D21,6/4/23,PR,E. coli,snt0002d21presbl-1of2,snt0002d21presbl-1of2,Escherichia coli,1,p23220-s206_snt0002d21presbl05-15-23-1of2_s205,Escherichia coli,E. coli_2,
+P33,W6,P33_W6,APPS,2,APPS,6/11/23,env,E. coli,apps0056envcre-1of2,apps0056envcre-1of2,Escherichia coli,1,p23220-s105_apps0056envcre05-22-23-1of2_s104,Escherichia coli,E. coli_3,
+P33,W6,P33_W6,APPS,2,APPS,6/11/23,IG,E. coli,apps0056igesbl-1of1,apps0056igesbl-1of1,Escherichia coli,1,p23220-s107_apps0056igesbl05-22-23-1of1_s106,Escherichia coli,E. coli_3,
+P33,W6,P33_W6,APPS,2,APPS,6/11/23,PR,E. coli,apps0056prcre-1of1,apps0056prcre-1of1,Escherichia coli,1,p23220-s109_apps0056prcre05-22-23-1of1_s108,Escherichia coli,E. coli_3,
+P33,W6,P33_W6,APPS,2,APPS,6/11/23,PR,E. coli,apps0056presbl-1of1,apps0056presbl-1of1,Escherichia coli,1,p23220-s110_apps0056presbl05-22-23-1of1_s109,Escherichia coli,E. coli_3,
+P01,W1,P01_W1,APPS,1,APPS,5/7/23,IG,E. coli,apps0017igesbl-1of2,apps0017igesbl-1of2,Escherichia coli,1,apps0017igesbl1of2_s76,Escherichia coli,E. coli_4,
+P01,W1,P01_W1,APPS,1,APPS,5/7/23,PR,E. coli,apps0017presbl-1of2,apps0017presbl-1of2,Escherichia coli,1,apps0017presbl1of2_s75,Escherichia coli,E. coli_4,
+P01,W6,P01_W6,APPS,2,APPS,6/11/23,IG,E. coli,apps0017-2igesbl1of1,apps0017_2igesbl1of1,Escherichia coli,1,p23220-s001_apps0017-2igesbl1of1_s1,Escherichia coli,E. coli_4,
+P26,W1,P26_W1,SNT,1,APPS,5/7/23,PR,E. coli,apps0044presbl-3of3,apps0044presbl-3of3,Pseudomonas aeruginosa,1,p23220-s074_apps0044presbl04-17-23-3of3_s74,Escherichia coli,E. coli_5,
+P01,W6,P01_W6,APPS,2,APPS,6/11/23,PR,E. coli,apps0017-2prcre1of1,apps0017_2prcre1of1,Escherichia coli,0,,,,
+P44,W6,P44_W6,APPS,2,APPS,6/11/23,PR,E. coli,apps0070prcre-1of1,apps0070prcre-1of1,Escherichia coli,0,,,,
+P33,W6,P33_W6,APPS,2,APPS,6/11/23,env,E. coli,apps0056envesbl-1of1,apps0056envesbl-1of1,Escherichia coli,0,,,,
+P26,W6,P26_W6,SNT,1,D28,6/11/23,PR,E. coli,snt0001-d28presbl-1of1,snt0001-d28presbl-1of1,Escherichia coli,0,,,,
+P26,W6,P26_W6,SNT,2,APPS,6/11/23,PR,E. coli,apps0044-2presbl-1of1,apps0044_2presbl-1of1,Escherichia coli,1,p23220-s309_apps44-2-presbl05-22-23-1of1_s308,Escherichia coli,E. coli_5,
+P05,W1,P05_W1,APPS,1,APPS,5/7/23,PR,E. coli,apps0021igesbl-1of1,apps0021igesbl-1of1,Escherichia coli,1,p23220-s019_apps0021igesbl04-17-23-1of1_s19,Escherichia coli,E. coli_6,
+P05,W1,P05_W1,APPS,1,APPS,5/7/23,PR,E. coli,apps0021presbl-1of1,apps0021presbl-1of1,Escherichia coli,1,p23220-s020_apps0021presbl04-17-23-1of1_s20,Escherichia coli,E. coli_6,
+P12,W1,P12_W1,APPS,1,APPS,5/7/23,PR,E. coli,apps0033prcre-1of2,apps0033prcre-1of2,Escherichia coli,1,p23220-s046_apps0033prcre04-17-23-1of2_s46,Escherichia coli,E. coli_7,
+P26,W1,P26_W1,SNT,1,APPS,5/7/23,PR,E. coli,apps0044presbl-2of3,apps0044presbl-2of3,Proteus mirabilis,1,p23220-s073_apps0044presbl04-17-23-2of3_s73,Escherichia coli,E. coli_8,
+P04,W1,P04_W1,APPS,1,APPS,5/7/23,IG,E. faecalis,apps0020igcre-1of1,apps0020igcre-1of1,Enterococcus faecalis,1,p23220-s017_apps0020igcre04-17-23-1of1_s17,Enterococcus faecalis,E. faecalis_11,
+P11,W1,P11_W1,APPS,1,APPS,5/7/23,IG,E. faecalis,apps0031igvre-1of1,apps0031igvre-1of1,Enterococcus faecalis,1,p23220-s044_apps0031igvre04-17-23-1of1_s44,Enterococcus faecalis,E. faecalis_9,
+P31,W1,P31_W1,SNT,1,APPS,5/7/23,IG,E. faecalis,apps0039igvre-1of1,apps0039igvre-1of1,Enterococcus faecalis,1,p23220-s058_apps0039igvre04-17-23-1of1_s58,Enterococcus faecalis,E. faecalis_1,E. faecalis_1
+P31,W1,P31_W1,SNT,1,APPS,5/7/23,PR,E. faecalis,apps0039prvre-2of2,apps0039prvre-2of2,Enterococcus faecalis,1,p23220-s060_apps0039prvre04-17-23-2of2_s60,Enterococcus faecalis,E. faecalis_1,E. faecalis_1
+P02,W1,P02_W1,APPS,1,APPS,5/7/23,PR,E. faecalis,apps0018prvre-1of1,apps0018prvre-1of1,Enterococcus faecalis,0,,,,
+P05,W1,P05_W1,APPS,1,APPS,5/7/23,PR,E. faecalis,apps0021prvre-1of1,apps0021prvre-1of1,Enterococcus faecalis,0,,,,
+P12,W1,P12_W1,APPS,1,APPS,5/7/23,IG,E. faecalis,apps0033prvre-1of1,apps0033prvre-1of1,Enterococcus faecalis,0,,,,
+P13,W1,P13_W1,APPS,1,APPS,5/7/23,PR,E. faecalis,apps0036prvre-1of1,apps0036prvre-1of1,Enterococcus faecalis,0,,,,
+P15,W1,P15_W1,APPS,1,APPS,5/7/23,PR,E. faecalis,apps0038prvre-1of1,apps0038prvre-1of1,Enterococcus faecalis,0,,,,
+P16,W1,P16_W1,APPS,1,APPS,5/7/23,PR,E. faecalis,apps0040prvre-1of1,apps0040prvre-1of1,Enterococcus faecalis,0,,,,
+P05,W1,P05_W1,APPS,1,APPS,5/7/23,IG,E. faecalis,apps0021igvre-1of1,apps0021igvre-1of1,Enterococcus faecalis,0,,,,
+P29,W2,P29_W2,SNT,1,D00,5/14/23,PR,E. faecalis,snt0006d0prcre-1of1,snt0006d0prcre-1of1,Enterococcus faecalis,1,p23220-s234_snt0006d0prcre04-24-23-1of1_s233,Enterococcus faecalis,E. faecalis_2,E. faecalis_2
+P28,W3,P28_W3,SNT,1,D07,5/21/23,PR,E. faecalis,snt0003d7prvre-1of1,snt0003d7prvre-1of1,Enterococcus faecium,1,p23220-s233_snt0003d7prvre05-01-23-1of1_s232,Enterococcus faecalis,E. faecalis_3,E. faecalis_3
+P29,W3,P29_W3,SNT,1,D07,5/21/23,env,E. faecalis,snt0006d7envvre-1of1,snt0006d7envvre-1of1,Enterococcus faecalis,1,p23220-s235_snt0006d7envvre05-01-23-1of1_s234,Enterococcus faecalis,E. faecalis_12,
+P30,W3,P30_W3,SNT,1,D07,5/21/23,PR,E. faecalis,snt0007d7prvre-1of1,snt0007d7prvre-1of1,Enterococcus faecalis,1,p23220-s249_snt0007d7prvre05-01-23-1of1_s248,Enterococcus faecalis,E. faecalis_4,E. faecalis_4
+P31,W3,P31_W3,SNT,1,D07,5/21/23,PR,E. faecalis,snt0008d7prvre-2of2,snt0008d7prvre-2of2,Enterococcus faecalis,1,p23220-s260_snt0008d7prvre05-01-23-2of2_s259,Enterococcus faecalis,E. faecalis_4,E. faecalis_4
+P31,W4,P31_W4,SNT,1,D14,5/28/23,env,E. faecalis,snt0008d14envvre-1of1,snt0008d14envvre-1of1,Enterococcus faecium,1,p23220-s252_snt0008d14envvre05-08-23-1of1_s251,Enterococcus faecalis,E. faecalis_2,E. faecalis_2
+P31,W4,P31_W4,SNT,1,D14,5/28/23,PR,E. faecalis,snt0008d14prvre-1of1,snt0008d14prvre-1of1,Enterococcus faecium,1,p23220-s257_snt0008d14prvre05-08-23-1of1_s256,Enterococcus faecalis,E. faecalis_2,E. faecalis_2
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,env,E. faecalis,apps0053-2envvre-2of2,apps0053_2envvre-2of2,Enterococcus faecalis,1,p23220-s087_apps0053-2envvre05-22-23-2of2_s86,Enterococcus faecalis,E. faecalis_3,E. faecalis_3
+P41,W6,P41_W6,APPS,2,APPS,6/11/23,env,E. faecalis,apps0067envvre-2of2,apps0067envvre-2of2,Enterococcus faecalis,1,p23220-s145_apps0067envvre05-22-23-2of2_s144,Enterococcus faecalis,E. faecalis_3,E. faecalis_3
+P41,W6,P41_W6,APPS,2,APPS,6/11/23,IG,E. faecalis,apps0067igvre-2of2,apps0067igvre-2of2,Enterococcus faecalis,1,p23220-s149_apps0067igvre05-22-23-2of2_s148,Enterococcus faecalis,E. faecalis_3,E. faecalis_3
+P49,W6,P49_W6,SNT,2,APPS,6/11/23,PR/IG,E. faecalis,apps0073pr/igccfa-1of1,apps0073pr/igccfa-1of1,Enterococcus faecalis,0,,,,
+P34,W6,P34_W6,APPS,2,APPS,6/11/23,PR,E. faecalis,apps0057prvre-1of1,apps0057prvre-1of1,Enterococcus faecalis,0,,,,
+P39,W6,P39_W6,APPS,2,APPS,6/11/23,PR,E. faecalis,apps0062prvre-1of1,apps0062prvre-1of1,Enterococcus faecalis,0,,,,
+P50,W6,P50_W6,SNT,2,APPS,6/11/23,PR,E. faecalis,apps0064prvre-1of1,apps0064prvre-1of1,Enterococcus faecalis,0,,,,
+P34,W6,P34_W6,APPS,2,APPS,6/11/23,IG,E. faecalis,apps0057igvre-1of1,apps0057igvre-1of1,Enterococcus faecalis,0,,,,
+P51,W7,P51_W7,SNT,2,D00,6/21/23,PR,E. faecalis,snt0012-d0prvre-1of2,snt0012-d0prvre-1of2,Enterococcus faecalis,1,p23220-s301_snt0012-d0prvre06-01-23-1of2_s300,Enterococcus faecalis,E. faecalis_5,
+P49,W8,P49_W8,SNT,2,D00,6/28/23,PR,E. faecalis,snt0009-d0prvre-1of1,snt0009-d0prvre-1of1,Enterococcus faecalis,1,p23220-s261_snt0009-d0prvre06-08-23-1of1_s260,Enterococcus faecalis,E. faecalis_2,E. faecalis_2
+P26,W8,P26_W8,SNT,2,D07,6/28/23,PR,E. faecalis,snt0013-d7prcre-2of2,snt0013-d7prcre0 - 2of2,Enterococcus faecalis,1,p23220-s308_snt0013-d7prcre0-6-08-23-2of2_s307,Enterococcus faecalis,E. faecalis_1,E. faecalis_1
+P50,W9,P50_W9,SNT,2,D14,7/5/23,PR,E. faecalis,snt0011-d14prvre-1of1,snt0011-d14prvre-1of1,Enterococcus faecalis,1,p23220-s281_snt0011-d14prvre06-15-23-1of1_s280,Enterococcus faecalis,E. faecalis_8,
+P51,W9,P51_W9,SNT,2,D14,7/5/23,PR,E. faecalis,snt0012-d14prvre-1of1,snt0012-d14prvre-1of1,Enterococcus faecium,1,p23220-s303_snt0012-d14prvre06-15-23-1of1_s302,Enterococcus faecalis,E. faecalis_5,
+P49,W10,P49_W10,SNT,2,D14,7/12/23,PR,E. faecalis,snt0009-d14prvre-1of1,snt0009-d14prvre-1of1,Enterococcus faecalis,1,p23220-s262_snt0009-d14prvre06-22-23-1of1_s261,Enterococcus faecalis,E. faecalis_2,E. faecalis_2
+P50,W10,P50_W10,SNT,2,D21,7/12/23,PR,E. faecalis,snt0011-d21prvre-1of1,snt0011-d21prvre-1of1,Enterococcus faecalis,1,p23220-s285_snt0011-d21prvre06-22-23-1of1_s284,Enterococcus faecalis,E. faecalis_7,
+P49,W11,P49_W11,SNT,2,D21,7/19/23,PR,E. faecalis,snt0009-d21prvre-1of1,snt0009-d21prvre-1of1,Enterococcus faecalis,1,p23220-s263_snt0009-d21prvre06-29-23-1of1_s262,Enterococcus faecalis,E. faecalis_2,E. faecalis_2
+P51,W12,P51_W12,SNT,2,D28,7/25/23,PR,E. faecalis,snt0012-d28vre-2of2,snt0012-d28vre-2of2,Enterococcus faecium,1,p23220-s306_snt0012-d28vre07-05-23-2of2_s305,Enterococcus faecalis,E. faecalis_6,
+P51,W12,P51_W12,SNT,2,D28,7/25/23,PR,E. faecalis,snt0012-d28vre-1of2,snt0012-d28vre-1of2,Enterococcus faecalis,0,,,,
+P49,W12,P49_W12,SNT,2,D28,7/26/23,PR,E. faecalis,snt0009-d28prvre-1of1,snt0009-d28prvre-1of1,Enterococcus faecalis,1,p23220-s264_snt0009-d28prvre07-06-23-1of1_s263,Enterococcus faecalis,E. faecalis_2,E. faecalis_2
+P49,W12,P49_W12,SNT,2,D28,7/26/23,PR,E. faecalis,snt0009-d28prccfa-1of1,snt0009-d28prccfa-1of1,Clostridioides difficile,1,p23220-s334_snt0009-d28prccfa07-06-23-1of1_s333,Enterococcus faecalis,E. faecalis_2,E. faecalis_2
+P03,W1,P03_W1,APPS,1,APPS,5/7/23,env,E. faecium,apps0019envvre-1of1,apps0019envvre-1of1,Enterococcus faecium,1,apps0019envvre1of1_s78,Enterococcus faecium,E. faecium_1,E. faecium_1
+P03,W1,P03_W1,APPS,1,APPS,5/7/23,PR,E. faecium,apps0019prvre-1of1,apps0019prvre-1of1,Enterococcus faecium,1,app0019prvre1of1_s77,Enterococcus faecium,E. faecium_33,
+P09,W1,P09_W1,APPS,1,APPS,5/7/23,env,E. faecium,apps0026envvre-1of1,apps0026envvre-1of1,Enterococcus faecium,1,p23220-s023_apps0026envvre04-17-23-1of1_s23,Enterococcus faecium,E. faecium_1,E. faecium_1
+P09,W1,P09_W1,APPS,1,APPS,5/7/23,IG,E. faecium,apps0026igvre-1of1,apps0026igvre-1of1,Enterococcus faecium,1,p23220-s024_apps0026igvre04-17-23-1of1_s24,Enterococcus faecium,E. faecium_1,E. faecium_1
+P09,W1,P09_W1,APPS,1,APPS,5/7/23,PR,E. faecium,apps0026prvre-1of1,apps0026prvre-1of1,Enterococcus faecium,1,p23220-s025_apps0026prvre04-17-23-1of1_s25,Enterococcus faecium,E. faecium_1,E. faecium_1
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,env,E. faecium,apps0028envvre-1of1,apps0028envvre-1of1,Enterococcus faecium,1,p23220-s032_apps0028envvre04-17-23-1of1_s32,Enterococcus faecium,E. faecium_2,E. faecium_2
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,IG,E. faecium,apps0028igvre-1of1,apps0028igvre-1of1,Enterococcus faecium,1,p23220-s035_apps0028igvre04-17-23-1of1_s35,Enterococcus faecium,E. faecium_2,E. faecium_2
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,PR,E. faecium,apps0028prvre-1of1,apps0028prvre-1of1,Enterococcus faecium,1,p23220-s038_apps0028prvre04-17-23-1of1_s38,Enterococcus faecium,E. faecium_2,E. faecium_2
+P10,W1,P10_W1,APPS,1,APPS,5/7/23,IG,E. faecium,apps0030igvre-1of1,apps0030igvre-1of1,Enterococcus faecium,1,p23220-s039_apps0030igvre04-17-23-1of1_s39,Enterococcus faecium,E. faecium_19,
+P10,W1,P10_W1,APPS,1,APPS,5/7/23,PR,E. faecium,apps0030prvre-1of1,apps0030prvre-1of1,Enterococcus faecium,1,p23220-s040_apps0030prvre04-17-23-1of1_s40,Enterococcus faecium,E. faecium_19,
+P31,W1,P31_W1,SNT,1,APPS,5/7/23,PR,E. faecium,apps0039prvre-1of2,apps0039prvre-1of2,Enterococcus faecium,1,p23220-s059_apps0039prvre04-17-23-1of2_s59,Enterococcus faecium,E. faecium_3,E. faecium_3
+P27,W1,P27_W1,SNT,1,APPS,5/7/23,env,E. faecium,apps0042envesbl1of1,apps0042envesbl1of1,Enterococcus faecium,1,p23220-s062_apps0042envesbl1of1_s62,Enterococcus faecium,E. faecium_4,E. faecium_4
+P27,W1,P27_W1,SNT,1,APPS,5/7/23,env,E. faecium,apps0042envvre-1of1,apps0042envvre-1of1,Enterococcus sp,1,p23220-s063_apps0042envvre04-17-23-1of1_s63,Enterococcus faecium,E. faecium_4,E. faecium_4
+P26,W1,P26_W1,SNT,1,APPS,5/7/23,PR,E. faecium,apps0044prcre-1of2,apps0044prcre-1of2,Enterococcus faecium,1,apps0044prcre1of2_s81,Enterococcus faecium,E. faecium_6,E. faecium_6
+P19,W1,P19_W1,APPS,1,APPS,5/7/23,PR,E. faecium,apps0046prvre-1of1,apps0046prvre-1of1,Enterococcus faecium,1,apps0046prvre1of1_s83,Enterococcus faecium,E. faecium_16,
+P20,W1,P20_W1,APPS,1,APPS,5/7/23,env,E. faecium,apps0047envvre-1of1,apps0047envvre-1of1,Enterococcus sp,1,p23220-s083_apps0047envvre04-17-23-1of1_s83,Enterococcus faecium,E. faecium_23,
+P23,W1,P23_W1,APPS,1,APPS,5/7/23,env,E. faecium,apps0053envvre-1of1,apps0053envvre-1of1,Enterococcus sp,1,p23220-s094_apps0053envvre04-17-23-1of1_s93,Enterococcus faecium,E. faecium_7,E. faecium_7
+P23,W1,P23_W1,APPS,1,APPS,5/7/23,PR,E. faecium,apps0053prvre-1of2,apps0053prvre-1of2,Enterococcus faecium,1,p23220-s096_apps0053prvre04-17-23-1of2_s95,Enterococcus faecium,E. faecium_7,E. faecium_7
+P23,W1,P23_W1,APPS,1,APPS,5/7/23,PR,E. faecium,apps0053prvre-2of2,apps0053prvre-2of2,Enterococcus faecium,0,,,,
+P27,W2,P27_W2,SNT,1,D00,5/14/23,env,E. faecium,snt0002-d0envvre-1of1,snt0002-d0envvre-1of1,Enterococcus faecium,1,p23220-s179_snt0002-d0envvre04-24-23-1of1_s178,Enterococcus faecium,E. faecium_4,E. faecium_4
+P27,W2,P27_W2,SNT,1,D00,5/14/23,env,E. faecium,snt0002-d0envvre-1of1,snt0002-d0envvre-1of1,Enterococcus faecium,1,p23220-s180_snt0002-d0envvre04-24-23-1of1_s179,Enterococcus faecium,E. faecium_4,E. faecium_4
+P27,W2,P27_W2,SNT,1,D00,5/14/23,PR,E. faecium,snt0002-d0prvre1of1,snt0002-d0prvre1of1,Enterococcus faecium,1,p23220-s181_snt0002-d0prvre1of1_s180,Enterococcus faecium,E. faecium_4,E. faecium_4
+P28,W2,P28_W2,SNT,1,D00,5/14/23,env,E. faecium,snt0003d0envvre-1of1,snt0003d0envvre-1of1,Enterococcus faecium,1,p23220-s212_snt0003d0envvre04-24-23-1of1_s211,Enterococcus faecium,E. faecium_2,E. faecium_2
+P28,W2,P28_W2,SNT,1,D00,5/14/23,PR,E. faecium,snt0003d0prcre-1of1,snt0003d0prcre-1of1,Enterococcus faecium,0,,,,
+P30,W2,P30_W2,SNT,1,D00,5/14/23,env,E. faecium,snt0007d0envvre-1of1,snt0007d0envvre-1of1,Enterococcus faecalis,1,p23220-s241_snt0007d0envvre04-24-23-1of1_s240,Enterococcus faecium,E. faecium_8,E. faecium_8
+P31,W2,P31_W2,SNT,1,D00,5/14/23,PR,E. faecium,snt0008d0prvre-1of1,snt0008d0prvre-1of1,Enterococcus faecalis,1,p23220-s251_snt0008d0prvre04-24-23-1of1_s250,Enterococcus faecium,E. faecium_6,E. faecium_6
+P28,W2,P28_W2,SNT,1,D00,5/14/23,PR,E. faecium,snt0003day0prvre1of1_s87,,,1,snt0003day0prvre1of1_s87,Enterococcus faecium,E. faecium_2,E. faecium_2
+P26,W3,P26_W3,SNT,1,D07,5/21/23,env,E. faecium,snt0001-d7envvre-1of1,snt0001-d7envvre-1of1,Enterococcus faecium,1,p23220-s174_snt0001-d7envvre05-01-23-1of1_s173,Enterococcus faecium,E. faecium_6,E. faecium_6
+P26,W3,P26_W3,SNT,1,D07,5/21/23,PR,E. faecium,snt0001-d7prcre-1of2,snt0001-d7prcre-1of2,Enterococcus faecium,1,p23220-s175_snt0001-d7prcre05-01-23-1of2_s174,Enterococcus faecium,E. faecium_6,E. faecium_6
+P26,W3,P26_W3,SNT,1,D07,5/21/23,PR,E. faecium,snt0001-d7prvre-1of1,snt0001-d7prvre-1of1,Enterococcus faecium,1,p23220-s177_snt0001-d7prvre05-01-23-1of1_s176,Enterococcus faecium,E. faecium_6,E. faecium_6
+P27,W3,P27_W3,SNT,1,D07,5/21/23,env,E. faecium,snt0002-d7envvre-1of1,snt0002-d7envvre-1of1,Enterococcus faecium,1,p23220-s187_snt0002-d7envvre05-01-23-1of1_s186,Enterococcus faecium,E. faecium_4,E. faecium_4
+P27,W3,P27_W3,SNT,1,D07,5/21/23,PR,E. faecium,snt0002-d7prcre-2of3,snt0002-d7prcre-2of3,Enterococcus faecium,1,p23220-s189_snt0002-d7prcre05-01-23-2of3_s188,Enterococcus faecium,E. faecium_4,E. faecium_4
+P27,W3,P27_W3,SNT,1,D07,5/21/23,PR,E. faecium,snt0002-d7prvre-1of2,snt0002-d7prvre-1of2,Enterococcus faecium,1,p23220-s193_snt0002-d7prvre05-01-23-1of2_s192,Enterococcus faecium,E. faecium_4,E. faecium_4
+P28,W3,P28_W3,SNT,1,D07,5/21/23,env,E. faecium,snt0003d7envcre-1of1,snt0003d7envcre-1of1,Enterococcus faecium,1,p23220-s228_snt0003d7envcre05-01-23-1of1_s227,Enterococcus faecium,E. faecium_28,
+P28,W3,P28_W3,SNT,1,D07,5/21/23,env,E. faecium,snt0003d7envvre-1of1,snt0003d7envvre-1of1,Enterococcus faecium,1,p23220-s229_snt0003d7envvre05-01-23-1of1_s228,Enterococcus faecium,E. faecium_21,
+P28,W3,P28_W3,SNT,1,D07,5/21/23,PR,E. faecium,snt0003d7prcre-2of2,snt0003d7prcre-2of2,Enterococcus faecium,1,snt0003day7prcre2of2_s88,Enterococcus faecium,E. faecium_2,E. faecium_2
+P29,W3,P29_W3,SNT,1,D07,5/21/23,PR,E. faecium,snt0006d7prvre-1of2,snt0006d7prvre-1of2,Enterococcus faecium,1,p23220-s237_snt0006d7prvre05-01-23-1of2_s236,Enterococcus faecium,E. faecium_9,E. faecium_9
+P29,W3,P29_W3,SNT,1,D07,5/21/23,PR,E. faecium,snt0006d7prvre-2of2,snt0006d7prvre-2of2,Enterococcus faecium,1,p23220-s238_snt0006d7prvre05-01-23-2of2_s237,Enterococcus faecium,E. faecium_2,E. faecium_2
+P31,W3,P31_W3,SNT,1,D07,5/21/23,PR,E. faecium,snt0008d7prvre-1of2,snt0008d7prvre-1of2,Enterococcus faecium,1,snt0008day7prvre1of2_s91,Enterococcus faecium,E. faecium_3,E. faecium_3
+P27,W3,P27_W3,SNT,1,D07,5/21/23,PR,E. faecium,snt0002-d7prvre-2of2,snt0002-d7prvre-2of2,Enterococcus faecium,0,,,,
+P27,W4,P27_W4,SNT,1,D14,5/28/23,env,E. faecium,snt0002d14envvre-1of1,snt0002d14envvre-1of1,Enterococcus faecium,1,p23220-s196_snt0002d14envvre05-08-23-1of1_s195,Enterococcus faecium,E. faecium_5,E. faecium_5
+P27,W4,P27_W4,SNT,1,D14,5/28/23,PR,E. faecium,snt0002d14prvre-1of2,snt0002d14prvre-1of2,Enterococcus faecium,1,p23220-s200_snt0002d14prvre05-08-23-1of2_s199,Enterococcus faecium,E. faecium_4,E. faecium_4
+P27,W4,P27_W4,SNT,1,D14,5/28/23,PR,E. faecium,snt0002d14prvre-2of2,snt0002d14prvre-2of2,Enterococcus faecium,1,p23220-s201_snt0002d14prvre05-08-23-2of2_s200,Enterococcus faecium,E. faecium_26,
+P28,W4,P28_W4,SNT,1,D14,5/28/23,env,E. faecium,snt0003d14envvre-1of1,snt0003d14envvre-1of1,Enterococcus faecium,1,p23220-s216_snt0003d14envvre05-08-23-1of1_s215,Enterococcus faecium,E. faecium_20,
+P28,W4,P28_W4,SNT,1,D14,5/28/23,PR,E. faecium,snt0003d14prvre-1of1,snt0003d14prvre-1of1,Enterococcus faecium,1,p23220-s220_snt0003d14prvre05-08-23-1of1_s219,Enterococcus faecium,E. faecium_2,E. faecium_2
+P26,W5,P26_W5,SNT,1,D21,6/4/23,PR,E. faecium,snt0001-d21prcre-1of2,snt0001-d21prcre-1of2,Enterococcus faecium,1,p23220-s169_snt0001-d21prcre05-15-23-1of2_s168,Enterococcus faecium,E. faecium_6,E. faecium_6
+P26,W5,P26_W5,SNT,1,D21,6/4/23,PR,E. faecium,snt0001-d21prvre-1of1,snt0001-d21prvre-1of1,Enterococcus faecium,1,p23220-s171_snt0001-d21prvre05-15-23-1of1_s170,Enterococcus faecium,E. faecium_6,E. faecium_6
+P27,W5,P27_W5,SNT,1,D21,6/4/23,env,E. faecium,snt0002d21envvre-1of2,snt0002d21envvre-1of2,Enterococcus faecium,1,p23220-s203_snt0002d21envvre05-15-23-1of2_s202,Enterococcus faecium,E. faecium_4,E. faecium_4
+P27,W5,P27_W5,SNT,1,D21,6/4/23,env,E. faecium,snt0002d21envvre-2of2,snt0002d21envvre-2of2,Enterococcus faecium,1,p23220-s204_snt0002d21envvre05-15-23-2of2_s203,Enterococcus faecium,E. faecium_10,E. faecium_10
+P27,W5,P27_W5,SNT,1,D21,6/4/23,PR,E. faecium,snt0002d21prvre-1of2,snt0002d21prvre-1of2,Enterococcus faecium,1,p23220-s208_snt0002d21prvre05-15-23-1of2_s207,Enterococcus faecium,E. faecium_17,
+P27,W5,P27_W5,SNT,1,D21,6/4/23,PR,E. faecium,snt0002d21prvre-2of2,snt0002d21prvre-2of2,Enterococcus faecium,1,p23220-s209_snt0002d21prvre05-15-23-2of2_s208,Enterococcus faecium,E. faecium_17,
+P28,W5,P28_W5,SNT,1,D21,6/4/23,PR,E. faecium,snt0003d21prvre-1of1,snt0003d21prvre-1of1,Enterococcus faecium,1,p23220-s224_snt0003d21prvre05-15-23-1of1_s223,Enterococcus faecium,E. faecium_2,E. faecium_2
+P02,W6,P02_W6,APPS,2,APPS,6/11/23,IG,E. faecium,apps0018-2igvre-1of1,apps0018_2igvre-1of1,Enterococcus faecium,1,p23220-s008_apps0018-2igvre05-22-23-1of2_s8,Enterococcus faecium,E. faecium_1,E. faecium_1
+P28,W6,P28_W6,SNT,2,APPS,6/11/23,env,E. faecium,apps0028-2envvre-1of2,apps0028_2envvre-1of2,Enterococcus faecium,1,p23220-s026_apps0028-2envvre05-22-23-1of2_s26,Enterococcus faecium,E. faecium_2,E. faecium_2
+P28,W6,P28_W6,SNT,2,APPS,6/11/23,env,E. faecium,apps0028-2envvre-2of2,apps0028_2envvre-2of2,Enterococcus faecalis,1,p23220-s027_apps0028-2envvre05-22-23-2of2_s27,Enterococcus faecium,E. faecium_2,E. faecium_2
+P26,W6,P26_W6,SNT,2,APPS,6/11/23,IG,E. faecium,apps0044-2igvre-1of1,apps0044_2igvre-1of1,Enterococcus faecium,1,p23220-s068_apps0044-2igvre05-22-23-1of1_s68,Enterococcus faecium,E. faecium_6,E. faecium_6
+P26,W6,P26_W6,SNT,2,APPS,6/11/23,IG,E. faecium,apps0044-2prvre-1of1,apps0044_2prvre-1of1,Enterococcus faecium,1,p23220-s070_apps0044-2prvre05-22-23-1of1_s70,Enterococcus faecium,E. faecium_6,E. faecium_6
+P19,W6,P19_W6,APPS,2,APPS,6/11/23,IG,E. faecium,apps0046-2igvre-1of1,apps0046_2igvre-1of1,Enterococcus faecium,1,p23220-s077_apps0046-2igvre05-22-23-1of1_s77,Enterococcus faecium,E. faecium_16,
+P19,W6,P19_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0046-2prvre-1of1,apps0046_2prvre-1of1,Enterococcus faecium,1,apps0046_2prvre1of1_s84,Enterococcus faecium,E. faecium_16,
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,IG,E. faecium,apps0053-2igvre-1of1,apps0053_2igvre-1of1,Enterococcus faecium,1,p23220-s090_apps0053-2igvre05-22-23-1of1_s89,Enterococcus faecium,E. faecium_7,E. faecium_7
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0053-2prvre-1of1,apps0053_2prvre-1of1,Enterococcus faecium,1,p23220-s093_apps0053-2prvre05-22-23-1of1_s92,Enterococcus faecium,E. faecium_7,E. faecium_7
+P25,W6,P25_W6,APPS,2,APPS,6/11/23,env,E. faecium,apps0055-2envvre-1of2,apps0055_2envvre-1of2,Enterococcus faecium,1,p23220-s099_apps0055-2envvre05-22-23-1of2_s98,Enterococcus faecium,E. faecium_7,E. faecium_7
+P25,W6,P25_W6,APPS,2,APPS,6/11/23,env,E. faecium,apps0055-2envvre-2of2,apps0055_2envvre-2of2,Enterococcus faecium,1,p23220-s100_apps0055-2envvre05-22-23-2of2_s99,Enterococcus faecium,E. faecium_7,E. faecium_7
+P25,W6,P25_W6,APPS,2,APPS,6/11/23,IG,E. faecium,apps0055-2igvre-1of1,apps0055_2igvre-1of1,Enterococcus faecium,1,p23220-s101_apps0055-2igvre05-22-23-1of1_s100,Enterococcus faecium,E. faecium_22,
+P25,W6,P25_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0055-2prvre-1of1,apps0055_2prvre-1of1,Enterococcus faecium,1,p23220-s103_apps0055-2prvre05-22-23-1of1_s102,Enterococcus faecium,E. faecium_7,E. faecium_7
+P33,W6,P33_W6,APPS,2,APPS,6/11/23,env,E. faecium,apps0056envvre-1of1,apps0056envvre-1of1,Enterococcus faecium,1,p23220-s106_apps0056envvre05-22-23-1of1_s105,Enterococcus faecium,E. faecium_14,
+P33,W6,P33_W6,APPS,2,APPS,6/11/23,IG,E. faecium,apps0056igvre-1of1,apps0056igvre-1of1,Enterococcus faecium,1,p23220-s108_apps0056igvre05-22-23-1of1_s107,Enterococcus faecium,E. faecium_14,
+P33,W6,P33_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0056prvre-1of1,apps0056prvre-1of1,Enterococcus faecium,1,p23220-s111_apps0056prvre05-22-23-1of1_s110,Enterococcus faecium,E. faecium_14,
+P36,W6,P36_W6,APPS,2,APPS,6/11/23,IG,E. faecium,apps0059igvre-1of1,apps0059igvre-1of1,Enterococcus faecium,1,p23220-s120_apps0059igvre05-22-23-1of1_s119,Enterococcus faecium,E. faecium_1,E. faecium_1
+P36,W6,P36_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0059prvre-1of1,apps0059prvre-1of1,Enterococcus faecium,1,p23220-s122_apps0059prvre05-22-23-1of1_s121,Enterococcus faecium,E. faecium_30,
+P37,W6,P37_W6,APPS,2,APPS,6/11/23,env,E. faecium,apps0060envvre-1of1,apps0060envvre-1of1,Enterococcus faecium,1,p23220-s123_apps0060envvre05-22-23-1of1_s122,Enterococcus faecium,E. faecium_15,
+P37,W6,P37_W6,APPS,2,APPS,6/11/23,IG,E. faecium,apps0060igvre-1of1,apps0060igvre-1of1,Enterococcus faecium,1,p23220-s124_apps0060igvre05-22-23-1of1_s123,Enterococcus faecium,E. faecium_15,
+P37,W6,P37_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0060prvre-1of1,apps0060prvre-1of1,Enterococcus faecium,1,p23220-s125_apps0060prvre05-22-23-1of1_s124,Enterococcus faecium,E. faecium_15,
+P51,W6,P51_W6,SNT,2,APPS,6/11/23,env,E. faecium,apps0063envvre-1of1,apps0063envvre-1of1,Enterococcus faecium,1,p23220-s132_apps0063envvre05-22-23-1of1_s131,Enterococcus faecium,E. faecium_9,E. faecium_9
+P51,W6,P51_W6,SNT,2,APPS,6/11/23,IG,E. faecium,apps0063igvre-1of1,apps0063igvre-1of1,Enterococcus sp,1,p23220-s133_apps0063igvre05-22-23-1of1_s132,Enterococcus faecium,E. faecium_24,
+P51,W6,P51_W6,SNT,2,APPS,6/11/23,PR,E. faecium,apps0063prvre-1of1,apps0063prvre-1of1,Enterococcus sp,1,p23220-s134_apps0063prvre05-22-23-1of1_s133,Enterococcus faecium,E. faecium_9,E. faecium_9
+P13,W6,P13_W6,APPS,2,APPS,6/11/23,env,E. faecium,apps0066envvre-1of1,apps0066envvre-1of1,Enterococcus faecium,1,p23220-s142_apps0066envvre05-22-23-1of1_s141,Enterococcus faecium,E. faecium_11,E. faecium_11
+P41,W6,P41_W6,APPS,2,APPS,6/11/23,env,E. faecium,apps0067envvre-1of2,apps0067envvre-1of2,Enterococcus faecium,1,p23220-s144_apps0067envvre05-22-23-1of2_s143,Enterococcus faecium,E. faecium_11,E. faecium_11
+P41,W6,P41_W6,APPS,2,APPS,6/11/23,IG,E. faecium,apps0067igvre-1of2,apps0067igvre-1of2,Enterococcus faecium,1,p23220-s148_apps0067igvre05-22-23-1of2_s147,Enterococcus faecium,E. faecium_12,E. faecium_12
+P41,W6,P41_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0067prvre-1of1,apps0067prvre-1of1,Enterococcus faecium,1,p23220-s151_apps0067prvre05-22-23-1of1_s150,Enterococcus faecium,E. faecium_27,
+P42,W6,P42_W6,APPS,2,APPS,6/11/23,env,E. faecium,apps0068envvre-1of1,apps0068envvre-1of1,Enterococcus faecium,1,p23220-s152_apps0068envvre05-22-23-1of1_s151,Enterococcus faecium,E. faecium_32,
+P43,W6,P43_W6,APPS,2,APPS,6/11/23,env,E. faecium,apps0069envvre-1of1,apps0069envvre-1of1,Enterococcus faecium,1,p23220-s153_apps0069envvre05-22-23-1of1_s152,Enterococcus faecium,E. faecium_12,E. faecium_12
+P45,W6,P45_W6,APPS,2,APPS,6/11/23,env,E. faecium,apps0071envvre-1of1,apps0071envvre-1of1,Enterococcus faecium,1,p23220-s154_apps0071envvre05-22-23-1of1_s153,Enterococcus faecium,E. faecium_18,
+P45,W6,P45_W6,APPS,2,APPS,6/11/23,IG,E. faecium,apps0071igvre-1of1,apps0071igvre-1of1,Enterococcus faecalis,1,p23220-s157_apps0071igvre05-22-23-1of1_s156,Enterococcus faecium,E. faecium_13,E. faecium_13
+P45,W6,P45_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0071prvre-1of1,apps0071prvre-1of1,Enterococcus faecium,1,p23220-s160_apps0071prvre05-22-23-1of1_s159,Enterococcus faecium,E. faecium_18,
+P46,W6,P46_W6,APPS,2,APPS,6/11/23,env,E. faecium,apps0072envvre-1of1,apps0072envvre-1of1,Enterococcus faecium,1,p23220-s161_apps0072envvre05-22-23-1of1_s160,Enterococcus faecium,E. faecium_13,E. faecium_13
+P46,W6,P46_W6,APPS,2,APPS,6/11/23,IG,E. faecium,apps0072igvre-1of1,apps0072igvre-1of1,Enterococcus faecium,1,p23220-s162_apps0072igvre05-22-23-1of1_s161,Enterococcus faecium,E. faecium_13,E. faecium_13
+P46,W6,P46_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0072prvre-1of1,apps0072prvre-1of1,Enterococcus faecium,1,p23220-s164_apps0072prvre05-22-23-1of1_s163,Enterococcus faecium,E. faecium_13,E. faecium_13
+P48,W6,P48_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0076prvre-1of1,apps0076prvre-1of1,Enterococcus faecium,1,p23220-s167_apps0076prvre05-22-23-1of1_s166,Enterococcus faecium,E. faecium_31,
+P26,W6,P26_W6,SNT,1,D28,6/11/23,PR,E. faecium,snt0001-d28igvre-1of1,snt0001-d28igvre-1of1,Enterococcus faecium,1,p23220-s172_snt0001-d28igvre05-22-23-1of1_s171,Enterococcus faecium,E. faecium_6,E. faecium_6
+P26,W6,P26_W6,SNT,1,D28,6/11/23,PR,E. faecium,snt0001-d28prvre-1of1,snt0001-d28prvre-1of1,Enterococcus faecium,1,p23220-s173_snt0001-d28prvre05-22-23-1of1_s172,Enterococcus faecium,E. faecium_6,E. faecium_6
+P28,W6,P28_W6,SNT,1,D28,6/11/23,env,E. faecium,snt0003d28envcre-1of2,snt0003d28envcre-1of2,Enterococcus faecalis,1,p23220-s225_snt0003d28envcre05-22-23-1of2_s224,Enterococcus faecium,E. faecium_25,
+P28,W6,P28_W6,SNT,1,D28,6/11/23,env,E. faecium,snt0003d28envcre-2of2,snt0003d28envcre-2of2,Enterococcus faecalis,1,p23220-s226_snt0003d28envcre05-22-23-2of2_s225,Enterococcus faecium,E. faecium_10,E. faecium_10
+P28,W6,P28_W6,SNT,1,D28,6/11/23,PR,E. faecium,snt0003d28prvre-1of1,snt0003d28prvre-1of1,Enterococcus faecium,1,p23220-s227_snt0003d28prvre05-22-23-1of1_s226,Enterococcus faecium,E. faecium_29,
+P28,W6,P28_W6,SNT,2,APPS,6/11/23,PR,E. faecium,apps0028-2prvre-1of1,apps0028_2prvre-2of2,Enterococcus faecium,1,p23220-s347_apps28-2prvre5-22-23-1-of-1_s346,Enterococcus faecium,E. faecium_2,E. faecium_2
+P01,W6,P01_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0017-2prvre1of1,apps0017_2prvre1of1,Enterococcus faecium,0,,,,
+P04,W6,P04_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0020-2prvre-1of1,apps0020_2prvre-1of1,Enterococcus faecium,0,,,,
+P07,W6,P07_W6,APPS,2,APPS,6/11/23,PR,E. faecium,apps0023-2prvre-1of1,apps0023_2prvre-1of1,Enterococcus faecium,0,,,,
+P50,W7,P50_W7,SNT,2,D00,6/21/23,PR,E. faecium,snt0011-d0prvre-1of1,snt0011-d0prvre-1of1,Enterococcus faecium,1,p23220-s277_snt0011-d0prvre06-01-23-1of1_s276,Enterococcus faecium,E. faecium_3,E. faecium_3
+P51,W7,P51_W7,SNT,2,D00,6/21/23,PR,E. faecium,snt0012-d0prvre-2of2,snt0012-d0prvre-2of2,Enterococcus faecium,1,p23220-s302_snt0012-d0prvre06-01-23-2of2_s301,Enterococcus faecium,E. faecium_4,E. faecium_4
+P50,W8,P50_W8,SNT,2,D07,6/28/23,env,E. faecium,snt0011-d7envvre-1of1,snt0011-d7envvre-1of1,Enterococcus faecalis,1,p23220-s293_snt0011-d7envvre06-08-23-1of1_s292,Enterococcus faecium,E. faecium_2,E. faecium_2
+P49,W9,P49_W9,SNT,2,D07,7/5/23,env,E. faecium,snt0009-d7envvre-1of1,snt0009-d7envvre-1of1,Enterococcus faecalis,1,p23220-s265_snt0009-d7envvre06-15-23-1of1_s264,Enterococcus faecium,E. faecium_5,E. faecium_5
+P50,W11,P50_W11,SNT,2,D28,7/19/23,PR,E. faecium,snt0011-d28prvre-1of1,snt0011-d28prvre-1of1,Enterococcus faecium,1,p23220-s290_snt0011-d28prvre06-29-23-1of1_s289,Enterococcus faecium,E. faecium_3,E. faecium_3
+P51,W12,P51_W12,SNT,2,D28,7/25/23,PR,E. faecium,snt0012day28prvre1of2_s93,,,1,snt0012day28prvre1of2_s93,Enterococcus faecium,E. faecium_8,E. faecium_8
+P12,W1,P12_W1,APPS,1,APPS,5/7/23,env,E. hormaechei,apps0033envcre-1of1,apps0033envcre-1of1,Enterobacter hormaechei/asburiae /cloacae,1,p23220-s045_apps0033envcre04-17-23-1of1_s45,Enterobacter hormaechei,E. hormaechei_7,
+P12,W1,P12_W1,APPS,1,APPS,5/7/23,PR,E. hormaechei,apps0033presbl-2of2,apps0033presbl-2of2,Enterobacter hormaechei/asburiae /cloacae,1,p23220-s047_apps0033presbl04-17-23-2of2_s47,Enterobacter hormaechei,E. hormaechei_7,
+P34,W6,P34_W6,APPS,2,APPS,6/11/23,IG,E. hormaechei,apps0057igesbl-1of1,apps0057igesbl-1of1,Enterobacter asburiae/cloacae,1,p23220-s112_apps0057igesbl05-22-23-1of1_s111,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P34,W6,P34_W6,APPS,2,APPS,6/11/23,PR,E. hormaechei,apps0057presbl-1of2,apps0057presbl-1of2,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s113_apps0057presbl05-22-23-1of2_s112,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W2,P27_W2,SNT,1,D00,5/14/23,PR,E. hormaechei,snt0002-d0prcre1of1,snt0002- d0prcre1of1,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s178_snt0002-d0prcre1of1_s177,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W4,P27_W4,SNT,1,D14,5/28/23,PR,E. hormaechei,snt0002-d14presbl-3of4,snt0002-d14presbl-3of4,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s184_snt0002-d14presbl05-08-23-3of4_s183,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W3,P27_W3,SNT,1,D07,5/21/23,env,E. hormaechei,snt0002-d7envcre-1of1,snt0002-d7envcre-1of1,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s185_snt0002-d7envcre05-01-23-1of1_s184,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W3,P27_W3,SNT,1,D07,5/21/23,env,E. hormaechei,snt0002-d7envesbl-1of1,snt0002-d7envesbl-1of1,Enterobacter cloacae/asburiae,1,p23220-s186_snt0002-d7envesbl05-01-23-1of1_s185,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W3,P27_W3,SNT,1,D07,5/21/23,PR,E. hormaechei,snt0002-d7prcre-1of3,snt0002-d7prcre-1of3,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s188_snt0002-d7prcre05-01-23-1of3_s187,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W3,P27_W3,SNT,1,D07,5/21/23,PR,E. hormaechei,snt0002-d7presbl-2of2,snt0002-d7presbl-2of2,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s192_snt0002-d7presbl05-01-23-2of2_s191,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W4,P27_W4,SNT,1,D14,5/28/23,env,E. hormaechei,snt0002d14envcre-1of1,snt0002d14envcre-1of1,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s194_snt0002d14envcre05-08-23-1of1_s193,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W4,P27_W4,SNT,1,D14,5/28/23,env,E. hormaechei,snt0002d14envesbl-1of1,snt0002d14envesbl-1of1,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s195_snt0002d14envesbl05-08-23-1of1_s194,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W4,P27_W4,SNT,1,D14,5/28/23,PR,E. hormaechei,snt0002d14prcre-1of2,snt0002d14prcre-1of2,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s197_snt0002d14prcre05-08-23-1of2_s196,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W4,P27_W4,SNT,1,D14,5/28/23,PR,E. hormaechei,snt0002d14prcre-2of2,snt0002d14prcre-2of2,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s198_snt0002d14prcre05-08-23-2of2_s197,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W5,P27_W5,SNT,1,D21,6/4/23,env,E. hormaechei,snt0002d21envcre-1of1,snt0002d21envcre-1of1,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s202_snt0002d21envcre05-15-23-1of1_s201,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P27,W5,P27_W5,SNT,1,D21,6/4/23,PR,E. hormaechei,snt0002d21prcre-1of1,snt0002d21prcre-1of1,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s205_snt0002d21prcre05-15-23-1of1_s204,Enterobacter hormaechei,E. hormaechei_1,ECC_1
+P50,W6,P50_W6,SNT,2,APPS,6/11/23,IG,E. hormaechei,apps0064igesbl-1of1,apps0064igesbl-1of1,Enterobacter asburiae/cloacae,1,p23220-s137_apps0064igesbl05-22-23-1of1_s136,Enterobacter hormaechei,E. hormaechei_2,
+P50,W6,P50_W6,SNT,2,APPS,6/11/23,PR,E. hormaechei,apps0064presbl-2of2,apps0064presbl-2of2,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s139_apps0064presbl05-22-23-2of2_s138,Enterobacter hormaechei,E. hormaechei_2,
+P50,W7,P50_W7,SNT,2,D00,6/21/23,PR,E. hormaechei,snt0011-d0presbl-1of2,snt0011-d0presbl-1of2,Enterobacter cloacae/asburiae,1,p23220-s275_snt0011-d0presbl06-01-23-1of2_s274,Enterobacter hormaechei,E. hormaechei_2,
+P50,W9,P50_W9,SNT,2,D14,7/5/23,PR,E. hormaechei,snt0011-d14presbl-2of2,snt0011-d14presbl-2of2,Enterobacter cloacae complex,1,p23220-s280_snt0011-d14presbl06-15-23-2of2_s279,Enterobacter hormaechei,E. hormaechei_2,
+P50,W10,P50_W10,SNT,2,D21,7/12/23,PR,E. hormaechei,snt0011-d21presbl-1of2,snt0011-d21presbl-1of2,Enterobacter cloacae/asburiae,1,p23220-s283_snt0011-d21presbl06-22-23-1of2_s282,Enterobacter hormaechei,E. hormaechei_2,
+P50,W11,P50_W11,SNT,2,D28,7/19/23,PR,E. hormaechei,snt0011-d28prcre-1of2,snt0011-d28prcre-1of2,Enterobacter cloacae/asburiae,1,p23220-s286_snt0011-d28prcre06-29-23-1of2_s285,Enterobacter hormaechei,E. hormaechei_2,
+P50,W11,P50_W11,SNT,2,D28,7/19/23,PR,E. hormaechei,snt0011-d28presbl-1of2,snt0011-d28presbl-1of2,Enterobacter cloacae/asburiae,1,p23220-s288_snt0011-d28presbl06-29-23-1of2_s287,Enterobacter hormaechei,E. hormaechei_2,
+P50,W8,P50_W8,SNT,2,D07,6/28/23,env,E. hormaechei,snt0011-d7envcre-1of1,snt0011-d7envcre-1of1,Enterobacter cloacae/asburiae,1,p23220-s291_snt0011-d7envcre06-08-23-1of1_s290,Enterobacter hormaechei,E. hormaechei_2,
+P50,W8,P50_W8,SNT,2,D07,6/28/23,env,E. hormaechei,snt0011-d7envesbl-1of1,snt0011-d7envesbl-1of1,Enterobacter cloacae/asburiae,1,p23220-s292_snt0011-d7envesbl06-08-23-1of1_s291,Enterobacter hormaechei,E. hormaechei_2,
+P50,W8,P50_W8,SNT,2,D07,6/28/23,PR,E. hormaechei,snt0011-d7prcre-1of2,snt0011-d7prcre-1of2,Enterobacter cloacae/asburiae,1,p23220-s294_snt0011-d7prcre06-08-23-1of2_s293,Enterobacter hormaechei,E. hormaechei_2,
+P50,W8,P50_W8,SNT,2,D07,6/28/23,PR,E. hormaechei,snt0011-d7presbl-1of3,snt0011-d7presbl-1of3,Enterobacter cloacae/asburiae,1,p23220-s296_snt0011-d7presbl06-08-23-1of3_s295,Enterobacter hormaechei,E. hormaechei_2,
+P38,W6,P38_W6,APPS,2,APPS,6/11/23,IG,E. hormaechei,apps0061igcre-2of2,apps0061igcre-2of2,Stenotrophomonas maltophilia,1,p23220-s127_apps0061igcre05-22-23-2of2_s126,Enterobacter hormaechei,E. hormaechei_3,
+P38,W6,P38_W6,APPS,2,APPS,6/11/23,IG,E. hormaechei,apps0061igesbl-1of2,apps0061igesbl-1of2,Enterobacter asburiae/cloacae,1,p23220-s128_apps0061igesbl05-22-23-1of2_s127,Enterobacter hormaechei,E. hormaechei_3,
+P38,W6,P38_W6,APPS,2,APPS,6/11/23,IG,E. hormaechei,apps0061igesbl-2of2,apps0061igesbl-2of2,Enterobacter asburiae/cloacae,1,p23220-s129_apps0061igesbl05-22-23-2of2_s128,Enterobacter hormaechei,E. hormaechei_3,
+P38,W6,P38_W6,APPS,2,APPS,6/11/23,PR,E. hormaechei,apps0061prcre-1of1,apps0061prcre-1of1,Enterobacter asburiae/cloacae,1,p23220-s130_apps0061prcre05-22-23-1of1_s129,Enterobacter hormaechei,E. hormaechei_3,
+P51,W7,P51_W7,SNT,2,D00,6/21/23,env,E. hormaechei,snt0012-d0envesbl-1of1,snt0012-d0envesbl-1of1,Enterobacter cloacae/asburiae,1,p23220-s299_snt0012-d0envesbl06-01-23-1of1_s298,Enterobacter hormaechei,E. hormaechei_4,
+P51,W12,P51_W12,SNT,2,D28,7/25/23,PR,E. hormaechei,snt0012-d28cre-1of1,snt0012-d28cre-1of1,Enterobacter cloacae complex,1,p23220-s304_snt0012-d28cre07-05-23-1of1_s303,Enterobacter hormaechei,E. hormaechei_4,
+P51,W12,P51_W12,SNT,2,D28,7/25/23,PR,E. hormaechei,snt0012-d28esbl-1of1,snt0012-d28esbl-1of1,Enterobacter cloacae complex,1,p23220-s305_snt0012-d28esbl07-05-23-1of1_s304,Enterobacter hormaechei,E. hormaechei_4,
+P40,W6,P40_W6,APPS,2,APPS,6/11/23,PR,E. hormaechei,apps0065presbl-1of2,apps0065presbl-1of2,Enterobacter asburiae/cloacae,1,p23220-s140_apps0065presbl05-22-23-1of2_s139,Enterobacter hormaechei,E. hormaechei_5,
+P40,W6,P40_W6,APPS,2,APPS,6/11/23,PR,E. hormaechei,apps0065presbl-2of2,apps0065presbl-2of2,Enterobacter asburiae/cloacae,1,p23220-s141_apps0065presbl05-22-23-2of2_s140,Enterobacter hormaechei,E. hormaechei_5,
+P18,W1,P18_W1,APPS,1,APPS,5/7/23,PR,E. hormaechei,apps0045presbl-1of1,apps0045presbl-1of1,Enterobacter hormaechei,1,p23220-s076_apps0045presbl04-17-23-1of1_s76,Enterobacter hormaechei,E. hormaechei_6,
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,PR,E. hormaechei,apps0053-2prcre-1of3,apps0053_2prcre-1of3,Enterobacter asburiae/cloacae,1,p23220-s091_apps0053-2prcre05-22-23-1of3_s90,Enterobacter hormaechei,E. hormaechei_9,
+P02,W1,P02_W1,APPS,1,APPS,5/7/23,env,E. kobei,apps0018envesbl-1of1,apps0018envesbl-1of1,Enterobacter cloacae complex,1,p23220-s011_apps0018envesbl04-17-23-1of1_s11,Enterobacter kobei,E. kobei_1,
+P12,W1,P12_W1,APPS,1,APPS,5/7/23,PR,ECC,apps0033prcre-2of2,apps0033prcre-2of2,Enterobacter hormaechei/asburiae /cloacae,0,,,,
+P12,W1,P12_W1,APPS,1,APPS,5/7/23,env,ECC,apps0033envesbl-1of1,apps0033envesbl-1of1,Enterobacter hormaechei/asburiae /cloacae,0,,,,
+P18,W1,P18_W1,APPS,1,APPS,5/7/23,IG,ECC,apps0045igesbl-2of2,apps0045igesbl-2of2,Enterobacter hormaechei/asburiae/cloacae,0,,,,
+P27,W2,P27_W2,SNT,1,D00,5/14/23,env,ECC,snt0002-d0envvre-1of1,snt0002-d0envvre-1of1,Enterobacter hormaechei/asburiae/cloacae,0,,,,
+P27,W5,P27_W5,SNT,1,D21,6/4/23,env,ECC,snt0002d21envesbl-1of1,snt0002d21envesbl-1of1,Enterobacter hormaechei/asburiae/cloacae,0,,,,
+P27,W5,P27_W5,SNT,1,D21,6/4/23,PR,ECC,snt0002d21presbl-2of2,snt0002d21presbl-2of2,Enterobacter hormaechei/asburiae/cloacae,0,,,,
+P47,W6,P47_W6,APPS,2,APPS,6/11/23,env,ECC,apps0074envcre-1of1,apps0074envcre-1of1,Enterobacter hormaechei/asburiae/cloacae,0,,,,
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,PR,ECC,apps0053-2prcre-3of3,apps0053_2prcre-3of3,Enterobacter asburiae/cloacae,0,,,,
+P34,W6,P34_W6,APPS,2,APPS,6/11/23,PR,ECC,apps0057prcre-1of1,apps0057prcre-1of1,Enterobacter hormaechei,0,,,,
+P42,W6,P42_W6,APPS,2,APPS,6/11/23,PR,ECC,apps0068prcre-1of1,apps0068prcre-1of1,Enterobacter asburiae/cloacae,0,,,,
+P34,W6,P34_W6,APPS,2,APPS,6/11/23,IG,ECC,apps0057igcre-1of1,apps0057igcre-1of1,Enterobacter hormaechei,0,,,,
+P47,W6,P47_W6,APPS,2,APPS,6/11/23,env,ECC,apps0074envesbl-1of1,apps0074envesbl-1of1,Enterobacter hormaechei/asburiae/cloacae,0,,,,
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,PR,ECC,apps0053-2presbl-2of3,apps0053_2presbl-2of3,Enterobacter hormaechei/asburiae/cloacae,0,,,,
+P42,W6,P42_W6,APPS,2,APPS,6/11/23,PR,ECC,apps0068presbl-1of1,apps0068presbl-1of1,Enterobacter hormaechei/asburiae/cloacae,0,,,,
+P36,W6,P36_W6,APPS,2,APPS,6/11/23,PR,K. aerogenes,apps0059presbl-1of1,apps0059presbl-1of1,Klebsiella (Enterobacter) aerogenes,1,p23220-s121_apps0059presbl05-22-23-1of1_s120,Klebsiella aerogenes,K. aerogenes_1,
+P36,W6,P36_W6,APPS,2,APPS,6/11/23,PR,K. aerogenes,apps0059prcre-1of1,apps0059prcre-1of1,Klebsiella aerogenes,0,,,,
+P45,W6,P45_W6,APPS,2,APPS,6/11/23,IG,K. michiganensis,apps0071igcre-1of1,apps0071igcre-1of1,Klebsiella oxytoca,1,p23220-s155_apps0071igcre05-22-23-1of1_s154,Klebsiella michiganensis,K. michiganensis_1,
+P45,W6,P45_W6,APPS,2,APPS,6/11/23,IG,K. michiganensis,apps0071igesbl-1of1,apps0071igesbl-1of1,Klebsiella oxytoca,1,p23220-s156_apps0071igesbl05-22-23-1of1_s155,Klebsiella michiganensis,K. michiganensis_1,
+P45,W6,P45_W6,APPS,2,APPS,6/11/23,PR,K. michiganensis,apps0071prcre-1of1,apps0071prcre-1of1,Klebsiella oxytoca,1,p23220-s158_apps0071prcre05-22-23-1of1_s157,Klebsiella michiganensis,K. michiganensis_1,
+P45,W6,P45_W6,APPS,2,APPS,6/11/23,PR,K. michiganensis,apps0071presbl-1of1,apps0071presbl-1of1,Klebsiella oxytoca,1,p23220-s159_apps0071presbl05-22-23-1of1_s158,Klebsiella michiganensis,K. michiganensis_1,
+P46,W6,P46_W6,APPS,2,APPS,6/11/23,PR,K. michiganensis,apps0072presbl-1of2,apps0072presbl-1of2,Klebsiella oxytoca,0,,,,
+P06,W1,P06_W1,APPS,1,APPS,5/7/23,PR,K. pneumoniae,apps0022prcre-1of1,apps0022prcre-1of1,Klebsiella pneumoniae,1,p23220-s022_apps0022prcre04-17-23-1of1_s22,Klebsiella pneumoniae,K. pneumoniae_10,
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,env,K. pneumoniae,apps0028envesbl-1of1,apps0028envesbl-1of1,Klebsiella pneumoniae,1,p23220-s031_apps0028envesbl04-17-23-1of1_s31,Klebsiella pneumoniae,K. pneumoniae_1,K. pneumoniae_1
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,IG,K. pneumoniae,apps0028igcre-1of3,apps0028igcre-1of3,Klebsiella pneumoniae,1,p23220-s033_apps0028igcre04-17-23-1of3_s33,Klebsiella pneumoniae,K. pneumoniae_4,
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,IG,K. pneumoniae,apps0028igesbl-1of1,apps0028igesbl-1of1,Klebsiella pneumoniae,1,p23220-s034_apps0028igesbl04-17-23-1of1_s34,Klebsiella pneumoniae,K. pneumoniae_1,K. pneumoniae_1
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,PR,K. pneumoniae,apps0028prcre-1of3,apps0028prcre-1of3,Klebsiella pneumoniae,1,p23220-s036_apps0028prcre04-17-23-1of3_s36,Klebsiella pneumoniae,K. pneumoniae_4,
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,PR,K. pneumoniae,apps0028presbl-1of1,apps0028presbl-1of1,Klebsiella pneumoniae,1,p23220-s037_apps0028presbl04-17-23-1of1_s37,Klebsiella pneumoniae,K. pneumoniae_1,K. pneumoniae_1
+P19,W1,P19_W1,APPS,1,APPS,5/7/23,PR,K. pneumoniae,apps0046presbl-1of2,apps0046presbl-1of2,Klebsiella pneumoniae,1,p23220-s081_apps0046presbl04-17-23-1of2_s81,Klebsiella pneumoniae,K. pneumoniae_2,K. pneumoniae_2
+P24,W1,P24_W1,APPS,1,APPS,5/7/23,PR,K. pneumoniae,apps0054presbl-1of1,apps0054presbl-1of1,Klebsiella pneumoniae,1,p23220-s098_apps0054presbl04-17-23-1of1_s97,Klebsiella pneumoniae,K. pneumoniae_2,K. pneumoniae_2
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,PR,K. pneumoniae,apps0028prcre-2of3,apps0028prcre-2of3,Klebsiella pneumoniae,0,,,,
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,PR,K. pneumoniae,apps0028prcre-3of3,apps0028prcre-3of3,Klebsiella pneumoniae,0,,,,
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,IG,K. pneumoniae,apps0028igcre-2of3,apps0028igcre-2of3,Klebsiella pneumoniae,0,,,,
+P28,W1,P28_W1,SNT,1,APPS,5/7/23,IG,K. pneumoniae,apps0028igcre-3of3,apps0028igcre-3of3,Klebsiella pneumoniae,0,,,,
+P06,W1,P06_W1,APPS,1,APPS,5/7/23,PR,K. pneumoniae,apps0022presbl-1of1,apps0022presbl-1of1,Klebsiella pneumoniae,0,,,,
+P19,W1,P19_W1,APPS,1,APPS,5/7/23,PR,K. pneumoniae,apps0046presbl-2of2,apps0046presbl-2of2,Klebsiella pneumoniae,0,,,,
+P28,W2,P28_W2,SNT,1,D00,5/14/23,env,K. pneumoniae,snt0003d0envcre-1of1,snt0003d0envcre-1of1,Klebsiella pneumoniae,1,p23220-s210_snt0003d0envcre04-24-23-1of1_s209,Klebsiella pneumoniae,K. pneumoniae_4,
+P28,W2,P28_W2,SNT,1,D00,5/14/23,env,K. pneumoniae,snt0003d0envesbl-1of1,snt0003d0envesbl-1of1,Klebsiella pneumoniae,1,p23220-s211_snt0003d0envesbl04-24-23-1of1_s210,Klebsiella pneumoniae,K. pneumoniae_1,K. pneumoniae_1
+P28,W2,P28_W2,SNT,1,D00,5/14/23,PR,K. pneumoniae,snt0003d0prcre-1of1,snt0003d0prcre-1of1,Klebsiella pneumoniae,1,p23220-s214_snt0003d0prcre04-24-23-1of1_s213,Klebsiella pneumoniae,K. pneumoniae_4,
+P28,W2,P28_W2,SNT,1,D00,5/14/23,PR,K. pneumoniae,snt0003d0presbl-1of1,snt0003d0presbl-1of1,Klebsiella pneumoniae,1,p23220-s215_snt0003d0presbl04-24-23-1of1_s214,Klebsiella pneumoniae,K. pneumoniae_1,K. pneumoniae_1
+P28,W3,P28_W3,SNT,1,D07,5/21/23,PR,K. pneumoniae,snt0003d7prcre-1of2,snt0003d7prcre-1of2,Klebsiella pneumoniae,1,p23220-s230_snt0003d7prcre05-01-23-1of2_s229,Klebsiella pneumoniae,K. pneumoniae_4,
+P28,W3,P28_W3,SNT,1,D07,5/21/23,PR,K. pneumoniae,snt0003d7presbl-1of1,snt0003d7presbl-1of1,Klebsiella pneumoniae,1,p23220-s232_snt0003d7presbl05-01-23-1of1_s231,Klebsiella pneumoniae,K. pneumoniae_1,K. pneumoniae_1
+P29,W3,P29_W3,SNT,1,D07,5/21/23,PR,K. pneumoniae,snt0006d7presbl-1of1,snt0006d7presbl-1of1,Klebsiella pneumoniae,1,p23220-s236_snt0006d7presbl05-01-23-1of1_s235,Klebsiella pneumoniae,K. pneumoniae_1,K. pneumoniae_1
+P28,W4,P28_W4,SNT,1,D14,5/28/23,PR,K. pneumoniae,snt0003d14prcre-1of2,snt0003d14prcre-1of2,Klebsiella pneumoniae,1,p23220-s217_snt0003d14prcre05-08-23-1of2_s216,Klebsiella pneumoniae,K. pneumoniae_4,
+P28,W4,P28_W4,SNT,1,D14,5/28/23,PR,K. pneumoniae,snt0003d14prcre-2of2,snt0003d14prcre-2of2,Klebsiella pneumoniae,1,p23220-s218_snt0003d14prcre05-08-23-2of2_s217,Klebsiella pneumoniae,K. pneumoniae_4,
+P28,W4,P28_W4,SNT,1,D14,5/28/23,PR,K. pneumoniae,snt0003d14presbl-1of1,snt0003d14presbl-1of1,Klebsiella pneumoniae,1,snt0003day14presbl1of1_s89,Klebsiella pneumoniae,K. pneumoniae_1,K. pneumoniae_1
+P28,W5,P28_W5,SNT,1,D21,6/4/23,PR,K. pneumoniae,snt0003d21prcre-1of2,snt0003d21prcre-1of2,Klebsiella pneumoniae,1,p23220-s221_snt0003d21prcre05-15-23-1of2_s220,Klebsiella pneumoniae,K. pneumoniae_4,
+P28,W5,P28_W5,SNT,1,D21,6/4/23,PR,K. pneumoniae,snt0003d21prcre-2of2,snt0003d21prcre-2of2,Klebsiella pneumoniae,1,p23220-s222_snt0003d21prcre05-15-23-2of2_s221,Klebsiella pneumoniae,K. pneumoniae_4,
+P28,W5,P28_W5,SNT,1,D21,6/4/23,PR,K. pneumoniae,snt0003d21presbl-1of1,snt0003d21presbl-1of1,Klebsiella pneumoniae,1,p23220-s223_snt0003d21presbl05-15-23-1of1_s222,Klebsiella pneumoniae,K. pneumoniae_1,K. pneumoniae_1
+P06,W6,P06_W6,APPS,2,APPS,6/11/23,IG,K. pneumoniae,apps0022-2igesbl-1of1,apps0022_2igesbl-1of1,Klebsiella pneumoniae,1,p23220-s021_apps0022-2igesbl05-22-23-1of1_s21,Klebsiella pneumoniae,K. pneumoniae_3,K. pneumoniae_3
+P28,W6,P28_W6,SNT,2,APPS,6/11/23,PR,K. pneumoniae,apps0028-2prcre-1of2,apps0028_2prcre-1of2,Klebsiella pneumoniae,1,p23220-s028_apps0028-2prcre05-22-23-1of2_s28,Klebsiella pneumoniae,K. pneumoniae_4,
+P28,W6,P28_W6,SNT,2,APPS,6/11/23,PR,K. pneumoniae,apps0028-2presbl-1of1,apps0028_2presbl-1of1,Klebsiella pneumoniae,1,p23220-s029_apps0028-2presbl05-22-23-1of1_s29,Klebsiella pneumoniae,K. pneumoniae_1,K. pneumoniae_1
+P13,W6,P13_W6,APPS,2,APPS,6/11/23,PR,K. pneumoniae,apps0036-2prcre-1of1,apps0036_2prcre-1of1,Klebsiella pneumoniae,1,p23220-s052_apps0036-2prcre05-22-23-1of1_s52,Klebsiella pneumoniae,K. pneumoniae_11,
+P19,W6,P19_W6,APPS,2,APPS,6/11/23,PR,K. pneumoniae,apps0046-2prcre-2of2,apps0046_2prcre-2of2,Klebsiella pneumoniae,1,p23220-s078_apps0046-2prcre05-22-23-2of2_s78,Klebsiella pneumoniae,K. pneumoniae_7,
+P19,W6,P19_W6,APPS,2,APPS,6/11/23,PR,K. pneumoniae,apps0046-2presbl-1of1,apps0046_2presbl-1of1,Klebsiella pneumoniae,1,p23220-s079_apps0046-2presbl05-22-23-1of1_s79,Klebsiella pneumoniae,K. pneumoniae_7,
+P24,W6,P24_W6,APPS,2,APPS,6/11/23,PR,K. pneumoniae,apps0054-2presbl-1of1,apps0054_2presbl-1of1,Klebsiella pneumoniae,1,p23220-s097_apps0054-2presbl05-22-23-1of1_s96,Klebsiella pneumoniae,K. pneumoniae_2,K. pneumoniae_2
+P35,W6,P35_W6,APPS,2,APPS,6/11/23,env,K. pneumoniae,apps0058envesbl-1of1,apps0058envesbl-1of1,Klebsiella pneumoniae,1,p23220-s114_apps0058envesbl05-22-23-1of1_s113,Klebsiella pneumoniae,K. pneumoniae_5,
+P35,W6,P35_W6,APPS,2,APPS,6/11/23,IG,K. pneumoniae,apps0058igcre-1of3,apps0058igcre-1of3,Klebsiella pneumoniae,1,p23220-s115_apps0058igcre05-22-23-1of3_s114,Klebsiella pneumoniae,K. pneumoniae_5,
+P35,W6,P35_W6,APPS,2,APPS,6/11/23,IG,K. pneumoniae,apps0058igcre-2of3,apps0058igcre-2of3,Klebsiella pneumoniae,1,p23220-s116_apps0058igcre05-22-23-2of3_s115,Klebsiella pneumoniae,K. pneumoniae_5,
+P35,W6,P35_W6,APPS,2,APPS,6/11/23,IG,K. pneumoniae,apps0058igesbl-1of1,apps0058igesbl-1of1,Klebsiella pneumoniae,1,p23220-s117_apps0058igesbl05-22-23-1of1_s116,Klebsiella pneumoniae,K. pneumoniae_5,
+P35,W6,P35_W6,APPS,2,APPS,6/11/23,PR,K. pneumoniae,apps0058prcre-1of1,apps0058prcre-1of1,Klebsiella pneumoniae,1,apps0058prcre1of1_s85,Klebsiella pneumoniae,K. pneumoniae_5,
+P35,W6,P35_W6,APPS,2,APPS,6/11/23,PR,K. pneumoniae,apps0058presbl-1of1,apps0058presbl-1of1,Klebsiella pneumoniae,1,p23220-s119_apps0058presbl05-22-23-1of1_s118,Klebsiella pneumoniae,K. pneumoniae_5,
+P41,W6,P41_W6,APPS,2,APPS,6/11/23,env,K. pneumoniae,apps0067envesbl-1of1,apps0067envesbl-1of1,Klebsiella pneumoniae,1,p23220-s143_apps0067envesbl05-22-23-1of1_s142,Klebsiella pneumoniae,K. pneumoniae_3,K. pneumoniae_3
+P41,W6,P41_W6,APPS,2,APPS,6/11/23,IG,K. pneumoniae,apps0067igcre-1of1,apps0067igcre-1of1,Klebsiella pneumoniae,1,p23220-s146_apps0067igcre05-22-23-1of1_s145,Klebsiella pneumoniae,K. pneumoniae_3,K. pneumoniae_3
+P41,W6,P41_W6,APPS,2,APPS,6/11/23,IG,K. pneumoniae,apps0067igesbl-1of1,apps0067igesbl-1of1,Klebsiella pneumoniae,1,p23220-s147_apps0067igesbl05-22-23-1of1_s146,Klebsiella pneumoniae,K. pneumoniae_3,K. pneumoniae_3
+P41,W6,P41_W6,APPS,2,APPS,6/11/23,PR,K. pneumoniae,apps0067presbl-1of1,apps0067presbl-1of1,Klebsiella pneumoniae,1,p23220-s150_apps0067presbl05-22-23-1of1_s149,Klebsiella pneumoniae,K. pneumoniae_3,K. pneumoniae_3
+P47,W6,P47_W6,APPS,2,APPS,6/11/23,PR,K. pneumoniae,apps0074prcre-1of1,apps0074prcre-1of1,Klebsiella pneumoniae,1,p23220-s165_apps0074prcre05-22-23-1of1_s164,Klebsiella pneumoniae,K. pneumoniae_8,
+P47,W6,P47_W6,APPS,2,APPS,6/11/23,PR,K. pneumoniae,apps0074presbl-1of1,apps0074presbl-1of1,Klebsiella pneumoniae,1,p23220-s166_apps0074presbl05-22-23-1of1_s165,Klebsiella pneumoniae,K. pneumoniae_8,
+P28,W6,P28_W6,SNT,2,APPS,6/11/23,PR,K. pneumoniae,apps0028-2prcre-1of2,apps0028_2prcre-1of2,Klebsiella pneumoniae,1,p23220-s310_apps28-2prcre05-22-23-1of2_s309,Klebsiella pneumoniae,K. pneumoniae_4,
+P28,W6,P28_W6,SNT,2,APPS,6/11/23,PR,K. pneumoniae,apps0028-2presbl-1of1,apps0028_2presbl-1of1,Klebsiella pneumoniae,1,p23220-s312_apps28-2presbl05-22-23-1of1_s311,Klebsiella pneumoniae,K. pneumoniae_1,K. pneumoniae_1
+P28,W6,P28_W6,SNT,1,D28,6/11/23,PR,K. pneumoniae,snt0003d28prcre-1of2,snt0003d28prcre-1of2,Klebsiella pneumoniae,0,,,,
+P13,W6,P13_W6,APPS,2,APPS,6/11/23,PR,K. pneumoniae,apps0066prcre-1of1,apps0066prcre-1of1,Klebsiella pneumoniae,0,,,,
+P28,W6,P28_W6,SNT,1,D28,6/11/23,PR,K. pneumoniae,snt0003d28presbl-1of1,snt0003d28presbl-1of1,Klebsiella pneumoniae,0,,,,
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,PR,K. pneumoniae,apps0053-2presbl-1of3,apps0053_2presbl-1of3,Klebsiella pneumoniae,0,,,,
+P13,W6,P13_W6,APPS,2,APPS,6/11/23,IG,M. morganii,apps0036-2igcre-1of1,apps0036_2igcre-1of1,Morganella morganii,0,,,,
+P04,W6,P04_W6,APPS,2,APPS,6/11/23,PR,M. morganii,apps0020-2presbl-1of2,apps0020_2presbl-1of2,Morganella morganii,0,,,,
+P04,W6,P04_W6,APPS,2,APPS,6/11/23,PR,M. morganii,apps0020-2presbl-2of2,apps0020_2presbl-2of2,Morganella morganii,0,,,,
+P01,W1,P01_W1,APPS,1,APPS,5/7/23,IG,P. aeruginosa,apps0017igesbl-2of2,apps0017igesbl-2of2,Pseudomonas aeruginosa,1,p23220-s004_apps0017igesbl04-17-23-2of2_s4,Pseudomonas aeruginosa,P. aeruginosa_9,
+P01,W1,P01_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0017presbl-2of2,apps0017presbl-2of2,Pseudomonas aeruginosa,1,p23220-s006_apps0017presbl04-17-23-2of2_s6,Pseudomonas aeruginosa,P. aeruginosa_9,
+P03,W1,P03_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0019prcre-1of1,apps0019prcre-1of1,Pseudomonas aeruginosa,1,p23220-s013_apps0019prcre04-17-23-1of1_s13,Pseudomonas aeruginosa,P. aeruginosa_13,
+P04,W1,P04_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0020prcre-1of1,apps0020prcre-1of1,Pseudomonas aeruginosa,1,p23220-s018_apps0020prcre04-17-23-1of1_s18,Pseudomonas aeruginosa,P. aeruginosa_6,
+P16,W1,P16_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0040prcre-1of1,apps0040prcre-1of1,Pseudomonas aeruginosa,1,p23220-s061_apps0040prcre04-17-23-1of1_s61,Pseudomonas aeruginosa,P. aeruginosa_1,P. aeruginosa_1
+P27,W1,P27_W1,SNT,1,APPS,5/7/23,PR,P. aeruginosa,apps0042prcre-1of1,apps0042prcre-1of1,Pseudomonas aeruginosa,1,p23220-s064_apps0042prcre04-17-23-1of1_s64,Pseudomonas aeruginosa,P. aeruginosa_8,
+P26,W1,P26_W1,SNT,1,APPS,5/7/23,PR,P. aeruginosa,apps0044prcre-2of2,apps0044prcre-2of2,Pseudomonas aeruginosa,1,p23220-s072_apps0044prcre04-17-23-2of2_s72,Pseudomonas aeruginosa,P. aeruginosa_1,P. aeruginosa_1
+P21,W1,P21_W1,APPS,1,APPS,5/7/23,IG,P. aeruginosa,apps0051igcre-1of1,apps0051igcre-1of1,Pseudomonas aeruginosa,1,p23220-s085_apps0051igcre04-17-23-1of1_s85,Pseudomonas aeruginosa,P. aeruginosa_14,
+P23,W1,P23_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0053presbl-1of1,apps0053presbl-1of1,Pseudomonas aeruginosa,1,p23220-s095_apps0053presbl04-17-23-1of1_s94,Pseudomonas aeruginosa,P. aeruginosa_5,
+P25,W1,P25_W1,APPS,1,APPS,5/7/23,IG,P. aeruginosa,apps0055igcre-1of1,apps0055igcre-1of1,Pseudomonas aeruginosa,1,p23220-s104_apps0055igcre04-17-23-1of1_s103,Pseudomonas aeruginosa,P. aeruginosa_12,
+P01,W1,P01_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0017prcre-1of1,apps0017prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P10,W1,P10_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0030prcre-1of1,apps0030prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P32,W1,P32_W1,SNT,1,APPS,5/7/23,PR,P. aeruginosa,apps0035prcre-1of1,apps0035prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P15,W1,P15_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0038prcre-1of1,apps0038prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P19,W1,P19_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0046prcre-1of1,apps0046prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P20,W1,P20_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0047prcre-1of1,apps0047prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P30,W1,P30_W1,SNT,1,APPS,5/7/23,PR,P. aeruginosa,apps0050prcre-1of1,apps0050prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P21,W1,P21_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0051prcre-1of1,apps0051prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P23,W1,P23_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0053prcre-1of1,apps0053prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P25,W1,P25_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0055prcre-1of1,apps0055prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P01,W1,P01_W1,APPS,1,APPS,5/7/23,IG,P. aeruginosa,apps0017igcre-1of1,apps0017igcre-1of1,Pseudomonas aeruginosa,0,,,,
+P11,W1,P11_W1,APPS,1,APPS,5/7/23,IG,P. aeruginosa,apps0031igcre-2of2,apps0031igcre-2of2,Pseudomonas aeruginosa,0,,,,
+P12,W1,P12_W1,APPS,1,APPS,5/7/23,IG,P. aeruginosa,apps0033igcre-1of1,apps0033igcre-1of1,Pseudomonas aeruginosa,0,,,,
+P27,W1,P27_W1,SNT,1,APPS,5/7/23,IG,P. aeruginosa,apps0042igcre-1of1,apps0042igcre-1of1,Pseudomonas aeruginosa,0,,,,
+P26,W1,P26_W1,SNT,1,APPS,5/7/23,IG,P. aeruginosa,apps0044igcre-1of1,apps0044igcre-1of1,Pseudomonas aeruginosa,0,,,,
+P19,W1,P19_W1,APPS,1,APPS,5/7/23,IG,P. aeruginosa,apps0046igcre-1of1,apps0046igcre-1of1,Pseudomonas aeruginosa,0,,,,
+P20,W1,P20_W1,APPS,1,APPS,5/7/23,IG,P. aeruginosa,apps0047igcre-1of1,apps0047igcre-1of1,Pseudomonas aeruginosa,0,,,,
+P03,W1,P03_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0019presbl-1of1,apps0019presbl-1of1,Pseudomonas aeruginosa,0,,,,
+P04,W1,P04_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0020presbl-1of1,apps0020presbl-1of1,Pseudomonas aeruginosa,0,,,,
+P31,W1,P31_W1,SNT,1,APPS,5/7/23,PR,P. aeruginosa,apps0039presbl-1of1,apps0039presbl-1of1,Pseudomonas aeruginosa,0,,,,
+P16,W1,P16_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0040presbl-1of2,apps0040presbl-1of2,Pseudomonas aeruginosa,0,,,,
+P16,W1,P16_W1,APPS,1,APPS,5/7/23,PR,P. aeruginosa,apps0040presbl-2of2,apps0040presbl-2of2,Pseudomonas aeruginosa,0,,,,
+P25,W1,P25_W1,APPS,1,APPS,5/7/23,IG,P. aeruginosa,apps0055igesbl-1of1,apps0055igesbl-1of1,Pseudomonas aeruginosa,0,,,,
+P26,W2,P26_W2,SNT,1,D00,5/14/23,PR,P. aeruginosa,snt0001-d0prcre-1of1,snt0001-d0prcre-1of1,Pseudomonas aeruginosa,1,p23220-s168_snt0001-d0prcre04-24-23-1of1_s167,Pseudomonas aeruginosa,P. aeruginosa_1,P. aeruginosa_1
+P30,W2,P30_W2,SNT,1,D00,5/14/23,PR,P. aeruginosa,snt0007d0prcre-1of1,snt0007d0prcre-1of1,Pseudomonas aeruginosa,1,snt0007day0prcre1of1_s90,Pseudomonas aeruginosa,P. aeruginosa_10,
+P31,W2,P31_W2,SNT,1,D00,5/14/23,PR,P. aeruginosa,snt0008d0prcre-1of1,snt0008d0prcre-1of1,Pseudomonas aeruginosa,1,p23220-s250_snt0008d0prcre04-24-23-1of1_s249,Pseudomonas aeruginosa,P. aeruginosa_3,
+P26,W2,P26_W2,SNT,1,D00,5/14/23,PR,P. aeruginosa,snt0001-d0presbl-2of2,snt0001-d0presbl-2of2,Pseudomonas aeruginosa,0,,,,
+P26,W3,P26_W3,SNT,1,D07,5/21/23,PR,P. aeruginosa,snt0001-d7prcre-2of2,snt0001-d7prcre-2of2,Pseudomonas aeruginosa,1,p23220-s176_snt0001-d7prcre05-01-23-2of2_s175,Pseudomonas aeruginosa,P. aeruginosa_1,P. aeruginosa_1
+P27,W3,P27_W3,SNT,1,D07,5/21/23,PR,P. aeruginosa,snt0002-d7prcre-3of3,snt0002-d7prcre-3of3,Pseudomonas aeruginosa,1,p23220-s190_snt0002-d7prcre05-01-23-3of3_s189,Pseudomonas aeruginosa,P. aeruginosa_8,
+P30,W3,P30_W3,SNT,1,D07,5/21/23,PR,P. aeruginosa,snt0007d7prcre-1of1,snt0007d7prcre-1of1,Pseudomonas aeruginosa,1,p23220-s246_snt0007d7prcre05-01-23-1of1_s245,Pseudomonas aeruginosa,P. aeruginosa_4,
+P31,W3,P31_W3,SNT,1,D07,5/21/23,PR,P. aeruginosa,snt0008d7prcre-1of1,snt0008d7prcre-1of1,Pseudomonas aeruginosa,1,p23220-s258_snt0008d7prcre05-01-23-1of1_s257,Pseudomonas aeruginosa,P. aeruginosa_3,
+P31,W4,P31_W4,SNT,1,D14,5/28/23,PR,P. aeruginosa,snt0008d14prcre-1of2,snt0008d14prcre-1of2,Pseudomonas aeruginosa,1,p23220-s253_snt0008d14prcre05-08-23-1of2_s252,Pseudomonas aeruginosa,P. aeruginosa_3,
+P31,W4,P31_W4,SNT,1,D14,5/28/23,PR,P. aeruginosa,snt0008d14prcre-2of2,snt0008d14prcre-2of2,Pseudomonas aeruginosa,1,p23220-s254_snt0008d14prcre05-08-23-2of2_s253,Pseudomonas aeruginosa,P. aeruginosa_3,
+P31,W4,P31_W4,SNT,1,D14,5/28/23,PR,P. aeruginosa,snt0008d14presbl-1of2,snt0008d14presbl-1of2,Pseudomonas aeruginosa,1,p23220-s255_snt0008d14presbl05-08-23-1of2_s254,Pseudomonas aeruginosa,P. aeruginosa_3,
+P31,W4,P31_W4,SNT,1,D14,5/28/23,PR,P. aeruginosa,snt0008d14presbl-2of2,snt0008d14presbl-2of2,Pseudomonas aeruginosa,1,p23220-s256_snt0008d14presbl05-08-23-2of2_s255,Pseudomonas aeruginosa,P. aeruginosa_3,
+P26,W5,P26_W5,SNT,1,D21,6/4/23,PR,P. aeruginosa,snt0001-d21prcre-2of2,snt0001-d21prcre-2of2,Pseudomonas aeruginosa,1,p23220-s170_snt0001-d21prcre05-15-23-2of2_s169,Pseudomonas aeruginosa,P. aeruginosa_1,P. aeruginosa_1
+P30,W5,P30_W5,SNT,1,D21,6/4/23,PR,P. aeruginosa,snt0007d21prcre-1of2,snt0007d21prcre-1of2,Pseudomonas aeruginosa,1,p23220-s244_snt0007d21prcre05-15-23-1of2_s243,Pseudomonas aeruginosa,P. aeruginosa_4,
+P30,W5,P30_W5,SNT,1,D21,6/4/23,PR,P. aeruginosa,snt0007d21prcre-2of2,snt0007d21prcre-2of2,Pseudomonas aeruginosa,1,p23220-s245_snt0007d21prcre05-15-23-2of2_s244,Pseudomonas aeruginosa,P. aeruginosa_4,
+P04,W6,P04_W6,APPS,2,APPS,6/11/23,IG,P. aeruginosa,apps0020-2igesbl-1of1,apps0020_2igesbl-1of1,Pseudomonas aeruginosa,1,p23220-s015_apps0020-2igesbl05-22-23-1of1_s15,Pseudomonas aeruginosa,P. aeruginosa_6,
+P04,W6,P04_W6,APPS,2,APPS,6/11/23,PR,P. aeruginosa,apps0020-2prcre-1of1,apps0020_2prcre-1of1,Pseudomonas aeruginosa,1,p23220-s016_apps0020-2prcre05-22-23-1of1_s16,Pseudomonas aeruginosa,P. aeruginosa_6,
+P32,W6,P32_W6,SNT,2,APPS,6/11/23,PR,P. aeruginosa,apps0035-2prcre-1of1,apps0035_2prcre-1of1,Pseudomonas aeruginosa,1,p23220-s048_apps0035-2prcre05-22-23-1of1_s48,Pseudomonas aeruginosa,P. aeruginosa_7,
+P26,W6,P26_W6,SNT,2,APPS,6/11/23,PR,P. aeruginosa,apps0044-2prcre-1of1,apps0044_2prcre-1of1,Pseudomonas aeruginosa,1,p23220-s069_apps0044-2prcre05-22-23-1of1_s69,Pseudomonas aeruginosa,P. aeruginosa_1,P. aeruginosa_1
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,IG,P. aeruginosa,apps0053-2igcre-1of1,apps0053_2igcre-1of1,Pseudomonas aeruginosa,1,p23220-s088_apps0053-2igcre05-22-23-1of1_s87,Pseudomonas aeruginosa,P. aeruginosa_5,
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,PR,P. aeruginosa,apps0053-2presbl-3of3,apps0053_2presbl-3of3,Pseudomonas aeruginosa,1,p23220-s092_apps0053-2presbl05-22-23-3of3_s91,Pseudomonas aeruginosa,P. aeruginosa_5,
+P25,W6,P25_W6,APPS,2,APPS,6/11/23,PR,P. aeruginosa,apps0055-2prcre-1of1,apps0055_2prcre-1of1,Pseudomonas aeruginosa,1,p23220-s102_apps0055-2prcre05-22-23-1of1_s101,Pseudomonas aeruginosa,P. aeruginosa_11,
+P50,W6,P50_W6,SNT,2,APPS,6/11/23,env,P. aeruginosa,apps0064envcre-1of1,apps0064envcre-1of1,Pseudomonas aeruginosa,1,p23220-s135_apps0064envcre05-22-23-1of1_s134,Pseudomonas aeruginosa,P. aeruginosa_2,
+P50,W6,P50_W6,SNT,2,APPS,6/11/23,IG,P. aeruginosa,apps0064igcre-1of1,apps0064igcre-1of1,Pseudomonas aeruginosa,1,p23220-s136_apps0064igcre05-22-23-1of1_s135,Pseudomonas aeruginosa,P. aeruginosa_2,
+P50,W6,P50_W6,SNT,2,APPS,6/11/23,PR,P. aeruginosa,apps0064prcre-1of1,apps0064prcre-1of1,Pseudomonas aeruginosa,1,p23220-s138_apps0064prcre05-22-23-1of1_s137,Pseudomonas aeruginosa,P. aeruginosa_2,
+P26,W6,P26_W6,SNT,2,APPS,6/11/23,PR,P. aeruginosa,apps0044-2prcre-1of1,apps0044_2prcre-1of1,Pseudomonas aeruginosa,1,p23220-s348_apps44-2-prcre05-22-23-1of1_s347,Pseudomonas aeruginosa,P. aeruginosa_1,P. aeruginosa_1
+P33,W6,P33_W6,APPS,2,APPS,6/11/23,env,P. aeruginosa,apps0056envcre-2of2,apps0056envcre-2of2,Pseudomonas aeruginosa,0,,,,
+P46,W6,P46_W6,APPS,2,APPS,6/11/23,env,P. aeruginosa,apps0072envcre-1of1,apps0072envcre-1of1,Pseudomonas aeruginosa,0,,,,
+P26,W6,P26_W6,SNT,1,D28,6/11/23,PR,P. aeruginosa,snt0001-d28prcre-1of1,snt0001-d28prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P19,W6,P19_W6,APPS,2,APPS,6/11/23,PR,P. aeruginosa,apps0046-2prcre-1of2,apps0046_2prcre-1of2,Pseudomonas aeruginosa,0,,,,
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,PR,P. aeruginosa,apps0053-2prcre-2of3,apps0053_2prcre-2of3,Pseudomonas aeruginosa,0,,,,
+P46,W6,P46_W6,APPS,2,APPS,6/11/23,PR,P. aeruginosa,apps0072prcre-1of1,apps0072prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P01,W6,P01_W6,APPS,2,APPS,6/11/23,IG,P. aeruginosa,apps0017-2igcre1of1,apps0017_2igcre1of1,Pseudomonas aeruginosa,0,,,,
+P04,W6,P04_W6,APPS,2,APPS,6/11/23,IG,P. aeruginosa,apps0020-2igcre-1of1,apps0020_2igcre-1of1,Pseudomonas aeruginosa,0,,,,
+P19,W6,P19_W6,APPS,2,APPS,6/11/23,IG,P. aeruginosa,apps0046-2igcre-1of1,apps0046_2igcre-1of1,Pseudomonas aeruginosa,0,,,,
+P33,W6,P33_W6,APPS,2,APPS,6/11/23,IG,P. aeruginosa,apps0056igcre-1of2,apps0056igcre-1of2,Pseudomonas aeruginosa,0,,,,
+P33,W6,P33_W6,APPS,2,APPS,6/11/23,IG,P. aeruginosa,apps0056igcre-2of2,apps0056igcre-2of2,Pseudomonas aeruginosa,0,,,,
+P35,W6,P35_W6,APPS,2,APPS,6/11/23,IG,P. aeruginosa,apps0058igcre-3of3,apps0058igcre-3of3,Pseudomonas aeruginosa,0,,,,
+P46,W6,P46_W6,APPS,2,APPS,6/11/23,IG,P. aeruginosa,apps0072igcre-1of1,apps0072igcre-1of1,Pseudomonas aeruginosa,0,,,,
+P46,W6,P46_W6,APPS,2,APPS,6/11/23,env,P. aeruginosa,apps0072envesbl-1of1,apps0072envesbl-1of1,Pseudomonas aeruginosa,0,,,,
+P25,W6,P25_W6,APPS,2,APPS,6/11/23,PR,P. aeruginosa,apps0055-2presbl-1of1,apps0055_2presbl-1of1,Pseudomonas aeruginosa,0,,,,
+P50,W6,P50_W6,SNT,2,APPS,6/11/23,PR,P. aeruginosa,apps0064presbl-1of2,apps0064presbl-1of2,Pseudomonas aeruginosa,0,,,,
+P46,W6,P46_W6,APPS,2,APPS,6/11/23,PR,P. aeruginosa,apps0072presbl-2of2,apps0072presbl-2of2,Pseudomonas aeruginosa,0,,,,
+P23,W6,P23_W6,APPS,2,APPS,6/11/23,IG,P. aeruginosa,apps0053-2igesbl-2of2,apps0053_2igesbl-2of2,Pseudomonas aeruginosa,0,,,,
+P30,W6,P30_W6,SNT,1,D28,6/12/23,PR,P. aeruginosa,snt0007-d28prcre-1of1,snt0007d28prcre-1of1,Pseudomonas aeruginosa,1,p23220-s349_snt0007-d28prcre05-23-23-1of1_s348,Pseudomonas aeruginosa,P. aeruginosa_10,
+P32,W7,P32_W7,SNT,2,D00,6/21/23,PR,P. aeruginosa,snt0010-d0prcre-1of1,snt0010-d0prcre-1of1,Pseudomonas aeruginosa,1,p23220-s266_snt0010-d0prcre06-01-23-1of1_s265,Pseudomonas aeruginosa,P. aeruginosa_7,
+P50,W7,P50_W7,SNT,2,D00,6/21/23,PR,P. aeruginosa,snt0011-d0prcre-1of1,snt0011-d0prcre-1of1,Pseudomonas aeruginosa,1,p23220-s274_snt0011-d0prcre06-01-23-1of1_s273,Pseudomonas aeruginosa,P. aeruginosa_2,
+P50,W7,P50_W7,SNT,2,D00,6/21/23,PR,P. aeruginosa,snt0011-d0presbl-2of2,snt0011-d0presbl-2of2,Pseudomonas aeruginosa,1,p23220-s276_snt0011-d0presbl06-01-23-2of2_s275,Pseudomonas aeruginosa,P. aeruginosa_2,
+P50,W8,P50_W8,SNT,2,D07,6/28/23,PR,P. aeruginosa,snt0011-d7prcre-2of2,snt0011-d7prcre-2of2,Pseudomonas aeruginosa,1,p23220-s295_snt0011-d7prcre06-08-23-2of2_s294,Pseudomonas aeruginosa,P. aeruginosa_2,
+P50,W8,P50_W8,SNT,2,D07,6/28/23,PR,P. aeruginosa,snt0011-d7presbl-2of3,snt0011-d7presbl-2of3,Pseudomonas aeruginosa,1,p23220-s297_snt0011-d7presbl06-08-23-2of3_s296,Pseudomonas aeruginosa,P. aeruginosa_2,
+P50,W8,P50_W8,SNT,2,D07,6/28/23,PR,P. aeruginosa,snt0011-d7presbl-3of3,snt0011-d7presbl-3of3,Pseudomonas aeruginosa,1,p23220-s298_snt0011-d7presbl06-08-23-3of3_s297,Pseudomonas aeruginosa,P. aeruginosa_2,
+P26,W8,P26_W8,SNT,2,D07,6/28/23,PR,P. aeruginosa,snt0013-d7prcre-1of2,snt0013-d7prcre0 - 1of2,Pseudomonas aeruginosa,1,p23220-s307_snt0013-d7prcre0-6-08-23-1of2_s306,Pseudomonas aeruginosa,P. aeruginosa_1,P. aeruginosa_1
+P32,W8,P32_W8,SNT,2,D07,6/28/23,PR,P. aeruginosa,snt0010-d7prcre-1of1,snt0010-d7prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P32,W9,P32_W9,SNT,2,D14,7/5/23,PR,P. aeruginosa,snt0010-d14prcre-1of1,snt0010-d14prcre-1of1,Pseudomonas aeruginosa,1,p23220-s268_snt0010-d14prcre06-15-23-1of1_s267,Pseudomonas aeruginosa,P. aeruginosa_7,
+P50,W9,P50_W9,SNT,2,D14,7/5/23,PR,P. aeruginosa,snt0011-d14prcre-1of1,snt0011-d14prcre-1of1,Pseudomonas aeruginosa,1,p23220-s278_snt0011-d14prcre06-15-23-1of1_s277,Pseudomonas aeruginosa,P. aeruginosa_2,
+P50,W9,P50_W9,SNT,2,D14,7/5/23,PR,P. aeruginosa,snt0011-d14presbl-1of2,snt0011-d14presbl-1of2,Pseudomonas flourescens,1,p23220-s279_snt0011-d14presbl06-15-23-1of2_s278,Pseudomonas aeruginosa,P. aeruginosa_2,
+P50,W10,P50_W10,SNT,2,D21,7/12/23,PR,P. aeruginosa,snt0011-d21prcre-1of1,snt0011-d21prcre-1of1,Pseudomonas aeruginosa,1,p23220-s282_snt0011-d21prcre06-22-23-1of1_s281,Pseudomonas aeruginosa,P. aeruginosa_2,
+P50,W10,P50_W10,SNT,2,D21,7/12/23,PR,P. aeruginosa,snt0011-d21presbl-2of2,snt0011-d21presbl-2of2,Pseudomonas aeruginosa,1,p23220-s284_snt0011-d21presbl06-22-23-2of2_s283,Pseudomonas aeruginosa,P. aeruginosa_2,
+P32,W10,P32_W10,SNT,2,D21,7/12/23,PR,P. aeruginosa,snt0010-d21prcre-1of1,snt0010-d21prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P50,W11,P50_W11,SNT,2,D28,7/19/23,PR,P. aeruginosa,snt0011-d28prcre-2of2,snt0011-d28prcre-2of2,Pseudomonas aeruginosa,1,p23220-s287_snt0011-d28prcre06-29-23-2of2_s286,Pseudomonas aeruginosa,P. aeruginosa_2,
+P50,W11,P50_W11,SNT,2,D28,7/19/23,PR,P. aeruginosa,snt0011-d28presbl-2of2,snt0011-d28presbl-2of2,Pseudomonas aeruginosa,1,p23220-s289_snt0011-d28presbl06-29-23-2of2_s288,Pseudomonas aeruginosa,P. aeruginosa_2,
+P26,W11,P26_W11,SNT,2,D28,7/18/23,stool,P. aeruginosa,snt0013-d28stoolcre-1of1,snt0013-stoolcre-1of1,Pseudomonas aeruginosa,1,p23220-s350_snt0013-d28stoolcre06-28-23-1of1_s349,Pseudomonas aeruginosa,P. aeruginosa_1,P. aeruginosa_1
+P32,W11,P32_W11,SNT,2,D28,7/19/23,PR,P. aeruginosa,snt0010-d28prcre-1of1,snt0010-d28prcre-1of1,Pseudomonas aeruginosa,0,,,,
+P02,W6,P02_W6,APPS,2,APPS,6/11/23,IG,P. mirabilis,apps0018-2igvre-1of1,apps0018_2igvre-1of1,Enterococcus faecium,1,p23220-s008_apps0018-2igvre05-22-23-2of2_s8,Proteus mirabilis,P. mirabilis_5,
+P02,W6,P02_W6,APPS,2,APPS,6/11/23,PR,P. mirabilis,apps0018-2prvre-1of1,apps0018_2prvre-1of1,Enterococcus faecium,1,p23220-s010_apps0018-2prvre05-22-23-1of1_s10,Proteus mirabilis,P. mirabilis_4,
+P13,W6,P13_W6,APPS,2,APPS,6/11/23,IG,P. mirabilis,apps0036-2igesbl-1of1,apps0036_2igesbl-1of1,Proteus mirabilis,1,p23220-s051_apps0036-2igesbl05-22-23-1of1_s51,Proteus mirabilis,P. mirabilis_1,P. mirabilis_1
+P13,W6,P13_W6,APPS,2,APPS,6/11/23,env,P. mirabilis,apps0066envesbl-1of1,apps0066envesbl-1of1,Proteus mirabilis,0,,,,
+P13,W6,P13_W6,APPS,2,APPS,6/11/23,PR,P. mirabilis,apps0036-2presbl-1of1,apps0036_2presbl-1of1,Proteus mirabilis,0,,,,
+P13,W6,P13_W6,APPS,2,APPS,6/11/23,PR,P. mirabilis,apps0066presbl-1of1,apps0066presbl-1of1,Proteus mirabilis,0,,,,
+P13,W6,P13_W6,APPS,2,APPS,6/11/23,IG,P. mirabilis,apps0066igesbl-1of1,apps0066igesbl-1of1,Proteus mirabilis,0,,,,
+P17,W1,P17_W1,APPS,1,APPS,5/7/23,IG,P. mirabilis,apps0043igesbl-1of2,apps0043igesbl-1of2,Proteus mirabilis,1,p23220-s066_apps0043igesbl04-17-23-1of2_s66,Proteus mirabilis,P. mirabilis_1,P. mirabilis_1
+P17,W1,P17_W1,APPS,1,APPS,5/7/23,PR,P. mirabilis,apps0043presbl-1of3,apps0043presbl-1of3,Proteus mirabilis,1,apps0043presbl_s80,Proteus mirabilis,P. mirabilis_2,P. mirabilis_2
+P17,W1,P17_W1,APPS,1,APPS,5/7/23,PR,P. mirabilis,apps0043presbl-2of3,apps0043presbl-2of3,Proteus mirabilis,0,,,,
+P17,W1,P17_W1,APPS,1,APPS,5/7/23,PR,P. mirabilis,apps0043presbl-3of3,apps0043presbl-3of3,Proteus mirabilis,0,,,,
+P17,W1,P17_W1,APPS,1,APPS,5/7/23,IG,P. mirabilis,apps0043igesbl-2of2,apps0043igesbl-2of2,Proteus mirabilis,0,,,,
+P26,W1,P26_W1,SNT,1,APPS,5/7/23,PR,P. mirabilis,apps0044presbl-2of3,apps0044presbl-2of3,Proteus mirabilis,1,apps0044presbl2of3_s82,Proteus mirabilis,P. mirabilis_2,P. mirabilis_2
+P30,W1,P30_W1,SNT,1,APPS,5/7/23,PR,P. mirabilis,apps0050presbl-1of1,apps0050presbl-1of1,Proteus mirabilis,1,p23220-s084_apps0050presbl04-17-23-1of1_s84,Proteus mirabilis,P. mirabilis_3,
+P30,W2,P30_W2,SNT,1,D00,5/14/23,env,P. mirabilis,snt0007d0envcre-1of1,snt0007d0envcre-1of1,Proteus mirabilis,1,p23220-s239_snt0007d0envcre04-24-23-1of1_s238,Proteus mirabilis,P. mirabilis_2,P. mirabilis_2
+P30,W2,P30_W2,SNT,1,D00,5/14/23,env,P. mirabilis,snt0007d0envesbl-1of1,snt0007d0envesbl-1of1,Proteus mirabilis,1,p23220-s240_snt0007d0envesbl04-24-23-1of1_s239,Proteus mirabilis,P. mirabilis_2,P. mirabilis_2
+P30,W2,P30_W2,SNT,1,D00,5/14/23,PR,P. mirabilis,snt0007d0presbl-1of1,snt0007d0presbl-1of1,Proteus mirabilis,1,p23220-s243_snt0007d0presbl04-24-23-1of1_s242,Proteus mirabilis,P. mirabilis_3,
+P30,W3,P30_W3,SNT,1,D07,5/21/23,PR,P. mirabilis,snt0007d7presbl-1of2,snt0007d7presbl-1of2,Proteus mirabilis,1,p23220-s247_snt0007d7presbl05-01-23-1of2_s246,Proteus mirabilis,P. mirabilis_3,
+P30,W3,P30_W3,SNT,1,D07,5/21/23,PR,P. mirabilis,snt0007d7presbl-2of2,snt0007d7presbl-2of2,Proteus mirabilis,1,p23220-s248_snt0007d7presbl05-01-23-2of2_s247,Proteus mirabilis,P. mirabilis_2,P. mirabilis_2
+P38,W6,P38_W6,APPS,2,APPS,6/11/23,IG,S. maltophilia,apps0061igcre-1of2,apps0061igcre-1of2,Enterobacter asburiae/cloacae,1,p23220-s126_apps0061igcre05-22-23-1of2_s125,Stenotrophomonas maltophilia,S. maltophilia_1,
+P38,W6,P38_W6,APPS,2,APPS,6/11/23,PR,S. maltophilia,apps0061presbl-1of2,apps0061presbl-1of2,Enterobacter hormaechei/asburiae/cloacae,1,p23220-s131_apps0061presbl05-22-23-1of2_s130,Stenotrophomonas maltophilia,S. maltophilia_1,
+P28,W6,P28_W6,SNT,1,D28,6/11/23,PR,S. maltophilia,snt0003d28prcre-2of2,snt0003d28prcre-2of2,Stenotrophomonas maltophilia,0,,,,
+P38,W6,P38_W6,APPS,2,APPS,6/11/23,PR,S. maltophilia,apps0061presbl-2of2,apps0061presbl-2of2,Stenotrophomonas maltophilia,0,,,,
+P28,W6,P28_W6,SNT,2,APPS,6/11/23,PR,S. maltophilia,apps0028-2prcre-2of2,apps0028_2prcre-2of2,Stenotrophomonas maltophilia,1,p23220-s311_apps28-2prcre05-22-23-2of2_s310,Stenotrophomonas maltophilia,S. maltophilia_2,
