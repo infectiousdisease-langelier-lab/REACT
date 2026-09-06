@@ -18,13 +18,14 @@ graphics.off()
 knitr::opts_chunk$set(echo = TRUE)
 
 # Project paths
-DATA_DIR <- file.path("../DataFiles")
+DATA_DIR <- file.path("/Users/victoriachu/Documents/Research/REACT/FinalData") #../DataFiles
 
 # Statistical modeling and publication tables
 library(gtsummary)
 library(geepack)
 library(glmmTMB)
 library(car)
+library(ggpubr)
 
 # Core data wrangling and plotting
 library(tidyverse)
@@ -103,6 +104,7 @@ patients_all <- read.csv(file.path(DATA_DIR, "patients.csv"), na = c("NA", ""))
 patients <- patients_all %>% filter(!(nPID %in% c("P08", "P14")))
 
 samples <- read.csv(file.path(DATA_DIR, "samples.csv"), na = c("NA", ""))
+
 rooms <- read.csv(file.path(DATA_DIR, "rooms.csv"), na = c("NA", ""))
 providers <- read.csv(file.path(DATA_DIR, "providers.csv"), na = c("NA", ""))
 
@@ -160,14 +162,29 @@ table(non_donor_pt$Ethnicity)
 table(non_donor_pt$Diabetes)
 table(non_donor_pt$Hemodialysis)
 
+
+# Summarize all collected samples
+all_samples_summ <- samples %>% filter(Collected==1 & Study_Group!="Donor")
+
 #number participants per sampling week
-tbl_summary(samples %>% filter(Collected==1 & Study_Group!="Donor") %>% filter(!(nPID %in% c("P08","P14"))) %>% distinct(),
-  include = nTID, nPID,
+tbl_summary(
+  all_samples_summ,
+  by = nPID,
+  include = c(nTID, nPID),
   statistic = all_categorical() ~ "{n} ({p}%)"
-)
+) %>%
+  add_overall()
+
+tbl_summary(
+  all_samples_summ,
+  by = Source,
+  include = c(nTID, Source),
+  statistic = all_categorical() ~ "{n} ({p}%)"
+) %>%
+  add_overall()
 
 #number of weeks for SNT patients
-samples_data <- samples %>% filter(Collected==1 & Study_Group=="SNT") %>% filter(!(nPID %in% c("P08","P14"))) %>%
+samples_data <- samples %>% filter(Collected==1 & Study_Group=="SNT") %>%
   select(nPID, nTID) %>% distinct() %>%
   group_by(nPID) %>%
   mutate(weeks_num = n()) %>%
@@ -178,14 +195,12 @@ summary(samples_data$weeks_num)
 
 
 #number samples per source
-tbl_summary(samples %>% filter(Collected==1 & Study_Group!="Donor") %>% filter(!(nPID %in% c("P08","P14"))) %>% select(Source),
+tbl_summary(samples %>% filter(Collected==1) %>% select(Source),
   statistic = all_categorical() ~ "{n} ({p}%)"
 )
 
-# Summarize all collected samples
-all_samples_summ <- samples %>% filter(Collected==1)
-
 table(all_samples_summ$Source)
+
 
 ```
 
@@ -1271,7 +1286,7 @@ wilcox.test(recovery_rate ~ Source,
 ```{r Figure 2E}
 
 detection_freq <- SGBs %>%
-  group_by(MAG_derep) %>%
+  group_by(MAG_derep_num) %>%
   summarise(
     n_samples = n_distinct(mNGS_sample_name),
     n_participants = n_distinct(nPID),
