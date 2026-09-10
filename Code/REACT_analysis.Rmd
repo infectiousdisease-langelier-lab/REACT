@@ -18,7 +18,7 @@ graphics.off()
 knitr::opts_chunk$set(echo = TRUE)
 
 # Project paths
-DATA_DIR <- file.path("/Users/victoriachu/Documents/Research/REACT/FinalData") #../DataFiles
+DATA_DIR <- file.path("../DataFiles")
 
 # Statistical modeling and publication tables
 library(gtsummary)
