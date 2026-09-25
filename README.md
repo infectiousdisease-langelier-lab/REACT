@@ -1,6 +1,6 @@
-# Strain-resolved metagenomics reveals healthcare transmission dynamics and risk factors in long-term acute care
+# Culture-benchmarked metagenomics maps microbial strain sharing in long-term acute care
 
-This repository contains the code for the paper **Strain-resolved metagenomics reveals healthcare transmission dynamics and risk factors in long-term acute care**.
+This repository contains the code for the paper **Culture-benchmarked metagenomics maps microbial strain sharing in long-term acute care**.
 
 ## Code
 
